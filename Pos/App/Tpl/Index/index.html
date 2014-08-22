@@ -2,10 +2,149 @@
 <html lang="en">
   <head>
     <title>asdf</title>
+
     <layout name="layout" />
   </head>
-  <html>
-    <p>
-      asd
-    </p>
-  </html>
+  <body>
+    <div class="row">
+      <div class="col-lg-11">
+        <div class="tabbable">
+          <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#home">
+                <i class="green icon-home bigger-110"></i>
+                  入库登记
+                </a>
+            </li>
+
+            <li>
+              <a data-toggle="tab" href="#profile">
+                <i class="icon-rocket bigger-110"></i>
+                登记记录
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane in active">
+              <div class="row">
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 订单号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> POS机型号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    </div>
+          
+                
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 厂商编号</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username" />
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 数量 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    </div>
+                    <div class="col-sm-1"></div>
+                
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 单价</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username" />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 总价</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username" />
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    </div>
+                    <div class="col-sm-1"></div>
+                
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 日期</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username" />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 付款状态</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" placeholder="Username" />
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group " >
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 付款备注</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control" id="form-field-11" placeholder="Default Text"></textarea>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机身编号</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control" id="form-field-11" placeholder="Default Text"></textarea>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 "> </div>
+                    <div class="col-sm-3 ">
+                      <button class="btn btn-info" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          Submit
+                      </button>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
+            </div>
+
+            <div id="profile" class="tab-pane">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      订单号
+                    </th>
+                    <th>
+                      POS机型号
+                    </th>
+                    <th>
+                      数量
+                    </th>
+                    <th>
+                      单价
+                    </th>
+                    <th>
+                      总价
+                    </th>
+                    <th>
+                      付款状态
+                    </th>
+                    <th>
+                      联系人
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
