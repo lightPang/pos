@@ -1,0 +1,6 @@
+.showtables {
+	float: left;
+}
+.clear-float{
+	clear: both;
+}
