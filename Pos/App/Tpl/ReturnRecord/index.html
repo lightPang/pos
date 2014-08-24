@@ -11,41 +11,40 @@
         <div class="tabbable">
           <ul class="nav nav-tabs" id="myTab">
             <li class="active">
-              <a data-toggle="tab" href="#register">
+              <a data-toggle="tab" href="#fillin">
                 <i class="green icon-home bigger-110"></i>
-                  记录登记
+                  完工单填写
                 </a>
             </li>
 
             <li>
               <a data-toggle="tab" href="#unprocessed">
-                <i class="icon-rocket bigger-110"></i>
-                未巡检
-              </a>
+                <i class="green icon-home bigger-110"></i>
+                  未完成
+                </a>
             </li>
 
             <li>
               <a data-toggle="tab" href="#processed">
-                <i class="icon-rocket bigger-110"></i>
-                已巡检
-              </a>
+                <i class="green icon-home bigger-110"></i>
+                  已完成
+                </a>
             </li>
-
           </ul>
 
           <div class="tab-content">
-            <div id="register" class="tab-pane in active">
+            <div id="fillin" class="tab-pane in active">
               <div class="row">
                 <form class="form-horizontal" role="form">
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 记录编号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="tasknumber" placeholder="自动生成"  />
+                        <input type="text" id="form-field-1" name="applicant" placeholder="自动生成？"  />
                     </div>
                     <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
-                    <div class="col-sm-3">
-                        <textarea class="autosize-transition form-control" id="form-field-11" placeholder="Default Text"></textarea>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机器编号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" name="number" placeholder="机器编号"  />
                     </div>
                   </div>
 
@@ -53,7 +52,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 确认时间 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="？？？"  />
+                        <input type="text" id="form-field-1" name="applicant" placeholder="自动生成？"  />
                     </div>
                     <div class="col-sm-1"></div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成时间 </label>
@@ -65,7 +64,7 @@
                             </span>
                         </div>
                     </div>
-                  </div> 
+                  </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
@@ -100,7 +99,7 @@
                       记录编号
                     </th>
                     <th>
-                      备注
+                      机器编号
                     </th>
                     <th>
                       确认时间
@@ -118,7 +117,7 @@
                       记录编号
                     </th>
                     <th>
-                      备注
+                      机器编号
                     </th>
                     <th>
                       确认时间
