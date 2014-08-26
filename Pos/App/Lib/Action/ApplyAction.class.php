@@ -2,7 +2,7 @@
 // 处理装机申请
 class ApplyAction extends Action {
     public function index(){
-      
+      $this->assign("activeTab", $_GET["activeTab"]);
       $this->display();
     }
 

@@ -2,7 +2,7 @@
 // 处理退机登记
 class ReturnRegisterAction extends Action {
     public function index(){
-      
+      $this->assign("activeTab", $_GET["activeTab"]);
       $this->display();
     }
 

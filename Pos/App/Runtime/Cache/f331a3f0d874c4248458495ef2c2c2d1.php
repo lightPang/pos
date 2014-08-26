@@ -43,6 +43,7 @@
     
 		<!-- ace settings handler -->
 		<script src="__PUBLIC__/js/ace-extra.min.js"></script>
+   
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
@@ -365,33 +366,32 @@
 						</div>
 					</div><!-- #sidebar-shortcuts -->
 
-					<ul class="nav nav-list">
+					<ul class="nav nav-list" id="menu_bar">
           
             <li class="active">
-							<a href="typography.html">
+							<a href="__APP__/Storage/index/activeTab/0">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 入库登记 </span>
 							</a>
 						</li>
             
 						<li >
-							<a href="index.html">
+							<a href="__APP__/Apply">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
 							</a>
 						</li>
             
 						<li>
-							<a href="#" class="dropdown-toggle">
+							<a href="__APP__/Approve" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
 								<span class="menu-text"> 申请审批 </span>
 							</a>
 						</li>
             
             <li>
-							<a href="calendar.html">
+							<a href="__APP__/Task">
 								<i class="icon-calendar"></i>
-
 								<span class="menu-text">
 									任务分派
 								</span>
@@ -399,21 +399,21 @@
 						</li>
             
 						<li>
-							<a href="#" >
+							<a href="__APP__/Check" >
 								<i class="icon-edit"></i>
 								<span class="menu-text"> 巡检记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="widgets.html">
+							<a href="__APP__/ReturnRecord">
 								<i class="icon-list-alt"></i>
 								<span class="menu-text"> 装机记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="#" >
+							<a href="__APP__/ReturnRegister" >
 								<i class="icon-tag"></i>
 								<span class="menu-text"> 退机记录 </span>
 							</a>
@@ -633,8 +633,8 @@
 
   </body>
 </html>
-								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
+							<!-- PAGE CONTENT ENDS -->
+              <input type="hidden" value="<?php echo ($activeTab); ?>" id="activeTab" />
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><!-- /.main-content -->
@@ -698,7 +698,7 @@
 		<script src="__PUBLIC__/js/jquery.inputlimiter.1.3.1.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.maskedinput.min.js"></script>
 		<script src="__PUBLIC__/js/bootstrap-tag.min.js"></script>
-
+     <script src="__PUBLIC__/userDefinedJs/functional.js"></script>
 		<!-- ace scripts -->
 
 		<script src="__PUBLIC__/js/ace-elements.min.js"></script>
