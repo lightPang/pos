@@ -368,7 +368,7 @@
 
 					<ul class="nav nav-list" id="menu_bar">
           
-            <li class="active">
+            <li >
 							<a href="__APP__/Storage/index/activeTab/0">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 入库登记 </span>
@@ -376,21 +376,21 @@
 						</li>
             
 						<li >
-							<a href="__APP__/Apply">
+							<a href="__APP__/Apply/index/activeTab/1">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
 							</a>
 						</li>
             
 						<li>
-							<a href="__APP__/Approve" class="dropdown-toggle">
+							<a href="__APP__/Approve/index/activeTab/2" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
 								<span class="menu-text"> 申请审批 </span>
 							</a>
 						</li>
             
             <li>
-							<a href="__APP__/Task">
+							<a href="__APP__/Task/index/activeTab/3">
 								<i class="icon-calendar"></i>
 								<span class="menu-text">
 									任务分派
@@ -399,21 +399,21 @@
 						</li>
             
 						<li>
-							<a href="__APP__/Check" >
+							<a href="__APP__/Check/index/activeTab/4" >
 								<i class="icon-edit"></i>
 								<span class="menu-text"> 巡检记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRecord">
+							<a href="__APP__/ReturnRecord/index/activeTab/5">
 								<i class="icon-list-alt"></i>
 								<span class="menu-text"> 装机记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRegister" >
+							<a href="__APP__/ReturnRegister/index/activeTab/6" >
 								<i class="icon-tag"></i>
 								<span class="menu-text"> 退机记录 </span>
 							</a>

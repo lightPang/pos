@@ -40,6 +40,38 @@ LOCK TABLES `business` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `deployorder`
+--
+
+DROP TABLE IF EXISTS `deployorder`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deployorder` (
+  `do_id` int(11) NOT NULL AUTO_INCREMENT,
+  `source_c` int(11) NOT NULL,
+  `target_c` int(11) NOT NULL,
+  `m_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `edit_time` datetime DEFAULT NULL,
+  `edit_user` int(11) DEFAULT NULL,
+  `state` int(11) DEFAULT NULL,
+  `remark` tinytext,
+  PRIMARY KEY (`do_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `deployorder`
+--
+
+LOCK TABLES `deployorder` WRITE;
+/*!40000 ALTER TABLE `deployorder` DISABLE KEYS */;
+/*!40000 ALTER TABLE `deployorder` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `machine`
 --
 
@@ -60,6 +92,11 @@ CREATE TABLE `machine` (
   `o_id` int(4) NOT NULL,
   `r_id` int(4) DEFAULT NULL,
   `b_id` int(11) NOT NULL,
+  `c_id` int(11) NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `edit_user` int(11) NOT NULL,
+  `edit_time` datetime NOT NULL,
   PRIMARY KEY (`m_id`),
   UNIQUE KEY `m_code` (`m_code`,`m_tcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -72,6 +109,34 @@ CREATE TABLE `machine` (
 LOCK TABLES `machine` WRITE;
 /*!40000 ALTER TABLE `machine` DISABLE KEYS */;
 /*!40000 ALTER TABLE `machine` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `machineprovider`
+--
+
+DROP TABLE IF EXISTS `machineprovider`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `machineprovider` (
+  `mp_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `remark` tinyint(4) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `edit_time` datetime DEFAULT NULL,
+  `edit_user` int(11) DEFAULT NULL,
+  PRIMARY KEY (`mp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `machineprovider`
+--
+
+LOCK TABLES `machineprovider` WRITE;
+/*!40000 ALTER TABLE `machineprovider` DISABLE KEYS */;
+/*!40000 ALTER TABLE `machineprovider` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -94,6 +159,10 @@ CREATE TABLE `order` (
   `b_id` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `sum_price` int(11) NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `edit_user` int(11) NOT NULL,
+  `edit_time` datetime NOT NULL,
   PRIMARY KEY (`o_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -126,6 +195,8 @@ CREATE TABLE `task` (
   `dispatch_time` date DEFAULT NULL,
   `b_id` int(11) NOT NULL,
   `m_id` int(11) NOT NULL,
+  `edit_user` int(11) NOT NULL,
+  `edit_time` datetime NOT NULL,
   PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -174,4 +245,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-22 21:37:59
+-- Dump completed on 2014-08-31 11:38:32
