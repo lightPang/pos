@@ -6,4 +6,13 @@ class IndexAction extends Action {
       $this->display();
     }
 
+	public function test(){
+      
+      $this->display();
+    }
+
+    public function test2(){
+      
+      echo "test2";
+    }
 }

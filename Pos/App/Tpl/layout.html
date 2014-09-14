@@ -43,7 +43,9 @@
     
 		<!-- ace settings handler -->
 		<script src="__PUBLIC__/js/ace-extra.min.js"></script>
-   
+
+		<!-- Include jQuery -->
+   		<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
@@ -367,12 +369,55 @@
 					</div><!-- #sidebar-shortcuts -->
 
 					<ul class="nav nav-list" id="menu_bar">
-          
-            <li >
-							<a href="__APP__/Storage/index/activeTab/0">
-								<i class="icon-text-width"></i>
-								<span class="menu-text"> 入库登记 </span>
+          				<li >
+							<a href="#">
+								<i class="icon-dashboard"></i>
+								<span class="menu-text"> 控制台 </span>
 							</a>
+						</li>
+
+            			<li>
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 仓库管理 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu" style="display:block;">
+								<li>
+									<a href="__APP__/Storage/addSupplier">
+										<i class="icon-double-angle-right"></i>
+										设备供应商
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineType">
+										<i class="icon-double-angle-right"></i>
+										设备型号
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineStoring">
+										<i class="icon-double-angle-right"></i>
+										设备入库
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineStorage">
+										<i class="icon-double-angle-right"></i>
+										设备库存
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineDispatch">
+										<i class="icon-double-angle-right"></i>
+										设备调拨
+									</a>
+								</li>
+							</ul>	
 						</li>
             
 						<li >
@@ -389,7 +434,7 @@
 							</a>
 						</li>
             
-            <li>
+            			<li>
 							<a href="__APP__/Task/index/activeTab/3">
 								<i class="icon-calendar"></i>
 								<span class="menu-text">
