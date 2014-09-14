@@ -369,7 +369,7 @@
 					</div><!-- #sidebar-shortcuts -->
 
 					<ul class="nav nav-list" id="menu_bar">
-          				<li >
+          				<li>
 							<a href="#">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 控制台 </span>
@@ -377,12 +377,12 @@
 						</li>
 
             			<li>
-							<a href="#" class="dropdown-toggle">
+							<a class="dropdown-toggle" href="#">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 仓库管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
-							<ul class="submenu" style="display:block;">
+							<ul class="submenu">
 								<li>
 									<a href="__APP__/Storage/addSupplier">
 										<i class="icon-double-angle-right"></i>
@@ -420,7 +420,7 @@
 							</ul>	
 						</li>
             
-						<li >
+						<li>
 							<a href="__APP__/Apply/index/activeTab/1">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
@@ -464,7 +464,7 @@
 							</a>
 						</li>
             
-            <li>
+            			<li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-list"></i>
 								<span class="menu-text"> 机器记录 </span>
@@ -743,7 +743,7 @@
 		<script src="__PUBLIC__/js/jquery.inputlimiter.1.3.1.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.maskedinput.min.js"></script>
 		<script src="__PUBLIC__/js/bootstrap-tag.min.js"></script>
-     <script src="__PUBLIC__/userDefinedJs/functional.js"></script>
+     	<script src="__PUBLIC__/userDefinedJs/functional.js"></script>
 		<!-- ace scripts -->
 
 		<script src="__PUBLIC__/js/ace-elements.min.js"></script>
