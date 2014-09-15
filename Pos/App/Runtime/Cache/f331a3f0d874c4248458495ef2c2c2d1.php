@@ -377,42 +377,42 @@
 						</li>
 
             			<li>
-							<a class="dropdown-toggle" href="#">
+							<a class="dropdown-toggle" href="#/activeTab/1">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 仓库管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
-							<ul class="submenu">
+							<ul class="submenu" style="display:block;">
 								<li>
-									<a href="__APP__/Storage/addSupplier">
+									<a href="__APP__/Storage/addSupplier/activeTab/2">
 										<i class="icon-double-angle-right"></i>
 										设备供应商
 									</a>
 								</li>
 
 								<li>
-									<a href="__APP__/Storage/machineType">
+									<a href="__APP__/Storage/machineType/activeTab/3">
 										<i class="icon-double-angle-right"></i>
 										设备型号
 									</a>
 								</li>
 
 								<li>
-									<a href="__APP__/Storage/machineStoring">
+									<a href="__APP__/Storage/machineStoring/activeTab/4">
 										<i class="icon-double-angle-right"></i>
 										设备入库
 									</a>
 								</li>
 
 								<li>
-									<a href="__APP__/Storage/machineStorage">
+									<a href="__APP__/Storage/machineStorage/activeTab/5">
 										<i class="icon-double-angle-right"></i>
 										设备库存
 									</a>
 								</li>
 
 								<li>
-									<a href="__APP__/Storage/machineDispatch">
+									<a href="__APP__/Storage/machineDispatch/activeTab/6">
 										<i class="icon-double-angle-right"></i>
 										设备调拨
 									</a>
@@ -421,21 +421,21 @@
 						</li>
             
 						<li>
-							<a href="__APP__/Apply/index/activeTab/1">
+							<a href="__APP__/Apply/index/activeTab/7">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
 							</a>
 						</li>
             
 						<li>
-							<a href="__APP__/Approve/index/activeTab/2" class="dropdown-toggle">
+							<a href="__APP__/Approve/index/activeTab/8" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
 								<span class="menu-text"> 申请审批 </span>
 							</a>
 						</li>
             
             			<li>
-							<a href="__APP__/Task/index/activeTab/3">
+							<a href="__APP__/Task/index/activeTab/9">
 								<i class="icon-calendar"></i>
 								<span class="menu-text">
 									任务分派
@@ -444,21 +444,21 @@
 						</li>
             
 						<li>
-							<a href="__APP__/Check/index/activeTab/4" >
+							<a href="__APP__/Check/index/activeTab/10" >
 								<i class="icon-edit"></i>
 								<span class="menu-text"> 巡检记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRecord/index/activeTab/5">
+							<a href="__APP__/ReturnRecord/index/activeTab/11">
 								<i class="icon-list-alt"></i>
 								<span class="menu-text"> 装机记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRegister/index/activeTab/6" >
+							<a href="__APP__/ReturnRegister/index/activeTab/12" >
 								<i class="icon-tag"></i>
 								<span class="menu-text"> 退机记录 </span>
 							</a>
