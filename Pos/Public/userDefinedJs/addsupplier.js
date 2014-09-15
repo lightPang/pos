@@ -6,7 +6,14 @@ $('#addbtn').click(function(event){
 	if(supplier != ""){
 		$(this).attr('disabled', true);
 		$.post(url, {supplier:supplier, remark:remark}, function(data){
-			alert(data);
+			if(data == "true"){
+				alert("添加成功！");
+				$('#supplier').val("");
+				$('#remark').val("");
+			}
+			else{
+				alert(data);
+			}			
 		})
 		.complete(function(){
 			$('#addbtn').attr('disabled', false);

@@ -131,31 +131,7 @@
 
     <!--jQuery MD5-->
     <script type="text/javascript" src="__PUBLIC__/js/jquery.md5.js"></script>
-    <script type="text/javascript">
-      $('#login_form').submit(function(event){
-        event.preventDefault();
-        var $form = $(this),
-          url = $form.attr('action');
-          account = $('input[name="account"]').val();
-          pwd = $('input[name="pwd"]').val();
-
-        if(account != '' && pwd != ''){
-          $('#sbtn').attr("disabled", true);
-          $.post(url, {account:$.md5(account), pwd:$.md5(pwd)}, function(data){
-            if(data=='true'){
-              location.href="index.php/Index/home";
-            }
-            else if(data=='fail'){
-              alert('账号或密码错误');
-            }
-            else{
-              alert(data);
-            }
-          })
-          .complete(function() { $('#sbtn').attr("disabled", false);});;
-        }        
-      });
-    </script>
+    <script type="text/javascript" src="__PUBLIC__/userDefinedJs/login.js"></script>
     <!-- inline scripts related to this page -->
 
     <script type="text/javascript">
