@@ -72,7 +72,7 @@
 			event.preventDefault();
 			var $form = $(this),
 			 url = $form.attr('action');
-			alert($form.serialize());
+			//alert($form.serialize());
 			$.post(url, function(data){
 				alert(data);
 			})

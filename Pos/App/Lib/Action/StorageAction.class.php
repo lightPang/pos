@@ -6,6 +6,7 @@
     }
 
     public function addSupplier(){
+        doAuth();
         $this->assign("activeTab", $_GET["activeTab"]);
     	$this->display();
     }

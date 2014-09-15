@@ -6,7 +6,7 @@ return array(
     'DB_NAME'   =>  'pos',
     'DB_USER'   =>  'root',
     'DB_PWD'    =>  '',
-    'DB_PORT'   =>  '',
+    'DB_PORT'   =>  '3306',
     'DB_PREFIX' =>  '',
     'DEFAULT_TIMEZONE'=>'Asia/ShangHai' ,
 	//'配置项'=>'配置值'
