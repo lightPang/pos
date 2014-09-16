@@ -1,2 +1,4 @@
 #ignore cache document
 /Pos/App/Runtime/
+#ignore configure file
+/Pos/App/Conf/config.php
