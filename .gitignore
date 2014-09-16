@@ -2,3 +2,5 @@
 /Pos/App/Runtime/
 #ignore configure file
 /Pos/App/Conf/config.php
+#ignore tmp file
+~*
