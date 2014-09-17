@@ -12,7 +12,7 @@ $('#login_form').submit(function(event){
               location.href="index.php/Index/home";
             }
             else if(data=='fail'){
-              alert('账号或密码错误');
+              alert('账号或密码错误！');
             }
             else{
               alert(data);

@@ -14,7 +14,8 @@
 					$data['remark'] = $remark;
 					$data['create_user'] = $_SESSION['u_id'];
 					$data['create_time'] = date('Y-m-d H:i:s');
-					print_r($data);
+					$data['edit_user'] = $_SESSION['u_id'];
+					$data['edit_time'] = date('Y-m-d H:i:s');
 					if($supplierModel->add($data)){
 						echo "true";
 					}

@@ -13,7 +13,7 @@ $('#addbtn').click(function(event){
 				$('#remark').val("");
 			}
 			else{
-				alert(data);
+				 alert(data);
 				$('#supplier').focus();
 			}			
 		})
