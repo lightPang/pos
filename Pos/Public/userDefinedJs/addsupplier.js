@@ -9,10 +9,12 @@ $('#addbtn').click(function(event){
 			if(data == "true"){
 				alert("添加成功！");
 				$('#supplier').val("");
+				$('#supplier').focus();
 				$('#remark').val("");
 			}
 			else{
-				alert(data);
+				 alert(data);
+				$('#supplier').focus();
 			}			
 		})
 		.complete(function(){

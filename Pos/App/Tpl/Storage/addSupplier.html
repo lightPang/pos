@@ -59,34 +59,92 @@
               </div>
             </div>
 
-            <div id="all" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      序号
-                    </th>
-                    <th>
-                      供应商
-                    </th>
-                    <th>
-                      备注
-                    </th>
-                    <th>
-                      创建者
-                    </th>
-                    <th>
-                      创建时间
-                    </th>
-                    <th>
-                      修改者
-                    </th>
-                    <th>
-                      修改时间
-                    </th>
-                  </tr>
-                </thead>
-              </table>
+            <div id="all" class="table-responsive tab-pane">
+              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div id="sample-table-2_length" class="dataTables_length">
+                      <label>
+                        每页显示
+                      <select name="sample-table-2_length" size="1" aria-controls="sample-table-2">
+                        <option value="10" selected="selected">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                        条记录
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div id="sample-table-2_filter" class="dataTables_filter">
+                      <label>
+                        查找:
+                        <input type="text" aria-controls="sample-table-2">
+                      </label>
+                    </div>
+                  </div>
+                  </div>
+                <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="center">序号</th>
+                      <th>供应商</th>
+                      <th>备注</th>
+                      <th>创建者</th>
+                      <th>创建时间</th>
+                      <th>修改者</th>
+                      <th>修改时间</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <volist name="providers" id="provider">
+                      <tr>
+                      <td class="center">{$key+1}</td>
+                      <td style="display:none">{$provider.mp_id}</td>
+                      <td>{$provider.mp_name}</td>
+                      <td>{$provider.remark}</td>
+                      <td>{$provider.create_user}</td>
+                      <td>{$provider.create_time}</td>
+                      <td><if condition="$provider.edit_user != null">{$provider.edit_user} <else />无</if></td>
+                      <td><if condition="$provider.edit_time != null">{$provider.edit_time} <else />无</if></td>
+                    </tr>
+                   </volist>
+                  </tbody>
+                </table>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div id="sample-table-2_info" class="dataTables_info">显示 1 至 10， 总共 23 条记录</div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="dataTables_paginate paging_bootstrap">
+                      <ul class="pagination">
+                        <li class="prev disabled">
+                          <a href="#">
+                            <i class="icon-double-angle-left"></i>
+                          </a>
+                        </li>
+                        <li class="active">
+                          <a href="#">1</a>
+                        </li>
+                        <li>
+                          <a href="#">2</a>
+                        </li>
+                        <li>
+                          <a href="#">3</a>
+                        </li>
+                        <li class="next">
+                          <a href="#">
+                            <i class="icon-double-angle-right"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -94,5 +152,6 @@
     </div>
 
     <script src="__PUBLIC__/userDefinedJs/addsupplier.js"></script>
+    
   </body>
 </html>

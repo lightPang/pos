@@ -29,48 +29,98 @@
           <div class="tab-content">
             <div id="add" class="tab-pane in active">
               <div class="row">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" id="addmachinetypeform" action="#">
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 设备供应商</label>
+                    <div class="col-sm-3">
+                      <select id="form-field-select-1"  name="m_provider" class="form-control">
+                        <!--options-->
+                      </select>
                     </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机器名称 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
+                        <input type="text" id="form-field-1" name="m_name"  />
                     </div>
-          
-                
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机型号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
+                        <input type="text" id="form-field-1" name="m_number"  />
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机具类型</label>
+                    <div class="col-sm-3">
+                      <select id="form-field-select-1"  name="m_type" class="form-control">
+                        <option value="1">POS机</option>
+                        <option value="2">键盘</option>
+                        <option value="3">SIM卡</option>
+                        <option value="4">其它</option>
+                      </select>
                     </div>
-                    <div class="col-sm-1"></div>
                 
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 设备类型</label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
+                        <label>
+                          <input class="ace" type="radio" name="is_wired" checked="checked" value="1">
+                          <span class="lbl"> 有线</span>
+                        </label>
+                        <label>
+                          <input class="ace" type="radio" name="is_wired" value="0">
+                          <span class="lbl"> 无线</span>
+                        </label>
                     </div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
+                  </div> 
+
+                  <div class="space-4"></div>                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否有标识号</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="is_identified" checked="checked">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 启用</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="is_worked" checked="checked">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否需要键盘</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="is_keyboard">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否需要SIM</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="is_simed">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
+                    <div class="col-sm-6">
+                        <textarea class="autosize-transition form-control" id="remark" name="remark" placeholder="备注"></textarea>
                     </div>
                   </div> 
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <div class="col-md-9 "> </div>
-                    <div class="col-sm-3 ">
-                      <button class="btn btn-info" type="button">
+                    <div class="center ">
+                      <button class="btn btn-info" type="button" id="addbtn">
                         <i class="icon-ok bigger-110"></i>
                           Submit
                       </button>
@@ -115,5 +165,6 @@
       </div>
     </div>
 
+    <script src="__PUBLIC__/userDefinedJs/addmachinetype.js"></script>
   </body>
 </html>
