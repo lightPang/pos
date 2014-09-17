@@ -25,12 +25,16 @@ DROP TABLE IF EXISTS `bank`;
 CREATE TABLE `bank` (
   `b_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
   `code` varchar(20) NOT NULL,
-  PRIMARY KEY (`b_id`)
+  PRIMARY KEY (`b_id`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  CONSTRAINT `bank_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `bank_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,11 +59,15 @@ CREATE TABLE `client_attr` (
   `code` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `info` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  PRIMARY KEY (`ca_id`)
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ca_id`),
+  KEY `edit_user` (`edit_user`),
+  KEY `create_user` (`create_user`),
+  CONSTRAINT `client_attr_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `client_attr_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -85,11 +93,15 @@ CREATE TABLE `client_platform` (
   `code` varchar(20) NOT NULL,
   `info` tinytext NOT NULL,
   `create_user` int(11) NOT NULL,
-  `create_time` int(11) NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  `edit_time` int(11) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `edit_user` int(11) DEFAULT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cp_id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  CONSTRAINT `client_platform_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `client_platform_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,12 +126,16 @@ CREATE TABLE `client_rate` (
   `rate` int(11) NOT NULL,
   `code` varchar(20) NOT NULL,
   `info` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
   PRIMARY KEY (`cr_id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`),
+  KEY `edit_user` (`edit_user`),
+  KEY `create_user` (`create_user`),
+  CONSTRAINT `client_rate_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `client_rate_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -144,7 +160,7 @@ CREATE TABLE `company` (
   `name` varchar(100) NOT NULL,
   `type` int(11) NOT NULL,
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,6 +169,7 @@ CREATE TABLE `company` (
 
 LOCK TABLES `company` WRITE;
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
+INSERT INTO `company` VALUES (1,'中国银行534分行',1);
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,13 +186,24 @@ CREATE TABLE `deployorder` (
   `target_c` int(11) NOT NULL,
   `m_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime DEFAULT NULL,
+  `edit_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `edit_user` int(11) DEFAULT NULL,
   `state` int(11) DEFAULT NULL,
   `remark` tinytext,
-  PRIMARY KEY (`do_id`)
+  PRIMARY KEY (`do_id`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  KEY `m_id` (`m_id`),
+  KEY `deployorder_ifbk_4` (`source_c`),
+  KEY `deployorder_ifbk_5` (`target_c`),
+  CONSTRAINT `deployorder_ifbk_5` FOREIGN KEY (`target_c`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `deployorder_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `deployorder_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `deployorder_ibfk_3` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`),
+  CONSTRAINT `deployorder_ifbk_4` FOREIGN KEY (`source_c`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `do_dom_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,24 +258,38 @@ DROP TABLE IF EXISTS `machine`;
 CREATE TABLE `machine` (
   `m_id` int(11) NOT NULL AUTO_INCREMENT,
   `m_code` varchar(40) NOT NULL,
-  `m_bank` int(11) DEFAULT NULL,
+  `b_id` int(11) DEFAULT NULL,
   `m_type` int(4) DEFAULT NULL,
   `m_tcode` varchar(40) DEFAULT NULL,
   `m_bcode` varchar(40) DEFAULT NULL,
   `check_list` longtext,
-  `check_time` date DEFAULT NULL,
+  `check_time` timestamp NULL DEFAULT NULL,
   `state` int(4) DEFAULT NULL,
-  `a_id` int(11) DEFAULT NULL,
+  `task_apply_id` int(11) DEFAULT NULL,
   `o_id` int(4) NOT NULL,
-  `r_id` int(4) DEFAULT NULL,
+  `task_return_id` int(4) DEFAULT NULL,
   `c_id` int(11) NOT NULL,
   `create_user` int(11) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `edit_user` int(11) DEFAULT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`m_id`),
-  UNIQUE KEY `m_code` (`m_code`,`m_tcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `m_code` (`m_code`,`m_tcode`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  KEY `m_bank` (`b_id`),
+  KEY `machine_ifbk4` (`task_apply_id`),
+  KEY `machine_ifbk5` (`task_return_id`),
+  KEY `machine_ifbk_6` (`o_id`),
+  KEY `machine_ifbk_7` (`c_id`),
+  CONSTRAINT `machine_ifbk_7` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `machine_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `machine_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `machine_ifbk4` FOREIGN KEY (`task_apply_id`) REFERENCES `task` (`t_id`),
+  CONSTRAINT `machine_ifbk5` FOREIGN KEY (`task_return_id`) REFERENCES `task` (`t_id`),
+  CONSTRAINT `machine_ifbk_3` FOREIGN KEY (`b_id`) REFERENCES `bank` (`b_id`),
+  CONSTRAINT `machine_ifbk_6` FOREIGN KEY (`o_id`) REFERENCES `order` (`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,13 +311,17 @@ DROP TABLE IF EXISTS `machineprovider`;
 CREATE TABLE `machineprovider` (
   `mp_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
-  `remark` tinyint(4) DEFAULT NULL,
-  `create_time` datetime NOT NULL,
+  `remark` tinytext,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime DEFAULT NULL,
+  `edit_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `edit_user` int(11) DEFAULT NULL,
-  PRIMARY KEY (`mp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`mp_id`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  CONSTRAINT `machineprovider_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `machineprovider_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -284,6 +330,7 @@ CREATE TABLE `machineprovider` (
 
 LOCK TABLES `machineprovider` WRITE;
 /*!40000 ALTER TABLE `machineprovider` DISABLE KEYS */;
+INSERT INTO `machineprovider` VALUES (1,'大耗子','小耗子','2014-09-16 09:42:07',1,NULL,NULL),(8,'大耗子大','小耗子','0000-00-00 00:00:00',1,NULL,NULL),(9,'设备商1','','0000-00-00 00:00:00',1,NULL,NULL),(10,'设备商2','','0000-00-00 00:00:00',1,NULL,NULL),(11,'设备商3','','0000-00-00 00:00:00',1,NULL,NULL),(12,'设备商4','','0000-00-00 00:00:00',1,NULL,NULL),(13,'设备商5','','0000-00-00 00:00:00',1,NULL,NULL),(14,'设备商6','','0000-00-00 00:00:00',1,NULL,NULL),(15,'设备商7','','0000-00-00 00:00:00',1,NULL,NULL),(16,'设备商8','','0000-00-00 00:00:00',1,NULL,NULL),(17,'设备商9','','0000-00-00 00:00:00',1,NULL,NULL),(18,'设备商10','','0000-00-00 00:00:00',1,NULL,NULL),(19,'设备商11','','0000-00-00 00:00:00',1,NULL,NULL),(20,'设备商12','','0000-00-00 00:00:00',1,NULL,NULL),(21,'设备商13','','0000-00-00 00:00:00',1,NULL,NULL),(22,'设备商14','','0000-00-00 00:00:00',1,NULL,NULL),(23,'设备商15','','0000-00-00 00:00:00',1,NULL,NULL),(24,'设备商16','','0000-00-00 00:00:00',1,NULL,NULL),(25,'设备商17','','0000-00-00 00:00:00',1,NULL,NULL),(26,'设备商18','','0000-00-00 00:00:00',1,NULL,NULL),(27,'设备商19','','0000-00-00 00:00:00',1,NULL,NULL),(28,'设备商20','','0000-00-00 00:00:00',1,NULL,NULL),(29,'设备商21','','0000-00-00 00:00:00',1,NULL,NULL),(30,'设备商22','','0000-00-00 00:00:00',1,NULL,NULL),(31,'设备商23','','0000-00-00 00:00:00',1,NULL,NULL),(32,'设备商24','','0000-00-00 00:00:00',1,NULL,NULL),(33,'设备商25','','0000-00-00 00:00:00',1,NULL,NULL),(34,'设备商26','','0000-00-00 00:00:00',1,NULL,NULL),(35,'设备商27','','0000-00-00 00:00:00',1,NULL,NULL),(36,'设备商28','','0000-00-00 00:00:00',1,NULL,NULL),(37,'设备商29','','0000-00-00 00:00:00',1,NULL,NULL),(38,'设备商30','','0000-00-00 00:00:00',1,NULL,NULL),(39,'设备商31','','0000-00-00 00:00:00',1,NULL,NULL),(40,'设备商32','','0000-00-00 00:00:00',1,NULL,NULL),(41,'设备商33','','0000-00-00 00:00:00',1,NULL,NULL),(42,'设备商34','','0000-00-00 00:00:00',1,NULL,NULL),(43,'设备商35','','0000-00-00 00:00:00',1,NULL,NULL),(44,'设备商36','','0000-00-00 00:00:00',1,NULL,NULL),(45,'设备商37','','0000-00-00 00:00:00',1,NULL,NULL),(46,'设备商38','','0000-00-00 00:00:00',1,NULL,NULL),(47,'设备商39','','0000-00-00 00:00:00',1,NULL,NULL),(48,'设备商40','','0000-00-00 00:00:00',1,NULL,NULL),(49,'设备商41','','0000-00-00 00:00:00',1,NULL,NULL),(50,'设备商42','','0000-00-00 00:00:00',1,NULL,NULL),(51,'设备商43','','0000-00-00 00:00:00',1,NULL,NULL),(52,'设备商44','','0000-00-00 00:00:00',1,NULL,NULL),(53,'设备商45','','0000-00-00 00:00:00',1,NULL,NULL),(54,'设备商46','','0000-00-00 00:00:00',1,NULL,NULL),(55,'设备商47','','0000-00-00 00:00:00',1,NULL,NULL),(56,'设备商48','','0000-00-00 00:00:00',1,NULL,NULL),(57,'设备商49','','0000-00-00 00:00:00',1,NULL,NULL),(58,'设备商50','','0000-00-00 00:00:00',1,NULL,NULL),(59,'设备商51','','0000-00-00 00:00:00',1,NULL,NULL),(60,'设备商52','','0000-00-00 00:00:00',1,NULL,NULL),(61,'设备商53','','0000-00-00 00:00:00',1,NULL,NULL),(62,'设备商54','','0000-00-00 00:00:00',1,NULL,NULL),(63,'设备商55','','0000-00-00 00:00:00',1,NULL,NULL),(64,'设备商56','','0000-00-00 00:00:00',1,NULL,NULL),(65,'设备商57','','2014-09-16 03:21:27',1,NULL,NULL);
 /*!40000 ALTER TABLE `machineprovider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,11 +345,15 @@ CREATE TABLE `mcc_big` (
   `mb_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
   `info` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  PRIMARY KEY (`mb_id`)
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
+  PRIMARY KEY (`mb_id`),
+  KEY `edit_user` (`edit_user`),
+  KEY `create_user` (`create_user`),
+  CONSTRAINT `mcc_big_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `mcc_big_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -332,12 +383,20 @@ CREATE TABLE `mcc_item` (
   `c_rate` float NOT NULL,
   `d_rate` float NOT NULL,
   `info` int(11) NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
   PRIMARY KEY (`mi_id`),
-  UNIQUE KEY `code` (`code`)
+  UNIQUE KEY `code` (`code`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  KEY `mcc_item_ifbk_3` (`mb_id`),
+  KEY `mcc_item_ifbk_4` (`ms_id`),
+  CONSTRAINT `mcc_item_ifbk_4` FOREIGN KEY (`ms_id`) REFERENCES `mcc_sub` (`ms_id`),
+  CONSTRAINT `mcc_item_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `mcc_item_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `mcc_item_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -362,11 +421,17 @@ CREATE TABLE `mcc_sub` (
   `name` varchar(20) NOT NULL,
   `mb_id` int(11) NOT NULL,
   `info` tinytext NOT NULL,
-  `create_time` datetime NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
-  `edit_time` int(11) NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  PRIMARY KEY (`ms_id`)
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ms_id`),
+  KEY `edit_user` (`edit_user`),
+  KEY `create_user` (`create_user`),
+  KEY `mcc_sub_ifbk_3` (`mb_id`),
+  CONSTRAINT `mcc_sub_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`),
+  CONSTRAINT `mcc_sub_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `mcc_sub_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -389,10 +454,10 @@ DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `o_id` int(11) NOT NULL AUTO_INCREMENT,
   `o_user` int(11) NOT NULL,
-  `o_time` date NOT NULL,
+  `o_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `m_list` mediumtext NOT NULL,
   `m_type` varchar(100) NOT NULL,
-  `m_fact` varchar(30) NOT NULL,
+  `mp_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `pay_state` int(4) NOT NULL,
   `pay_remark` mediumtext,
@@ -400,10 +465,20 @@ CREATE TABLE `order` (
   `price` int(11) NOT NULL,
   `sum_price` int(11) NOT NULL,
   `create_user` int(11) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  PRIMARY KEY (`o_id`)
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `edit_user` int(11) DEFAULT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`o_id`),
+  KEY `create_user` (`create_user`),
+  KEY `edit_user` (`edit_user`),
+  KEY `order_company_constraint` (`c_id`),
+  KEY `order_ifbk_3` (`mp_id`),
+  KEY `order_ifbk_4` (`o_user`),
+  CONSTRAINT `order_ifbk_4` FOREIGN KEY (`o_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `order_company_constraint` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `order_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `order_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `order_ifbk_3` FOREIGN KEY (`mp_id`) REFERENCES `machineprovider` (`mp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -428,16 +503,26 @@ CREATE TABLE `task` (
   `t_type` int(11) NOT NULL,
   `create_user` int(11) NOT NULL,
   `ac_user` int(11) DEFAULT NULL,
-  `create_time` date NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `vertification` text NOT NULL,
-  `ac_time` date DEFAULT NULL,
-  `finish_time` date DEFAULT NULL,
-  `dispatch_time` date DEFAULT NULL,
+  `ac_time` timestamp NULL DEFAULT NULL,
+  `finish_time` timestamp NULL DEFAULT NULL,
+  `dispatch_time` timestamp NULL DEFAULT NULL,
   `c_id` int(11) NOT NULL,
   `m_id` int(11) NOT NULL,
-  `edit_user` int(11) NOT NULL,
-  `edit_time` datetime NOT NULL,
-  PRIMARY KEY (`t_id`)
+  `edit_user` int(11) DEFAULT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`t_id`),
+  KEY `edit_user` (`edit_user`),
+  KEY `create_user` (`create_user`),
+  KEY `task_cu_constraint` (`ac_user`),
+  KEY `task_tc_constraint` (`c_id`),
+  KEY `task_tm_constraint` (`m_id`),
+  CONSTRAINT `task_tm_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`),
+  CONSTRAINT `task_cu_constraint` FOREIGN KEY (`ac_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `task_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `task_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `task_tc_constraint` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -464,8 +549,11 @@ CREATE TABLE `user` (
   `pwd` varchar(100) NOT NULL,
   `account` varchar(100) NOT NULL,
   `c_id` int(11) NOT NULL,
-  PRIMARY KEY (`u_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`u_id`),
+  KEY `c_id` (`c_id`),
+  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -474,6 +562,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,0,'开起我亲爱的小耗子','21232f297a57a5a743894a0e4a801fc3','21232f297a57a5a743894a0e4a801fc3',1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -486,6 +575,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-
--- Dump completed on 2014-09-15 16:26:34
->>>>>>> master
+-- Dump completed on 2014-09-17 10:57:14
