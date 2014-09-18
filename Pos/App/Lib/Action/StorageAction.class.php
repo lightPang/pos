@@ -21,7 +21,19 @@
     }
 
     public function machineType(){
+        doAuth();
+
+        //get machine provider
+        $mpModel = M('Machineprovider');
+        $providers = $mpModel->field('mp_id, name')->select();
+        
+        //get machine type
+        $mtModel = M('Machinetype');
+        $machineTypes = $mtModel->select();
+
         $this->assign("activeTab", $_GET["activeTab"]);
+        $this->assign("providers", $providers);
+        $this->assign("machineTypes", $machineTypes);
         $this->display();
     }
 

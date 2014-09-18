@@ -1,9 +1,12 @@
-$('#login_form').submit(function(event){
+$(document).ready(function(){
+  $('input[name=account]').focus();
+
+  $('#login_form').submit(function(event){
         event.preventDefault();
         var $form = $(this),
           url = $form.attr('action');
-          account = $('input[name="account"]').val();
-          pwd = $('input[name="pwd"]').val();
+          account = $('input[name=account]').val();
+          pwd = $('input[name=pwd]').val();
 
         if(account != '' && pwd != ''){
           $('#sbtn').attr("disabled", true);
@@ -20,4 +23,5 @@ $('#login_form').submit(function(event){
           })
           .complete(function() { $('#sbtn').attr("disabled", false);});
         }        
-      });
+  });
+});
