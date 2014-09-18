@@ -58,7 +58,7 @@ CREATE TABLE `client_attr` (
   `ca_id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `info` tinytext NOT NULL,
+  `remark` tinytext NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -91,7 +91,7 @@ CREATE TABLE `client_platform` (
   `cp_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `code` varchar(20) NOT NULL,
-  `info` tinytext NOT NULL,
+  `remark` tinytext NOT NULL,
   `create_user` int(11) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `edit_user` int(11) DEFAULT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE `client_rate` (
   `cr_id` int(11) NOT NULL AUTO_INCREMENT,
   `rate` int(11) NOT NULL,
   `code` varchar(20) NOT NULL,
-  `info` tinytext NOT NULL,
+  `remark` tinytext NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -204,38 +204,6 @@ CREATE TABLE `deployorder` (
   CONSTRAINT `deployorder_ibfk_3` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`),
   CONSTRAINT `deployorder_ifbk_4` FOREIGN KEY (`source_c`) REFERENCES `company` (`c_id`),
   CONSTRAINT `do_dom_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `deployorder`
---
-
-LOCK TABLES `deployorder` WRITE;
-/*!40000 ALTER TABLE `deployorder` DISABLE KEYS */;
-/*!40000 ALTER TABLE `deployorder` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `deployorder`
---
-
-DROP TABLE IF EXISTS `deployorder`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `deployorder` (
-  `do_id` int(11) NOT NULL AUTO_INCREMENT,
-  `source_c` int(11) NOT NULL,
-  `target_c` int(11) NOT NULL,
-  `m_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `create_user` int(11) NOT NULL,
-  `edit_time` datetime DEFAULT NULL,
-  `edit_user` int(11) DEFAULT NULL,
-  `state` int(11) DEFAULT NULL,
-  `remark` tinytext,
-  PRIMARY KEY (`do_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -344,7 +312,7 @@ DROP TABLE IF EXISTS `mcc_big`;
 CREATE TABLE `mcc_big` (
   `mb_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
-  `info` tinytext NOT NULL,
+  `remark` tinytext NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -382,7 +350,7 @@ CREATE TABLE `mcc_item` (
   `b_rate` float NOT NULL,
   `c_rate` float NOT NULL,
   `d_rate` float NOT NULL,
-  `info` int(11) NOT NULL,
+  `remark` int(11) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -393,10 +361,10 @@ CREATE TABLE `mcc_item` (
   KEY `edit_user` (`edit_user`),
   KEY `mcc_item_ifbk_3` (`mb_id`),
   KEY `mcc_item_ifbk_4` (`ms_id`),
-  CONSTRAINT `mcc_item_ifbk_4` FOREIGN KEY (`ms_id`) REFERENCES `mcc_sub` (`ms_id`),
   CONSTRAINT `mcc_item_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `mcc_item_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
-  CONSTRAINT `mcc_item_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`)
+  CONSTRAINT `mcc_item_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`),
+  CONSTRAINT `mcc_item_ifbk_4` FOREIGN KEY (`ms_id`) REFERENCES `mcc_sub` (`ms_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -420,7 +388,7 @@ CREATE TABLE `mcc_sub` (
   `ms_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `mb_id` int(11) NOT NULL,
-  `info` tinytext NOT NULL,
+  `remark` tinytext NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -429,9 +397,9 @@ CREATE TABLE `mcc_sub` (
   KEY `edit_user` (`edit_user`),
   KEY `create_user` (`create_user`),
   KEY `mcc_sub_ifbk_3` (`mb_id`),
-  CONSTRAINT `mcc_sub_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`),
   CONSTRAINT `mcc_sub_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
-  CONSTRAINT `mcc_sub_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
+  CONSTRAINT `mcc_sub_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `mcc_sub_ifbk_3` FOREIGN KEY (`mb_id`) REFERENCES `mcc_big` (`mb_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -575,4 +543,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-17 10:57:14
+-- Dump completed on 2014-09-17 13:25:21
