@@ -4,6 +4,7 @@
     <title>asdf</title>
 
     <layout name="layout" />
+    <link rel="stylesheet" href="__PUBLIC__/userDefinedCss/dialog.css" />
   </head>
   <body>
     <div class="row">
@@ -92,15 +93,60 @@
         </div>
       </div>
     </div>
-    <div id="dialog" title="basic dialog"><p>这是一个采用默认样式的对话框</p></div>
+   <div id="dialog-modal" title="修改MCC大类"  style="display: none">
+        <div class="dialog-content">
+        <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="updateForm">
+          <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 类型名称 </label>
+            <div class="col-sm-2">
+                <input type="text" id="updateName" name="name" placeholder="名称"  />
+            </div>
+                   
+          </div>
+
+          <div class="space-4"></div>
+          
+          <div class="form-group " >
+            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 备注</label>
+            <div class="col-sm-6 ">
+              <textarea class="autosize-transition form-control" id="updateRemark" name="remark" placeholder="备注"></textarea>
+            </div>
+
+          </div> 
+          <input id="mb_id" type="hidden" name="mb_id" />
+          
+          <div class="space-4"></div>
+          <div class="form-group">
+            <div class="col-md-3 "> </div>
+            <div class="col-sm-6 ">
+              <div style='float: left;'>
+              <button id="updateBtn" class="btn btn-info" type="button">
+              <i class="icon-ok bigger-110"></i>
+                提交
+              </button>
+              </div>
+              <div style='float: left;'>
+              <button id="cancelBtn" class="btn btn-danger" type="button">
+              <i class="icon-reply bigger-110"></i>
+                取消
+              </button>
+              </div>
+            </div>
+          </div>
+                  
+        </form>
+        </div>
+    </div>
     
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
     <script src="__PUBLIC__/userDefinedJs/mccBig.js"></script>
      <script>
-     $(function(){
-       $("#dialog").dialog();
-});
+
+        
+        $('#ok').click( function(){
+          $("#dialog-modal").dialog("open"); 
+        });
     </script>
     
   </body>

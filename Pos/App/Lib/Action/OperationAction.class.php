@@ -9,7 +9,7 @@
       $name = $_POST['name'];
       $remark = $_POST['remark'];
       $u_id = $_SESSION['u_id'];
-      $curTime = date('Y-m-d H:i:s',time());;
+      $curTime = date('Y-m-d H:i:s',time());
       $MccBigItem['name'] = $name;
       $MccBigItem['create_user'] = $u_id;
       $MccBigItem['create_time'] = $curTime;
@@ -43,6 +43,21 @@
       if( isset( $_SESSION['u_id'] ) )
         $this->ajaxReturn( $data, "123", 1 );
       
+    }
+    
+    public function updateMCCBig(){
+      $MCCBig = M('mcc_big');
+     
+      if( isset( $_POST['mb_id'] ) && isset( $_SESSION['u_id'] ) ){
+        $map['mb_id'] = $_POST['mb_id'] ;
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $data['name'] = $_POST['name'];
+        $data['edit_time'] = date('Y-m-d H:i:s',time());
+        $data['remark'] = $_POST['remark'];
+        $MCCBig->where($map)->save($data);
+        $this->ajaxReturn( $data, "123", 1 );
+      }
+      $this->ajaxReturn( null, "123", 0 );
     }
   }
 ?>
