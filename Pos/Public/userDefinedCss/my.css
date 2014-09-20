@@ -1,0 +1,13 @@
+.checkboxGroup{
+  margin-top:3px;
+  float:left;
+  margin-left:5px;
+}
+
+.checkboxGroup label{
+  margin-left:8px;
+}
+
+.checkboxGroupRow{
+  margin-bottom:12px;
+}
