@@ -7,7 +7,7 @@ $(document).ready(function(){
 function createDialog(){
   $("#dialog-modal").dialog({
 
-                height: 320,
+                height: 450,
                 width: 400,
                 dialogClass: "no-close",
                 modal: true,
@@ -63,7 +63,7 @@ $('#cancelBtn').click( function(){
 
 $('#updateBtn').click( function(){
   var url = $('#updateForm').attr('action');
-  $("#updateBtn").css('disabled','true');
+  $("#updateBtn").attr('disabled',true);
   console.log(url);
   $.ajax({
     type:'POST',
