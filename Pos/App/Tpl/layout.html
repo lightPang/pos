@@ -53,6 +53,65 @@
 		<script src="__PUBLIC__/js/html5shiv.js"></script>
 		<script src="__PUBLIC__/js/respond.min.js"></script>
 		<![endif]-->
+    
+    <!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='__PUBLIC__/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='__PUBLIC__/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='__PUBLIC__/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+		</script>
+		<script src="__PUBLIC__/js/bootstrap.min.js"></script>
+		<script src="__PUBLIC__/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!--[if lte IE 8]>
+		  <script src="__PUBLIC__/js/excanvas.min.js"></script>
+		<![endif]-->
+
+		<script src="__PUBLIC__/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="__PUBLIC__/js/chosen.jquery.min.js"></script>
+		<script src="__PUBLIC__/js/fuelux/fuelux.spinner.min.js"></script>
+		<script src="__PUBLIC__/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="__PUBLIC__/js/date-time/bootstrap-timepicker.min.js"></script>
+		<script src="__PUBLIC__/js/date-time/moment.min.js"></script>
+		<script src="__PUBLIC__/js/date-time/daterangepicker.min.js"></script>
+		<script src="__PUBLIC__/js/bootstrap-colorpicker.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.knob.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.autosize.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.maskedinput.min.js"></script>
+		<script src="__PUBLIC__/js/bootstrap-tag.min.js"></script>
+    
+    <script src="__PUBLIC__/userDefinedJs/functional.js"></script>
+		<!-- ace scripts -->
+		<script src="__PUBLIC__/js/ace-elements.min.js"></script>
+		<script src="__PUBLIC__/js/ace.min.js"></script>
+    
 	</head>
 
 	<body>
@@ -369,20 +428,20 @@
 					</div><!-- #sidebar-shortcuts -->
 
 					<ul class="nav nav-list" id="menu_bar">
-          				<li>
+          	<li>
 							<a href="#">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 控制台 </span>
 							</a>
 						</li>
 
-            			<li>
+            <li>
 							<a class="dropdown-toggle" href="#/activeTab/1">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 仓库管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
-							<ul class="submenu" style="display:block;">
+							<ul class="submenu" style="display:none;" id="storage_menu">
 								<li>
 									<a href="__APP__/Storage/addSupplier/activeTab/2">
 										<i class="icon-double-angle-right"></i>
@@ -420,22 +479,74 @@
 							</ul>	
 						</li>
             
+            <li>
+              <a class="dropdown-toggle" href="__APP__/Operation/index/activeTab/7">
+								<i class="icon-text-width"></i>
+								<span class="menu-text"> 运营管理 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+            	<ul class="submenu" style="display:none;" id="operate_menu">
+								<li>
+									<a href="__APP__/Operation/index/activeTab/8">
+										<i class="icon-double-angle-right"></i>
+										MCC大类管理
+									</a>
+								</li>
+
+								<li>
+                
+									<a href="__APP__/Storage/machineType/activeTab/9">
+										<i class="icon-double-angle-right"></i>
+										MCC小类管理
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineStoring/activeTab/10">
+										<i class="icon-double-angle-right"></i>
+										MCC项目管理
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineStorage/activeTab/11">
+										<i class="icon-double-angle-right"></i>
+										商户平台
+									</a>
+								</li>
+
+								<li>
+									<a href="__APP__/Storage/machineDispatch/activeTab/12">
+										<i class="icon-double-angle-right"></i>
+										行业费率
+									</a>
+								</li>
+                
+                <li>
+									<a href="__APP__/Storage/machineDispatch/activeTab/13">
+										<i class="icon-double-angle-right"></i>
+										商户属性
+									</a>
+								</li>
+							</ul>	
+            </li>
+           
 						<li>
-							<a href="__APP__/Apply/index/activeTab/7">
+							<a href="__APP__/Apply/index/activeTab/14">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
 							</a>
 						</li>
             
 						<li>
-							<a href="__APP__/Approve/index/activeTab/8" class="dropdown-toggle">
+							<a href="__APP__/Approve/index/activeTab/15" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
 								<span class="menu-text"> 申请审批 </span>
 							</a>
 						</li>
             
-            			<li>
-							<a href="__APP__/Task/index/activeTab/9">
+            <li>
+							<a href="__APP__/Task/index/activeTab/16">
 								<i class="icon-calendar"></i>
 								<span class="menu-text">
 									任务分派
@@ -444,27 +555,27 @@
 						</li>
             
 						<li>
-							<a href="__APP__/Check/index/activeTab/10" >
+							<a href="__APP__/Check/index/activeTab/17" >
 								<i class="icon-edit"></i>
 								<span class="menu-text"> 巡检记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRecord/index/activeTab/11">
+							<a href="__APP__/ReturnRecord/index/activeTab/18">
 								<i class="icon-list-alt"></i>
 								<span class="menu-text"> 装机记录 </span>
 							</a>
 						</li>
 
 						<li>
-							<a href="__APP__/ReturnRegister/index/activeTab/12" >
+							<a href="__APP__/ReturnRegister/index/activeTab/19" >
 								<i class="icon-tag"></i>
 								<span class="menu-text"> 退机记录 </span>
 							</a>
 						</li>
             
-            			<li>
+            <li>
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-list"></i>
 								<span class="menu-text"> 机器记录 </span>
@@ -542,63 +653,12 @@
 			</a>
 		</div><!-- /.main-container -->
 
-		<!-- basic scripts -->
+		
+    
+    
 
-		<!--[if !IE]> -->
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<![endif]-->
-
-		<!--[if !IE]> -->
-
-		<script type="text/javascript">
-			window.jQuery || document.write("<script src='__PUBLIC__/js/jquery-2.0.3.min.js'>"+"<"+"script>");
-		</script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-<script type="text/javascript">
- window.jQuery || document.write("<script src='__PUBLIC__/js/jquery-1.10.2.min.js'>"+"<"+"script>");
-</script>
-<![endif]-->
-
-		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='__PUBLIC__/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
-		</script>
-		<script src="__PUBLIC__/js/bootstrap.min.js"></script>
-		<script src="__PUBLIC__/js/typeahead-bs2.min.js"></script>
-
-		<!-- page specific plugin scripts -->
-
-		<!--[if lte IE 8]>
-		  <script src="__PUBLIC__/js/excanvas.min.js"></script>
-		<![endif]-->
-
-		<script src="__PUBLIC__/js/jquery-ui-1.10.3.custom.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.ui.touch-punch.min.js"></script>
-		<script src="__PUBLIC__/js/chosen.jquery.min.js"></script>
-		<script src="__PUBLIC__/js/fuelux/fuelux.spinner.min.js"></script>
-		<script src="__PUBLIC__/js/date-time/bootstrap-datepicker.min.js"></script>
-		<script src="__PUBLIC__/js/date-time/bootstrap-timepicker.min.js"></script>
-		<script src="__PUBLIC__/js/date-time/moment.min.js"></script>
-		<script src="__PUBLIC__/js/date-time/daterangepicker.min.js"></script>
-		<script src="__PUBLIC__/js/bootstrap-colorpicker.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.knob.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.autosize.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.inputlimiter.1.3.1.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.maskedinput.min.js"></script>
-		<script src="__PUBLIC__/js/bootstrap-tag.min.js"></script>
-     	<script src="__PUBLIC__/userDefinedJs/functional.js"></script>
-		<!-- ace scripts -->
-
-		<script src="__PUBLIC__/js/ace-elements.min.js"></script>
-		<script src="__PUBLIC__/js/ace.min.js"></script>
+    
+    
 		<script type="text/javascript">
 			jQuery(function($) {
 				$('#id-disable-check').on('click', function() {
