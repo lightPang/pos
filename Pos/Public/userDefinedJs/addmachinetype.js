@@ -1,5 +1,82 @@
 $(document).ready(function(){
 	loadMCTData();
+	createDialog();
+});
+
+function createDialog(){
+  $("#dialog-modal").dialog({
+                height: 450,
+                width: 400,
+                dialogClass: "no-close",
+                modal: true,
+                autoOpen: false
+
+            });
+}
+
+function updateRow(ele){
+  var $tr = $(ele).parents('tr');
+  var $tdlist = $tr.find( $('td') );
+  console.log( $tdlist.length);
+  var mt_id = $tdlist.get(0);
+  var mt_name = $tdlist.get(1);
+  var mt_remark = $tdlist.get(2);
+  console.log( $(mt_name).html() );
+  $("#mb_id").val( $(mt_id).html() );
+  $("#updateName").val( $(mt_name).html() );
+  $("#updateRemark").val( $(mt_remark).html());
+  $("#dialog-modal").dialog( "open");
+}
+
+function deleteRow(ele){
+  var $tr = $(ele).parents('tr');
+  $tr.addClass('remove');
+  console.log( $tr.find('td').html() );
+  var mb_id = $tr.find('td').html();
+  var confirmFlag = confirm("确认要删除吗？");
+  if( confirmFlag === true ){
+    $.ajax({
+      type:'POST',
+      url:'/pos/Pos/index.php/Operation/delMCCBigItem',
+      data: {'mb_id' : mb_id },
+      success: function(data){
+        console.log(data);
+        if( data['data'] != false ){
+          var table = $('#sample-table-2').DataTable();
+          table.row('.remove').remove().draw();
+          alert("删除成功！");
+        }
+        else{
+           alert("删除失败！");
+        }
+      }
+    });
+    
+  }
+}
+
+$('#cancelBtn').click( function(){
+  $("#dialog-modal").dialog('close');
+});
+
+$('#updateBtn').click( function(){
+  var url = $('#updateForm').attr('action');
+  $("#updateBtn").attr('disabled',true);
+  console.log(url);
+  $.ajax({
+    type:'POST',
+    url: url,
+    data: $('#updateForm').serialize(),
+    success: function(data){
+      console.log(data);
+      if( data['status'] == 1 ){
+        loadMCCBigData();
+        alert( "修改成功！");
+        $("#dialog-modal").dialog("close");
+      }
+    }
+  }
+  );
 });
 
 $('#addbtn').click(function(event){
@@ -15,8 +92,7 @@ $('#addbtn').click(function(event){
 			is_worked=$("input[name=is_worked]:checked").val() ? 1 : 0,
 			is_keyboard=$("input[name=is_keyboard]:checked").val() ? 1 : 0,
 			is_simed=$("input[name=is_simed]:checked").val() ? 1 : 0,
-			remark=$('remark').val();
-			
+			remark=$("#remark").val();
 		if(mt_name == ""){
 			$('#error_name').html("机器名称不能为空");
 		}
@@ -42,9 +118,21 @@ $('#addbtn').click(function(event){
 				   	})
 			.complete(function(){
 				$('#addbtn').attr('disabled', false);
+				clearInput();
 			});
 		}
 });
+
+function clearInput(){
+  var inputs = $('#addmachinetypeform').find('input');
+  for( var i = 0; i < inputs.length; ++i ){
+    $(inputs[i]).val("")  ;
+  }
+  var textarea = $('textarea');
+  for( var i = 0; i < textarea.length; ++ i ){
+    $(textarea[i]).val("") ;
+  }
+}
 
 //input area focus and blur event
 $('input[name=mt_name]').focus(function(){
@@ -67,7 +155,7 @@ $('input[name=mt_number]').focus(function(){
 
 function loadMCTData(){
   $.ajax({
-    type:'GET',
+    type:'POST',
     dataType:"json", 
     url:"/pos/Pos/index.php/MachineType/search",
     success: function( data){
@@ -75,7 +163,7 @@ function loadMCTData(){
       var rows = [];
       var editHtml = '<tr>'+ 
                 '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
 																	<i class=\"icon-pencil bigger-130\"></i>\
 																</a>\
 																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
@@ -89,23 +177,30 @@ function loadMCTData(){
         row.push( item["mt_name"] );
         row.push( item["mt_number"] );
         row.push( item["type"] );
+        row.push( item["is_wired"] == 1 ? '是' : '否' );
         row.push( item["is_identified"] == 1 ? '是' : '否' );
         row.push( item["is_keyboard"] == 1 ? '是' : '否' );
-        row.push( item["remark"]);
-        row.push( item["is_simed"] == 1 ? '是' : '否' );
         row.push( item["is_worked"] == 1 ? '是' : '否' );
+        row.push( item["is_simed"] == 1 ? '是' : '否' );
+        row.push( item["remark"]);
         row.push( item["create_time"] );
         row.push( item["edit_time"] );
         row.push( editHtml  );
         rows.push(row);
       }
-      var oTable1 = $('#sample-table-2').dataTable({
+      var oTable1;
+      if ( $.fn.dataTable.isDataTable( '#sample-table-2' ) ) {
+        oTable1 = $('#sample-table-2').dataTable();
+      }
+      else {
+  
+      oTable1 = $('#sample-table-2').dataTable({
         "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
                         null,  null, null,null, null, null,null,
-                        { "bSortable": false }
+                        null,null, null, null,null, { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
@@ -119,6 +214,7 @@ function loadMCTData(){
                 "sUrl" : "",    
                 }
       });
+      }
       oTable1.fnClearTable();
       oTable1.fnAddData( rows );
     }
