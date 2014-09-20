@@ -49,14 +49,14 @@
                   
                   <div class="form-group">
                   
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 员工账户 </label>
+                    <label class="col-sm-1 control-label no-padding-right" > 员工账户 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="name" placeholder="员工账户"  />
+                        <input type="text" name="newAccount" placeholder="员工账户"  />
                     </div>
                   
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 员工密码 </label>
+                    <label class="col-sm-1 control-label no-padding-right" > 员工密码 </label>
                     <div class="col-sm-2">
-                        <input type="password" id="form-field-1" name="name" placeholder="员工密码"  />
+                        <input type="password"  name="newPwd"  placeholder="员工密码"  />
                     </div>
                     
                   </div>
@@ -67,32 +67,32 @@
                     <div class="checkboxGroup">
                       <div class="checkboxGroupRow">
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" id="storageCheck" value="storage"/>
+                          <input name="auth[]" type="checkbox" class="ace" id="storageCheck" value="manageStorage"/>
                           <span class="lbl"> 仓库管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" checked="true" value="1"/>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="manageSupplier"/>
                           <span class="lbl"> 设备供应商管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="2"/>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="manageMachineType"/>
                           <span class="lbl"> 设备型号管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="3"/>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="addMachine"/>
                           <span class="lbl"> 设备入库登记</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="4"/>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="viewStorage"/>
                           <span class="lbl"> 设备库存查看</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="5"/>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox" value="manageDeploy"/>
                           <span class="lbl"> 设备调拨管理</span>
                         </label>
                         
@@ -105,32 +105,32 @@
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="1"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="manageMccBig"/>
                           <span class="lbl"> MCC大类管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="2"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="manageMccSmall"/>
                           <span class="lbl"> MCC小类管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="3"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="manageMccItem"/>
                           <span class="lbl"> MCC项目管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="4"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="manageClientPlatform"/>
                           <span class="lbl"> 商户平台管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="5"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="mangeRate"/>
                           <span class="lbl"> 行业费率管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="A"/>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox" value="manageClientAttr"/>
                           <span class="lbl"> 商户属性管理</span>
                         </label>
                       </div>
@@ -181,14 +181,6 @@
                     </div>
                   </div>
                   
-                  <div class="space-4"></div>
-                  <div class="form-group " >
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注</label>
-                    <div class="col-sm-5 ">
-                        <textarea class="autosize-transition form-control" id="form-field-11" name="remark" placeholder="备注"></textarea>
-                    </div>
-
-                  </div> 
 
                   <div class="space-4"></div>
                   <div class="form-group">
@@ -213,7 +205,7 @@
                     <tr>
                       <th class="center">序号</th>
                       <th>员工姓名</th> 
-                      <th>员工权限</th>
+                      <th>所属公司</th>
                       <th>创建者</th>
                       <th>创建时间</th>
                       <th>修改者</th>
@@ -235,54 +227,178 @@
       </div>
     </div>
 
-   <div id="dialog-modal" title="修改公司信息"  style="display: none">
+   <div id="dialog-modal" title="修改员工信息"  style="display: none">
         <div class="dialog-content">
-        <form class="form-horizontal" role="form" method="post" action="__APP__/Company/updateCompany" id="updateForm">
-          <div class="form-group">
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司名 </label>
-            <div class="col-sm-2">
-                <input type="text" id="updateName" name="name" placeholder="公司名称"  />
-            </div>
-                   
-          </div>
-
-          <div class="space-4"></div>
-          
-          <div class="form-group " >
-            <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 备注</label>
-            <div class="col-sm-6 ">
-              <textarea class="autosize-transition form-control" id="updateRemark" name="remark" placeholder="备注"></textarea>
-            </div>
-
-          </div> 
-          <input id="c_id" type="hidden" name="c_id" />
-          
-          <div class="space-4"></div>
-          <div class="form-group">
-            <div class="col-md-3 "> </div>
-            <div class="col-sm-6 ">
-              <div style='float: left;'>
-              <button id="updateBtn" class="btn btn-info" type="button">
-              <i class="icon-ok bigger-110"></i>
-                提交
-              </button>
-              </div>
-              <div style='float: left;'>
-              <button id="cancelBtn" class="btn btn-danger" type="button">
-              <i class="icon-reply bigger-110"></i>
-                取消
-              </button>
-              </div>
-            </div>
-          </div>
+                <form class="form-horizontal" role="form" method="post" action="__APP__/Company/updateCompany" id="updateForm">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 员工姓名 </label>
+                    
+                    <div class="col-sm-2">
+                        <input type="text" id="updateName" name="name" placeholder="用户姓名"  />
+                    </div>
+                    
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属公司 </label>
+                    <div class="col-sm-2">
+                        <select type="text" id="updateCompany" name="c_id"></select>
+                    </div>
+ 
+                  </div>
                   
-        </form>
-        </div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 员工密码 </label>
+                    <div class="col-sm-2">
+                        <input type="password"  name="updatePwd"  placeholder="员工密码"  />
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 权限选择 </label>
+                    
+                    <div class="checkboxGroup">
+                      <div class="checkboxGroupRow">
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" id="storageCheck-update" value="manageStorage"/>
+                          <span class="lbl"> 仓库管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox-update" value="manageSupplier"/>
+                          <span class="lbl"> 设备供应商管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox-update" value="manageMachineType"/>
+                          <span class="lbl"> 设备型号管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox-update" value="addMachine"/>
+                          <span class="lbl"> 设备入库登记</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox-update" value="viewStorage"/>
+                          <span class="lbl"> 设备库存查看</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace storage-checkbox-update" value="manageDeploy"/>
+                          <span class="lbl"> 设备调拨管理</span>
+                        </label>
+                        
+                      </div>
+                      
+                      <div class="checkboxGroupRow">
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" id="operationCheck-update" value="operation"/>
+                          <span class="lbl"> 运营管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="manageMccBig"/>
+                          <span class="lbl"> MCC大类管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="manageMccSmall"/>
+                          <span class="lbl"> MCC小类管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="manageMccItem"/>
+                          <span class="lbl"> MCC项目管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="manageClientPlatform"/>
+                          <span class="lbl"> 商户平台管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="mangeRate"/>
+                          <span class="lbl"> 行业费率管理</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace operation-checkbox-update" value="manageClientAttr"/>
+                          <span class="lbl"> 商户属性管理</span>
+                        </label>
+                      </div>
+                      
+                     
+                      
+                      <div class="checkboxGroupRow">
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="setupApply"/>
+                          <span class="lbl"> 装机申请</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="setupRegister"/>
+                          <span class="lbl"> 装机登记</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="checkRegister"/>
+                          <span class="lbl"> 巡检登记</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="returnRegister"/>
+                          <span class="lbl"> 退机登记</span>
+                        </label>
+                        
+                      </div>
+                      
+                      <div class="checkboxGroupRow">
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="applyApprove"/>
+                          <span class="lbl"> 申请审批</span>
+                        </label>
+                        
+                         <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="taskDispatch"/>
+                          <span class="lbl"> 任务分派</span>
+                        </label>
+                        
+                        <label>
+                          <input name="auth[]" type="checkbox" class="ace" value="staffManage"/>
+                          <span class="lbl"> 员工管理</span>
+                        </label>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  <input type="hidden" id="updateUid" name="u_id"/>
+                  <div class="form-group">
+                    <div class="col-md-6 "> </div>
+                      <div class="col-sm-6 ">
+                      <div style='float: left;'>
+                        <button id="updateBtn" class="btn btn-info" type="button">
+                          <i class="icon-ok bigger-110"></i>
+                          提交
+                        </button>
+                      </div>
+                      <div style='float: left;'>
+                        <button id="cancelBtn" class="btn btn-danger" type="button">
+                          <i class="icon-reply bigger-110"></i>
+                          取消
+                        </button>
+                      </div>
+                      </div>
+                  </div>
+                  
+                </form>
+              </div>
     </div>
     
-    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
-		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
-    <script src="__PUBLIC__/userDefinedJs/user.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.md5.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/userDefinedJs/user.js"></script>
 
     
   </body>

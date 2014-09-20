@@ -9,9 +9,11 @@ $(document).ready(function(){
   loadCompanyData();
   
   $("#storageCheck").click( function(){checkMainBox(".storage-checkbox" ,this)});
+   $("#storageCheck-update").click( function(){checkMainBox(".storage-checkbox-update" ,this)});
   //如果不用function包裹则会直接执行，因为这个时候参数里面返回值是undefined，而不是函数。把this传进去是为了获取this的check属性。
   $("#operationCheck").on('change', function(){checkMainBox(".operation-checkbox",this)});
-  //loadData();
+  $("#operationCheck-update").on('change', function(){checkMainBox(".operation-checkbox-update",this)});
+  loadData();
   createDialog();
 });
 
@@ -34,9 +36,10 @@ function loadCompanyData(){
       var companyArr = data['data'];
       var options = "";
       for ( var i = 0; i < companyArr.length; ++i ){
-        options += "<option value=\" " + companyArr[i].c_id + " \" >" + companyArr[i].name + " </option>";
+        options += "<option value=\"" + companyArr[i].c_id + "\" >" + companyArr[i].name + " </option>";
       }
       $('#selectCompany').append( options );
+      $('#updateCompany').append( options );
     }
   });
 }
@@ -44,9 +47,8 @@ function loadCompanyData(){
 
 function createDialog(){
   $("#dialog-modal").dialog({
-
-                height: 450,
-                width: 400,
+                height: 400,
+                width: 1000,
                 dialogClass: "no-close",
                 modal: true,
                 autoOpen: false
@@ -58,26 +60,47 @@ function updateRow(ele){
   var $tr = $(ele).parents('tr');
   var $tdlist = $tr.find( $('td') );
   console.log( $tdlist.length);
-  var c_id = $tdlist.get(0);
-  var name = $tdlist.get(1);
-  var remark = $tdlist.get(2);
-  $("#c_id").val( $(c_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html());
-  $("#dialog-modal").dialog( "open");
+  var u_id = $tdlist.get(0);
+  console.log(u_id);
+  $.ajax({
+    type:'POST',
+    url:dataUrl,
+    data: { 'u_id' : $(u_id).html() },
+    success:function(data){
+      console.log(data);
+      var userItem = data['data'][0];
+      $('#updateCompany').val( userItem['c_id'] );
+      $('#updateName').val( userItem['name'] );
+      $('#updateUid').val( userItem['u_id'] );
+      $('#updateForm').find('input[type="checkbox"]').attr("checked",false);
+      var strs = userItem['auth'].split(',');
+      for( var i = 0 ; i<strs.length; ++i ){
+        if( strs[i] !== '' )
+        {
+          var condition = "input[value='" + strs[i] +"']";
+          //console.log(condition);
+          //用prop成功修改属性，用attr失败。
+          $('#updateForm').find(condition).prop("checked",true);
+          //console.log(box);
+          
+        }
+      }
+      $("#dialog-modal").dialog( "open");
+    }
+  });
 }
 
 function deleteRow(ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
   console.log( $tr.find('td').html() );
-  var mb_id = $tr.find('td').html();
+  var u_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
       url:delUrl,
-      data: {'mb_id' : mb_id },
+      data: {'u_id' : u_id },
       success: function(data){
         console.log(data);
         if( data['data'] != false ){
@@ -96,6 +119,7 @@ function deleteRow(ele){
 
 $('#cancelBtn').click( function(){
   $("#dialog-modal").dialog('close');
+  $("#updateBtn").attr('disabled',false);
 });
 
 $('#updateBtn').click( function(){
@@ -103,18 +127,33 @@ $('#updateBtn').click( function(){
   $.ajax({
     type:'POST',
     url: updateUrl,
-    data: $('#updateForm').serialize(),
+    data:{
+        u_id : $("#updateUid").val(),
+        name : $("#updateName").val(),
+        c_id : $("#updateCompany").val(),
+        pwd : stripPwd( $("#updatePwd").val() ),
+        auth : serializeAuth("#updateForm"),
+      },
     success: function(data){
       console.log(data);
       if( data['status'] == 1 ){
         loadData();
         alert( "修改成功！");
         $("#dialog-modal").dialog("close");
+        $("#updateBtn").attr('disabled',false);
       }
     }
   }
   );
 });
+
+function stripPwd( pwd){
+  $res = $.trim( pwd );
+  if( $res !== "" )
+    return $.md5($res);
+  else
+    return "";
+}
   
 $('#submitBtn').click( function(){
   var inputs = $('#contentForm').find('input');
@@ -131,9 +170,16 @@ $('#submitBtn').click( function(){
     $.ajax({
       type:'POST',
       url: createUrl,
-      data:$('#contentForm').serialize(),
+      data:{
+        name : $("input[name='name']").val(),
+        c_id : $("#selectCompany").val(),
+        account : $.md5( $("input[name='newAccount']").val() ),
+        pwd : $.md5( $("input[name='newPwd']").val() ),
+        auth : serializeAuth("#contentForm"),
+      },
       success: function(data,textStatus, jqXHR){
-        if( data['status'] == 1 ){
+        console.log(data);
+        if( data['status'] !== 0 ){
           alert("添加成功!");
           console.log(data);
           clearInput();
@@ -144,6 +190,17 @@ $('#submitBtn').click( function(){
   } 
 });
 
+function serializeAuth( authName ){
+  var res = "";
+  var $authArr = $(authName).find("input[type='checkbox']");
+  for ( var i = 0 ; i < $authArr.length; ++i){
+    var tempObj = $authArr.get(i);
+    if( tempObj.checked === true )
+      res += $(tempObj).val() + ",";
+  }
+  return res;
+}
+
 function clearInput(){
   var inputs = $('#contentForm').find('input');
   for( var i = 0; i < inputs.length; ++i ){
@@ -153,6 +210,8 @@ function clearInput(){
   for( var i = 0; i < textarea.length; ++ i ){
     $(textarea[i]).val("") ;
   }
+  
+  $('input[type="checkbox"]').attr("checked",false);
 }
 
 function loadData(){
@@ -161,23 +220,23 @@ function loadData(){
     dataType:"json", 
     url: dataUrl,
     success: function( data){
+      //console.log(data);
       var MccBigArr = data['data'];
       var rows = [];
-      var editHtml = '<tr>'+ 
-                '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
 																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
 																	<i class=\"icon-pencil bigger-130\"></i>\
 																</a>\
 																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
 																	<i class=\"icon-trash bigger-130\"></i>\
 																</a>\
-															</div></tr>';
+															</div></td>';
       for( var i=0; i<MccBigArr.length; ++i ){
         var item = MccBigArr[i];
         var row = [];
-        row.push( item["c_id"] );
+        row.push( item["u_id"] );
         row.push( item["name"] );
-        row.push( item["remark"] );
+        row.push( item["c_id"] );
         row.push( item["create_user"] );
         row.push( item["create_time"] );
         row.push( item["edit_user"] );
@@ -196,7 +255,13 @@ function loadData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,  null, null,null, null, null,null,
+                        null,  
+                        null, 
+                        null,
+                        null, 
+                        null, 
+                        null,
+                        null,
                         { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
