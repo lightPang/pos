@@ -159,8 +159,13 @@ CREATE TABLE `company` (
   `c_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `type` int(11) NOT NULL,
+  `remark` tinytext NOT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edit_user` int(11) NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `create_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`c_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +174,7 @@ CREATE TABLE `company` (
 
 LOCK TABLES `company` WRITE;
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
-INSERT INTO `company` VALUES (1,'中国银行534分行',1);
+INSERT INTO `company` VALUES (1,'中国银行534分行',1,'','2014-09-20 08:09:14',1,0,NULL),(2,'增城公司',0,'','2014-09-20 08:09:26',1,1,'2014-09-20 08:09:25'),(3,'增城公司',0,'','2014-09-20 08:09:37',1,1,'2014-09-20 08:09:36'),(4,'增城公司',0,'','2014-09-20 08:11:09',1,1,'2014-09-20 08:11:08'),(5,'增城公司',0,'','2014-09-20 08:11:24',1,1,'2014-09-20 08:11:23'),(6,'增城公司',0,'','2014-09-20 08:11:30',1,1,'2014-09-20 08:11:29'),(7,'增城公司',0,'','2014-09-20 08:11:55',1,1,'2014-09-20 08:11:54'),(8,'增城分公司',0,'','2014-09-20 08:12:28',1,1,'2014-09-20 08:12:27'),(9,'湛江分公司',0,'','2014-09-20 08:13:25',1,1,'2014-09-20 08:13:24');
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,11 +203,11 @@ CREATE TABLE `deployorder` (
   KEY `m_id` (`m_id`),
   KEY `deployorder_ifbk_4` (`source_c`),
   KEY `deployorder_ifbk_5` (`target_c`),
-  CONSTRAINT `deployorder_ifbk_5` FOREIGN KEY (`target_c`) REFERENCES `company` (`c_id`),
   CONSTRAINT `deployorder_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `deployorder_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `deployorder_ibfk_3` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`),
   CONSTRAINT `deployorder_ifbk_4` FOREIGN KEY (`source_c`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `deployorder_ifbk_5` FOREIGN KEY (`target_c`) REFERENCES `company` (`c_id`),
   CONSTRAINT `do_dom_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -250,14 +255,14 @@ CREATE TABLE `machine` (
   KEY `machine_ifbk5` (`task_return_id`),
   KEY `machine_ifbk_6` (`o_id`),
   KEY `machine_ifbk_7` (`c_id`),
-  CONSTRAINT `machine_ifbk_7` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
   CONSTRAINT `machine_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `machine_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `machine_ifbk4` FOREIGN KEY (`task_apply_id`) REFERENCES `task` (`t_id`),
   CONSTRAINT `machine_ifbk5` FOREIGN KEY (`task_return_id`) REFERENCES `task` (`t_id`),
   CONSTRAINT `machine_ifbk_3` FOREIGN KEY (`b_id`) REFERENCES `bank` (`b_id`),
-  CONSTRAINT `machine_ifbk_6` FOREIGN KEY (`o_id`) REFERENCES `order` (`o_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  CONSTRAINT `machine_ifbk_6` FOREIGN KEY (`o_id`) REFERENCES `order` (`o_id`),
+  CONSTRAINT `machine_ifbk_7` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,8 +292,8 @@ CREATE TABLE `machineprovider` (
   PRIMARY KEY (`mp_id`),
   KEY `create_user` (`create_user`),
   KEY `edit_user` (`edit_user`),
-  CONSTRAINT `machineprovider_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
-  CONSTRAINT `machineprovider_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
+  CONSTRAINT `machineprovider_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
+  CONSTRAINT `machineprovider_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -312,8 +317,8 @@ DROP TABLE IF EXISTS `mcc_big`;
 CREATE TABLE `mcc_big` (
   `mb_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
-  `remark` tinytext NOT NULL,
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `remark` tinytext,
+  `create_time` timestamp NULL DEFAULT NULL,
   `create_user` int(11) NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `edit_user` int(11) DEFAULT NULL,
@@ -322,7 +327,7 @@ CREATE TABLE `mcc_big` (
   KEY `create_user` (`create_user`),
   CONSTRAINT `mcc_big_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `mcc_big_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,6 +336,7 @@ CREATE TABLE `mcc_big` (
 
 LOCK TABLES `mcc_big` WRITE;
 /*!40000 ALTER TABLE `mcc_big` DISABLE KEYS */;
+INSERT INTO `mcc_big` VALUES (39,'34563116','','0000-00-00 00:00:00',1,'2014-09-20 02:57:53',1),(40,'123124124','','2014-09-18 09:34:12',1,'2014-09-18 09:34:13',1),(41,'123124124','','2014-09-18 09:34:18',1,'2014-09-18 09:34:19',1),(42,'234','','2014-09-19 02:44:14',1,'2014-09-19 02:44:15',1),(43,'asdfsdw','','2014-09-19 02:44:37',1,'2014-09-19 02:44:38',1),(44,'哇哇哇','','2014-09-19 02:45:37',1,'2014-09-19 02:45:38',1),(45,'234555','','2014-09-19 02:47:05',1,'2014-09-19 02:47:06',1),(46,'234234234','','2014-09-19 02:48:38',1,'2014-09-19 02:48:39',1),(47,'2323254','','2014-09-19 02:48:56',1,'2014-09-19 02:48:57',1),(48,'水电费','','2014-09-19 02:54:55',1,'2014-09-19 02:54:56',1),(49,'定位','','2014-09-19 02:55:26',1,'2014-09-19 02:55:27',1),(50,'234','','2014-09-19 02:57:25',1,'2014-09-19 02:57:26',1),(51,'2222222','','2014-09-19 02:57:56',1,'2014-09-19 02:57:57',1),(52,'222222','','2014-09-19 02:59:19',1,'2014-09-19 02:59:20',1),(53,'2323','','2014-09-19 06:31:06',1,'2014-09-19 06:31:07',1);
 /*!40000 ALTER TABLE `mcc_big` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -442,11 +448,11 @@ CREATE TABLE `order` (
   KEY `order_company_constraint` (`c_id`),
   KEY `order_ifbk_3` (`mp_id`),
   KEY `order_ifbk_4` (`o_user`),
-  CONSTRAINT `order_ifbk_4` FOREIGN KEY (`o_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `order_company_constraint` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
   CONSTRAINT `order_ibfk_1` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `order_ibfk_2` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
-  CONSTRAINT `order_ifbk_3` FOREIGN KEY (`mp_id`) REFERENCES `machineprovider` (`mp_id`)
+  CONSTRAINT `order_ifbk_3` FOREIGN KEY (`mp_id`) REFERENCES `machineprovider` (`mp_id`),
+  CONSTRAINT `order_ifbk_4` FOREIGN KEY (`o_user`) REFERENCES `user` (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -486,11 +492,11 @@ CREATE TABLE `task` (
   KEY `task_cu_constraint` (`ac_user`),
   KEY `task_tc_constraint` (`c_id`),
   KEY `task_tm_constraint` (`m_id`),
-  CONSTRAINT `task_tm_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`),
   CONSTRAINT `task_cu_constraint` FOREIGN KEY (`ac_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `task_ibfk_1` FOREIGN KEY (`edit_user`) REFERENCES `user` (`u_id`),
   CONSTRAINT `task_ibfk_2` FOREIGN KEY (`create_user`) REFERENCES `user` (`u_id`),
-  CONSTRAINT `task_tc_constraint` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
+  CONSTRAINT `task_tc_constraint` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `task_tm_constraint` FOREIGN KEY (`m_id`) REFERENCES `machine` (`m_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -512,16 +518,20 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `u_id` int(11) NOT NULL AUTO_INCREMENT,
-  `auth` int(11) NOT NULL,
+  `auth` varchar(500) NOT NULL,
   `name` varchar(100) NOT NULL,
   `pwd` varchar(100) NOT NULL,
   `account` varchar(100) NOT NULL,
   `c_id` int(11) NOT NULL,
+  `create_user` int(11) NOT NULL,
+  `create_time` timestamp NULL DEFAULT NULL,
+  `edit_user` int(11) NOT NULL,
+  `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`u_id`),
   KEY `c_id` (`c_id`),
-  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`),
+  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`c_id`) REFERENCES `company` (`c_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +540,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,0,'开起我亲爱的小耗子','21232f297a57a5a743894a0e4a801fc3','21232f297a57a5a743894a0e4a801fc3',1);
+INSERT INTO `user` VALUES (1,'manageStorage,manageSupplier,manageMachineType,addMachine,viewStorage,manageDeploy,operation,manageMccBig,manageMccSmall,manageMccItem,manageClientPlatform,mangeRate,manageClientAttr,','开起我亲爱的小耗子','21232f297a57a5a743894a0e4a801fc3','21232f297a57a5a743894a0e4a801fc3',1,0,'0000-00-00 00:00:00',0,'2014-09-20 17:02:20'),(7,'manageStorage,manageSupplier,manageMachineType,addMachine,viewStorage,manageDeploy,','王大可','202cb962ac59075b964b07152d234b70','202cb962ac59075b964b07152d234b70',1,1,'2014-09-20 13:45:47',1,'2014-09-20 13:45:48'),(8,'manageStorage,manageSupplier,manageMachineType,addMachine,viewStorage,manageDeploy,','王大可','7c4f29407893c334a6cb7a87bf045c0d','7c4f29407893c334a6cb7a87bf045c0d',1,1,'2014-09-20 13:48:12',1,'2014-09-20 13:48:13'),(9,'manageStorage,manageSupplier,manageMachineType,addMachine,viewStorage,manageDeploy,','王大锤','40be4e59b9a2a2b5dffb918c0e86b3d7','40be4e59b9a2a2b5dffb918c0e86b3d7',1,1,'2014-09-20 13:48:45',1,'2014-09-20 13:48:46'),(11,'','asd','670da91be64127c92faac35c8300e814','d2f2297d6e829cd3493aa7de4416a18f',1,1,'2014-09-20 16:49:09',1,'2014-09-20 16:49:10'),(12,'manageStorage,manageSupplier,manageMachineType,addMachine,viewStorage,manageDeploy,operation,manageMccBig,manageMccSmall,manageMccItem,manageClientPlatform,mangeRate,manageClientAttr,','ewqq','4eae35f1b35977a00ebd8086c259d4c9','4eae35f1b35977a00ebd8086c259d4c9',1,1,'2014-09-20 16:49:55',1,'2014-09-20 16:49:56');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -543,4 +553,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-17 13:25:21
+-- Dump completed on 2014-09-21  1:08:43
