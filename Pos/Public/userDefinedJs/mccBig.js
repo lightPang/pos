@@ -1,7 +1,34 @@
 $(document).ready(function(){
   loadMCCBigData();
+  createDialog();
 });
 
+
+function createDialog(){
+  $("#dialog-modal").dialog({
+
+                height: 320,
+                width: 400,
+                dialogClass: "no-close",
+                modal: true,
+                autoOpen: false
+
+            });
+}
+
+function updateRow(ele){
+  var $tr = $(ele).parents('tr');
+  var $tdlist = $tr.find( $('td') );
+  console.log( $tdlist.length);
+  var mb_id = $tdlist.get(0);
+  var mb_name = $tdlist.get(1);
+  var mb_remark = $tdlist.get(2);
+  console.log( $(mb_name).html() );
+  $("#mb_id").val( $(mb_id).html() );
+  $("#updateName").val( $(mb_name).html() );
+  $("#updateRemark").val( $(mb_remark).html());
+  $("#dialog-modal").dialog( "open");
+}
 
 function deleteRow(ele){
   var $tr = $(ele).parents('tr');
@@ -29,6 +56,30 @@ function deleteRow(ele){
     
   }
 }
+
+$('#cancelBtn').click( function(){
+  $("#dialog-modal").dialog('close');
+});
+
+$('#updateBtn').click( function(){
+  var url = $('#updateForm').attr('action');
+  $("#updateBtn").css('disabled','true');
+  console.log(url);
+  $.ajax({
+    type:'POST',
+    url: url,
+    data: $('#updateForm').serialize(),
+    success: function(data){
+      console.log(data);
+      if( data['status'] == 1 ){
+        loadMCCBigData();
+        alert( "修改成功！");
+        $("#dialog-modal").dialog("close");
+      }
+    }
+  }
+  );
+});
   
 $('#submitBtn').click( function(){
   var url = $('#contentForm').attr('action');
@@ -82,7 +133,7 @@ function loadMCCBigData(){
       var rows = [];
       var editHtml = '<tr>'+ 
                 '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
 																	<i class=\"icon-pencil bigger-130\"></i>\
 																</a>\
 																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
@@ -102,7 +153,13 @@ function loadMCCBigData(){
         row.push( editHtml  );
         rows.push(row);
       }
-      var oTable1 = $('#sample-table-2').dataTable({
+      var oTable1;
+      if ( $.fn.dataTable.isDataTable( '#sample-table-2' ) ) {
+        oTable1 = $('#sample-table-2').dataTable();
+      }
+      else {
+  
+      oTable1 = $('#sample-table-2').dataTable({
         "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
@@ -122,6 +179,7 @@ function loadMCCBigData(){
                 "sUrl" : "",    
                 }
       });
+      }
       oTable1.fnClearTable();
       oTable1.fnAddData( rows );
     }
