@@ -27,5 +27,21 @@
 
 			exit;
 		}
+
+		public function search(){
+			doAuth();
+
+			$mtModel = M('Machinetype');
+
+			if(isset($_POST['mt_id'])){
+				$map['mt_id'] = $_POST['mt_id'];
+				$data = $mtModel->where($map)->select();
+			}
+			else{
+				$data = $mtModel->select();
+			}
+
+			$this->ajaxReturn( $data, "123", 1 );
+		}
 	}
 ?>

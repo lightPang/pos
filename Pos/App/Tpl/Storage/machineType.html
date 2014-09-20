@@ -147,31 +147,11 @@
                     <th>是否启用</th>
                     <th>创建时间</th>
                     <th>修改时间</th>
+                    <th>操作</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <volist name="machineTypes" id="machineType">
-                    <tr>
-                      <td style="display:none">{$machineType.mt_id}</td>
-                      <td>{$machineType.mt_name}</td>
-                      <td>{$machineType.mt_number}</td>
-                      <td>
-                        <if condition="$machineType.type == 1">POS机
-                          <elseif condition="$machineType.type == 2" />键盘
-                          <elseif condition="$machineType.type == 3" />SIM卡
-                          <else />其它
-                        </if>
-                      </td>
-                      <td class="center"><if condition="$machineType.is_identified == 1">是 <else />否</if></td>
-                      <td class="center"><if condition="$machineType.is_keyboard == 1">是 <else />否</if></td>
-                      <td class="center"><if condition="$machineType.is_simed == 1">是 <else />否</if></td>
-                      <td>{$machineType.remark}</td>
-                      <td class="center"><if condition="$machineType.is_worked == 1">是 <else />否</if></td>
-                      <td>{$machineType.create_time}</td>
-                      <td>{$machineType.edit_time}</td>
-                    </tr>
-                  </volist>
                 </tbody>
               </table>
             </div>
@@ -180,6 +160,8 @@
       </div>
     </div>
 
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+    <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
     <script src="__PUBLIC__/userDefinedJs/addmachinetype.js"></script>
   </body>
 </html>
