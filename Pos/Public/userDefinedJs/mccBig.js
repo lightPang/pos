@@ -129,6 +129,7 @@ function loadMCCBigData(){
     dataType:"json", 
     url:"/pos/Pos/index.php/Operation/getMccBigData",
     success: function( data){
+      console.log(data);
       var MccBigArr = data['data'];
       var rows = [];
       var editHtml = '<tr>'+ 

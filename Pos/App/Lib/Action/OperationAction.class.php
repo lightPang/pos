@@ -1,7 +1,7 @@
 <?php
-  class OperationAction extends Action{
+  class OperationAction extends CommonAction{
     public function index(){
-      $this->assign("activeTab", $_GET["activeTab"]);
+      $this->doAuth();
       $this->display();
     }
     
@@ -40,9 +40,10 @@
       else
         $data = $MCCBig->select();
       //echo json_encode ( $data, JSON_UNESCAPED_UNICODE ); 
-      if( isset( $_SESSION['u_id'] ) )
-        $this->ajaxReturn( $data, "123", 1 );
-      
+      if( isset( $_SESSION['u_id'] ) ){
+       $data = $this->updateUserInfo( $data );
+       $this->ajaxReturn( $data, "123", 1 );
+      }
     }
     
     public function updateMCCBig(){

@@ -1,6 +1,7 @@
 <?php
-  class UserAction extends Action{
+  class UserAction extends CommonAction{
     public function index(){
+      $this->doAuth();
       $this->display();
     }
     
@@ -75,7 +76,7 @@
         unset( $user['account'] );
         array_push( $res, $user );
       }
-      return $res;
+      return $this->updateUserInfo( $res );
     }
   }
 ?>

@@ -382,156 +382,170 @@
 								<span class="menu-text"> 控制台 </span>
 							</a>
 						</li>
-
-            <li>
-							<a class="dropdown-toggle" href="#/activeTab/1">
+            <if condition="$manageStorage egt 1">
+            <li id="storage_li">
+							<a class="dropdown-toggle" href="#/activeTab/">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 仓库管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
 							<ul class="submenu" style="display:none;" id="storage_menu">
+                <if condition="$manageSupplier egt 1">
 								<li>
-									<a href="__APP__/Storage/addSupplier/activeTab/2">
+									<a href="__APP__/Storage/addSupplier/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										设备供应商
 									</a>
 								</li>
-
+                </if>
+                <if condition="$manageMachineType egt 1">
 								<li>
-									<a href="__APP__/Storage/machineType/activeTab/3">
+									<a href="__APP__/Storage/machineType/activeTab/" >
 										<i class="icon-double-angle-right"></i>
 										设备型号
 									</a>
 								</li>
-
+                </if>
+                <if condition="$addMachine egt 1">
 								<li>
-									<a href="__APP__/Storage/machineStoring/activeTab/4">
+									<a href="__APP__/Storage/machineStoring/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										设备入库
 									</a>
 								</li>
-
+                </if>
+                <if condition="$viewStorage egt 1">
 								<li>
-									<a href="__APP__/Storage/machineStorage/activeTab/5">
+									<a href="__APP__/Storage/machineStorage/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										设备库存
 									</a>
 								</li>
-
+                </if>
+                <if condition="$manageDeploy egt 1">
 								<li>
-									<a href="__APP__/Storage/machineDispatch/activeTab/6">
+									<a href="__APP__/Storage/machineDispatch/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										设备调拨
 									</a>
 								</li>
+                </if>
 							</ul>	
 						</li>
-            
-            <li>
-              <a class="dropdown-toggle" href="__APP__/Operation/index/activeTab/7">
+            </if>
+            <if condition="$operation egt 1">
+            <li id="operation_li">
+              <a class="dropdown-toggle" href="__APP__/Operation/index/activeTab/">
 								<i class="icon-text-width"></i>
 								<span class="menu-text"> 运营管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
             	<ul class="submenu" style="display:none;" id="operate_menu">
+                <if condition="$manageMccBig egt 1">
 								<li>
-									<a href="__APP__/Operation/index/activeTab/8">
+									<a href="__APP__/Operation/index/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										MCC大类管理
 									</a>
 								</li>
-
+                </if>
+                <if condition="$manageMccSmall egt 1">
 								<li>
                 
-									<a href="__APP__/Storage/machineType/activeTab/9">
+									<a href="__APP__/Storage/machineType/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										MCC小类管理
 									</a>
 								</li>
-
+                </if>
+                <if condition="$manageMccItem egt 1">
 								<li>
-									<a href="__APP__/Storage/machineStoring/activeTab/10">
+									<a href="__APP__/Storage/machineStoring/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										MCC项目管理
 									</a>
 								</li>
-
+                </if>
+                <if condition="$manageClientPlatform egt 1">
 								<li>
-									<a href="__APP__/Storage/machineStorage/activeTab/11">
+									<a href="__APP__/Storage/machineStorage/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										商户平台
 									</a>
 								</li>
-
+                </if>
+                <if condition="$mangeRate egt 1">
 								<li>
-									<a href="__APP__/Storage/machineDispatch/activeTab/12">
+									<a href="__APP__/Storage/machineDispatch/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										行业费率
 									</a>
 								</li>
-                
+                </if>
+                <if condition="$manageClientAttr egt 1">
                 <li>
-									<a href="__APP__/Storage/machineDispatch/activeTab/13">
+									<a href="__APP__/Storage/machineDispatch/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										商户属性
 									</a>
 								</li>
+                </if>
 							</ul>	
             </li>
-           
+            </if>
+            <if condition="$setupApply egt 1">
 						<li>
-							<a href="__APP__/Apply/index/activeTab/14">
+							<a href="__APP__/Apply/index/activeTab/">
 								<i class="icon-dashboard"></i>
 								<span class="menu-text"> 装机申请 </span>
 							</a>
 						</li>
-            
-						<li>
-							<a href="__APP__/Approve/index/activeTab/15" class="dropdown-toggle">
+            </if>
+            <if condition="$setupRegister egt 1">
+            <li>
+							<a href="__APP__/ReturnRecord/index/activeTab/">
+								<i class="icon-list-alt"></i>
+								<span class="menu-text"> 装机记录 </span>
+							</a>
+						</li>
+            </if>
+            <if condition="$checkRegister egt 1">
+            <li>
+							<a href="__APP__/Check/index/activeTab/" >
+								<i class="icon-edit"></i>
+								<span class="menu-text"> 巡检记录 </span>
+							</a>
+						</li>
+            </if>
+            <if condition="$returnRegister egt 1">
+            <li>
+							<a href="__APP__/ReturnRegister/index/activeTab/" >
+								<i class="icon-tag"></i>
+								<span class="menu-text"> 退机记录 </span>
+							</a>
+						</li>
+            </if>
+            <if condition="$applyApprove egt 1">
+            <li>
+							<a href="__APP__/Approve/index/activeTab/" class="dropdown-toggle">
 								<i class="icon-desktop"></i>
 								<span class="menu-text"> 申请审批 </span>
 							</a>
 						</li>
-            
+            </if>
+            <if condition="$taskDispatch egt 1">
             <li>
-							<a href="__APP__/Task/index/activeTab/16">
+							<a href="__APP__/Task/index/activeTab/">
 								<i class="icon-calendar"></i>
 								<span class="menu-text">
 									任务分派
 								</span>
 							</a>
 						</li>
-            
+            </if>
+            <if condition="$staffManage egt 1">
 						<li>
-							<a href="__APP__/Check/index/activeTab/17" >
-								<i class="icon-edit"></i>
-								<span class="menu-text"> 巡检记录 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="__APP__/ReturnRecord/index/activeTab/18">
-								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 装机记录 </span>
-							</a>
-						</li>
-
-						<li>
-							<a href="__APP__/ReturnRegister/index/activeTab/19" >
-								<i class="icon-tag"></i>
-								<span class="menu-text"> 退机记录 </span>
-							</a>
-						</li>
-            
-            <li>
-							<a href="#" class="dropdown-toggle">
-								<i class="icon-list"></i>
-								<span class="menu-text"> 机器记录 </span>
-							</a>
-						</li>
-            
-						<li>
-							<a href="__APP__/User" >
+							<a href="__APP__/User/index/activeTab/" >
 								<i class="icon-file-alt"></i>
 
 								<span class="menu-text">
@@ -539,15 +553,17 @@
 								</span>
 							</a>
 						</li>
-            
+            </if>
+            <if condition="$companyManage egt 1">
             <li>
-              <a href="__APP__/Company/index/activeTab/20">
+              <a href="__APP__/Company/index/activeTab/">
                 <i class="icon-home"></i>
                 <span class="menu-text">
                   公司管理
                 </span>
               </a>
             </li>
+            </if>
 					</ul><!-- /.nav-list -->
 
 					<div class="sidebar-collapse" id="sidebar-collapse">

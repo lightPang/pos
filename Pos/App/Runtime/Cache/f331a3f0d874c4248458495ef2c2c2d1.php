@@ -78,10 +78,7 @@
 
 
     <script src="__PUBLIC__/js/jquery-2.0.3.min.js"></script>
-    <!--jQuery MD5-->
     <script type="text/javascript" src="__PUBLIC__/js/jquery.md5.js"></script>
     <script type="text/javascript" src="__PUBLIC__/userDefinedJs/login.js"></script>
-    <!-- inline scripts related to this page -->
-
 </body>
 </html>
