@@ -1,7 +1,8 @@
 <?php
-  class CompanyAction extends Action{
+  class CompanyAction extends CommonAction{
     public function index(){
       if( $_SESSION['u_id'] ){
+        $this->doAuth();
         $this->display('index');
       }
     }
@@ -15,7 +16,7 @@
       }
       else if( isset( $_SESSION['u_id'] ) ){
         $data = $company->select();
-        $this->ajaxReturn( $data, "allCompanyData", 1);
+        $this->ajaxReturn( $this->updateUserInfo($data), "allCompanyData", 1);
       }
       else{
         $this->ajaxReturn( null, "no data", 0 );
