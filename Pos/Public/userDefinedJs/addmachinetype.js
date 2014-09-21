@@ -159,7 +159,7 @@ function loadMCTData(){
     dataType:"json", 
     url:"/pos/Pos/index.php/MachineType/search",
     success: function( data){
-      var MCTArr = data['data'];
+      var MCTArr = data['data']; alert(MCTArr.toSource());
       var rows = [];
       var editHtml = '<tr>'+ 
                 '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\

@@ -1,14 +1,4 @@
-<?php
-	/*
-	*在某些操作之前验证是否为登陆用户
-	*/
-	function doAuth() {
-		session_start();
-		if( !isset($_SESSION['user']) || !isset($_SESSION['u_id']) ) {
-			header("Location:".U('Index/index'));
-		}
-	}
-	
+<?php	
 	/*
 	*按照JSON协议打印API接口的处理结果
 	*/

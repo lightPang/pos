@@ -84,28 +84,28 @@ $('#updateBtn').click( function(){
 
 $('#addbtn').click(function(event){
 	event.preventDefault();
-	var url = $('#addsupplier_form').attr('action'),
-		supplier = $('#supplier').val(),
-		remark = $('#remark').val();
+	var supplier = $('#supplier').val(),
+		  remark = $('#remark').val();
 	if(supplier != ""){
 		$(this).attr('disabled', true);
-		$.post(url, {supplier:supplier, remark:remark}, function(data){
-			if(data == "true"){
-				alert("添加成功！");
-				clearInput();
-			}
-			else{
-				 alert(data);
-			}			
-		})
-		.complete(function(){
-			$('#addbtn').attr('disabled', false);
-		})
+    $.ajax({
+      type:'POST',
+      url:'/pos/Pos/index.php/Supplier/add',
+      data: {'supplier' : supplier,
+            'remark' : remark},
+      success: function(data){
+        console.log(data);
+        alert(data['info']);
+        if(data['info'] == 1)
+          clearInput();
+        $('#addbtn').attr('disabled', false);
+      }
+    });
 	}
 });
 
 function clearInput(){
-  var inputs = $('#addmachinetypeform').find('input');
+  var inputs = $('#addsupplier_form').find('input');
   for( var i = 0; i < inputs.length; ++i ){
     $(inputs[i]).val("")  ;
   }
