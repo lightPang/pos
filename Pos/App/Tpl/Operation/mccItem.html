@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>asdf</title>
+
+    <layout name="layout" />
+    <link rel="stylesheet" href="__PUBLIC__/userDefinedCss/dialog.css" />
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-lg-11">
+        <div class="tabbable">
+          <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+              <a data-toggle="tab" href="#home">
+                <i class="green icon-home bigger-110"></i>
+                  增加MCC小类
+                </a>
+            </li>
+
+            <li>
+              <a data-toggle="tab" href="#profile">
+                <i class="icon-rocket bigger-110"></i>
+                MCC小类信息
+              </a>
+            </li>
+
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane in active">
+              <div class="row">
+                <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/createMccSub" id="contentForm">
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC大类 </label>
+                    <div class="col-sm-2">
+                        <select id="selectMccBig" name="mb_id" ></select>
+                    </div>
+                    <div class="col-sm-1"></div> 
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC小类 </label>
+                    <div class="col-sm-2">
+                        <select id="selectMccSub" name="ms_id" ></select>
+                    </div>
+                    <div class="col-sm-1"></div> 
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" name="code" placeholder="名称"  />
+                    </div> 
+                   
+                  </div>
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 发卡（0.9）+转换（0.13）：</label>
+                    <div class="col-sm-2" >
+                        <input type="text" id="form-field-1" name="a_rate" placeholder="发卡（0.9）+转换（0.13）"  />
+                    </div> 
+                  </div>
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">收单基准价 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" name="b_rate" placeholder="收单基准价"  />
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">合计 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" name="c_rate" placeholder="合计"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">发卡+转接 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="form-field-1" name="d_rate" placeholder="发卡+转接"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group " >
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> 备注</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control" id="form-field-11" name="remark" placeholder="备注"></textarea>
+                    </div>
+
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-5 "> </div>
+                    <div class="col-sm-3 ">
+                      <button id="submitBtn" class="btn btn-info" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          提交
+                      </button>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
+            </div>
+
+            <div id="profile" class="tab-pane">
+              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+                
+                <table id="sample-table-2" id="contentTable" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="center">序号</th>
+                      <th>大类名称</th>
+                      <th>小类名称</th>
+                      <th>MCC</th>
+                      <th>发卡（0.9）+转换（0.13）</th>
+                      <th>收单基准价</th>
+                      <th>合计</th>
+                      <th>发卡+转接</th>
+                      <th>备注</th>
+                      <th>创建时间</th>
+                      <th>修改时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   <div id="dialog-modal" title="修改MCC项目"  style="display: none">
+        <div class="dialog-content">
+        <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="updateForm">
+
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC大类 </label>
+                    <div class="col-sm-2">
+                        <select id="updateMccBig" name="mb_id" ></select>
+                    </div>
+                    <div class="col-sm-1"></div> 
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC小类 </label>
+                    <div class="col-sm-2">
+                        <select id="updateMccSub" name="ms_id" ></select>
+                    </div>
+                    <div class="col-sm-1"></div> 
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="updateCode" name="code" placeholder="名称"  />
+                    </div> 
+                   
+                  </div>
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 发卡（0.9）+转换（0.13）：</label>
+                    <div class="col-sm-2" >
+                        <input type="text" id="updateA_rate" name="a_rate" placeholder="发卡（0.9）+转换（0.13）"  />
+                    </div> 
+                  </div>
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">收单基准价 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="updateB_rate" name="b_rate" placeholder="收单基准价"  />
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">合计 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="updateC_rate" name="c_rate" placeholder="合计"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">发卡+转接 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="updateD_rate" name="d_rate" placeholder="发卡+转接"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group " >
+                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> 备注</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control" id="updateRemark" name="remark" placeholder="备注"></textarea>
+                    </div>
+
+                  </div> 
+          <input id="mi_id" type="hidden" name="mi_id" />
+          
+          <div class="space-4"></div>
+          <div class="form-group">
+            <div class="col-md-3 "> </div>
+            <div class="col-sm-6 ">
+              <div style='float: left;'>
+              <button id="updateBtn" class="btn btn-info" type="button">
+              <i class="icon-ok bigger-110"></i>
+                提交
+              </button>
+              </div>
+              <div style='float: left;'>
+              <button id="cancelBtn" class="btn btn-danger" type="button">
+              <i class="icon-reply bigger-110"></i>
+                取消
+              </button>
+              </div>
+            </div>
+          </div>
+                  
+        </form>
+        </div>
+    </div>
+    
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/mccItem.js"></script>
+
+    
+  </body>
+</html>

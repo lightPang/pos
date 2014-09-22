@@ -43,5 +43,19 @@
       }
       return $resArr;
     }
+    
+    protected function updateCompanyInfo($arr){
+      $company = M('company');
+      $resArr = array();
+      foreach( $arr as $companyItem ){
+        $map['c_id'] = $companyItem['c_id'];
+        $data = $company->where($map)->select();
+        if( isset($data)){
+          $companyItem['c_name'] = $data[0]['name'];
+          array_push( $resArr, $companyItem );
+        }
+      }
+      return $resArr;
+    }
   }
 ?>

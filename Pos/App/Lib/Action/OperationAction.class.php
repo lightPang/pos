@@ -5,6 +5,10 @@
       $this->display();
     }
     
+    /*******
+    function about mccBig
+    */
+    
     public function addMccBig(){
       $name = $_POST['name'];
       $remark = $_POST['remark'];
@@ -17,7 +21,7 @@
       $MccBigItem['remark'] = $remark;
       $MCCBig = M('mcc_big');
       if( $res = $MCCBig->add( $MccBigItem ) )
-        $this->ajaxReturn($res, "表单数据保存成功!", 1);
+        $this->ajaxReturn($res, "琛ㄥ崟鏁版嵁淇濆瓨鎴愬姛!", 1);
       else
         $this->ajaxReturn( $data, "", 0);
     }
@@ -59,6 +63,323 @@
         $this->ajaxReturn( $data, "123", 1 );
       }
       $this->ajaxReturn( null, "123", 0 );
+    }
+    
+    /*******
+    function about mccSub
+    */
+    
+    public function mccSub(){
+      $this->doAuth();
+      $this->display();
+    }
+    
+    public function createMccSub(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['name'] ) ){
+        $MccSub = M('mcc_sub');
+        $data['name'] = $_POST['name'] ;
+        $data['mb_id'] = $_POST['mb_id'];
+        $data['remark'] = $_POST['remark'];
+        $data['create_user'] = $_SESSION['u_id'];
+        $data['create_time'] =  date('Y-m-d H:i:s',time());
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $res = $MccSub->add( $data );
+        $this->ajaxReturn( $res, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function getMccSubData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['ms_id'] ) ){
+        $map['ms_id'] = $$_POST['ms_id'] ;
+        $MccSub = M('mcc_sub');
+        $data = $MccSub->where($map)->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $MccSub = M('mcc_sub');
+        $data = $MccSub->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+      }
+    }
+    
+    public function updateMccSub(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['ms_id'] ) ){
+        $map['ms_id'] = $_POST['ms_id'];
+        $data['mb_id'] = $_POST['mb_id'];
+        $data['name'] = $_POST['name'];
+        $data['remark'] = $_POST['remark'];
+        $data['edit_user'] = $_SESSION['u_id'];
+        $MccSub = M('mcc_sub');
+        $res = $MccSub->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", $res);
+      }
+    }
+    
+    public function delMccSub(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['ms_id'] ) ){
+        $map['ms_id'] = $_POST['ms_id'];
+        $MccSub = M('mcc_sub');
+        $res = $MccSub->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+    }
+    
+    /*******
+    function about mccItem
+    */
+    
+    public function mccItem(){
+      $this->doAuth();
+      $this->display('mccItem');
+    }
+    
+    public function createMccItem(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
+        $MccItem = M('mcc_item');
+        $data['code'] = $_POST['code'] ;
+        $data['mb_id'] = $_POST['mb_id'];
+        $data['ms_id'] = $_POST['ms_id'];
+        $data['remark'] = $_POST['remark'];
+        $data['create_user'] = $_SESSION['u_id'];
+        $data['create_time'] =  date('Y-m-d H:i:s',time());
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $data['a_rate'] = $_POST['a_rate'];
+        $data['b_rate'] = $_POST['b_rate'];
+        $data['c_rate'] = $_POST['c_rate'];
+        $data['d_rate'] = $_POST['d_rate'];
+        $res = $MccItem->add( $data );
+        $this->ajaxReturn( $res, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function updateMccItem(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['mi_id'] ) ){
+        $map['mi_id'] = $_POST['mi_id'];
+        $data['ms_id'] = $_POST['ms_id'];
+        $data['mb_id'] = $_POST['mb_id'];
+        $data['remark'] = $_POST['remark'];
+        $data['edit_user'] = $_SESSION['u_id'];
+        $data['a_rate'] = $_POST['a_rate'];
+        $data['b_rate'] = $_POST['b_rate'];
+        $data['c_rate'] = $_POST['c_rate'];
+        $data['d_rate'] = $_POST['d_rate'];
+        $data['code'] = $_POST['code'];
+        $MccItem = M('mcc_item');
+        $res = $MccItem->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", 1);
+      }
+      $this->ajaxReturn( null, "ok", 0);
+    }
+    
+    public function delMccItem(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['mi_id'] ) ){
+        $map['mi_id'] = $_POST['mi_id'];
+        $MccItem = M('mcc_item');
+        $res = $MccItem->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+      $this->ajaxReturn( null, "deletion failed!", 0 );
+    }
+    
+    public function getMccItemData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['mi_id'] ) ){
+        $map['mi_id'] = $$_POST['mi_id'] ;
+        $MccItem = M('mcc_item');
+        $data = $MccItem->where($map)->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $MccItem = M('mcc_item');
+        $data = $MccItem->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+      }
+    }
+    
+    /*******
+    function about clientPlatform
+    */
+    
+    public function clientPlatform(){
+      $this->doAuth();
+      $this->display('clientPlatform');
+    }
+    
+    public function createClientPlatform(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
+        $cp = M('client_platform');
+        $data['code'] = $_POST['code'] ;
+        $data['name'] = $_POST['name'];
+        $data['remark'] = $_POST['remark'];
+        $data['create_user'] = $_SESSION['u_id'];
+        $data['create_time'] =  date('Y-m-d H:i:s',time());
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $res = $cp->add( $data );
+        $this->ajaxReturn( $res, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function updateClientPlatform(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['cp_id'] ) ){
+        $map['cp_id'] = $_POST['cp_id'];
+        $data['code'] = $_POST['code'] ;
+        $data['name'] = $_POST['name'];
+        $data['remark'] = $_POST['remark'];
+        $cp = M('client_platform');
+        $res = $cp->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", 1);
+      }
+      $this->ajaxReturn( null, "ok", 0);
+    }
+    
+    public function delClientPlatform(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['cp_id'] ) ){
+        $map['cp_id'] = $_POST['cp_id'];
+        $cp = M('client_platform');
+        $res = $cp->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+      $this->ajaxReturn( null, "deletion failed!", 0 );
+    }
+    
+    public function getClientPlatformData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['cp_id'] ) ){
+        $map['cp_id'] = $$_POST['cp_id'] ;
+        $cp = M('client_platform');
+        $data = $cp->where($map)->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $cp = M('client_platform');
+        $data = $cp->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+      }
+    }
+    
+    /*******
+    function about clientRate
+    */
+    
+    public function clientRate(){
+      $this->doAuth();
+      $this->display('clientRate');
+    }
+    
+    public function createClientRate(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
+        $cr = M('client_rate');
+        $data['code'] = $_POST['code'] ;
+        $data['rate'] = $_POST['rate'];
+        $data['remark'] = $_POST['remark'];
+        $data['is_inner'] = $_POST['is_inner'];
+        $data['create_user'] = $_SESSION['u_id'];
+        $data['create_time'] =  date('Y-m-d H:i:s',time());
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $res = $cr->add( $data );
+        $this->ajaxReturn( $res, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function updateClientRate(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
+        $map['cr_id'] = $_POST['cr_id'];
+        $data['code'] = $_POST['code'] ;
+        $data['rate'] = $_POST['rate'];
+        $data['is_inner'] = $_POST['is_inner'];
+        $data['remark'] = $_POST['remark'];
+        $cr = M('client_rate');
+        $res = $cr->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", 1);
+      }
+      $this->ajaxReturn( null, "update failed!", 0);
+    }
+    
+    public function delClientRate(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
+        $map['cr_id'] = $_POST['cr_id'];
+        $cr = M('client_rate');
+        $res = $cr->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+      $this->ajaxReturn( null, "deletion failed!", 0 );
+    }
+    
+    public function getClientRateData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
+        $map['cr_id'] = $$_POST['cr_id'] ;
+        $cr = M('client_rate');
+        $data = $cr->where($map)->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $cr = M('client_rate');
+        $data = $cr->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+      }
+    }
+    
+    /*******
+    function about clientAttr
+    */
+    
+    public function clientAttr(){
+      $this->doAuth();
+      $this->display('clientAttr');
+    }
+    
+    public function createClientAttr(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
+        $ca = M('client_attr');
+        $data['code'] = $_POST['code'] ;
+        $data['name'] = $_POST['name'];
+        $data['remark'] = $_POST['remark'];
+        $data['create_user'] = $_SESSION['u_id'];
+        $data['create_time'] =  date('Y-m-d H:i:s',time());
+        $data['edit_user'] = $_SESSION['u_id'] ;
+        $res = $ca->add( $data );
+        $this->ajaxReturn( $res, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function updateClientAttr(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['ca_id'] ) ){
+        $map['ca_id'] = $_POST['ca_id'];
+        $data['code'] = $_POST['code'] ;
+        $data['name'] = $_POST['name'];
+        $data['remark'] = $_POST['remark'];
+        $ca = M('client_attr');
+        $res = $ca->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", 1);
+      }
+      $this->ajaxReturn( null, "update failed!", 0);
+    }
+    
+    public function delClientAttr(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['ca_id'] ) ){
+        $map['ca_id'] = $_POST['ca_id'];
+        $ca = M('client_attr');
+        $res = $ca->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+      $this->ajaxReturn( null, "deletion failed!", 0 );
+    }
+    
+    public function getClientAttrData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['ca_id'] ) ){
+        $map['ca_id'] = $$_POST['ca_id'] ;
+        $ca = M('client_attr');
+        $data = $ca->where($map)->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $ca = M('client_attr');
+        $data = $ca->select();
+        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+      }
     }
   }
 ?>

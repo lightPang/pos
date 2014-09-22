@@ -41,7 +41,6 @@ function updateTabIndex(){
     var a = $($(li).children()).get(0);
     var href = $(a).attr('href');
     $(a).attr('href', href+ (i).toString());
-    console.log($(a).attr('href'));
   }
 }
 
