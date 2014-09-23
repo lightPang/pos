@@ -1,56 +1,36 @@
 var rootUrl = "/pos/Pos/index.php/";
-var createUrl =  rootUrl + "User/createUser";
-var updateUrl = rootUrl + "User/updateUser";
-var delUrl = rootUrl + "User/delUser";
-var dataUrl = rootUrl + "User/getUserData";
-var companyDataUrl = rootUrl + "Company/getCompanyData";
+var createUrl =  rootUrl + "Area/createCity";
+var updateUrl = rootUrl + "Area/updateCity";
+var delUrl = rootUrl + "Area/delCity";
+var dataUrl = rootUrl + "Area/getCityData";
+var provinceDataUrl = rootUrl + "Area/getProvinceData";
 
 $(document).ready(function(){
-  loadCompanyData();
-  
-  $("#storageCheck").click( function(){checkMainBox(".storage-checkbox" ,this)});
-   $("#storageCheck-update").click( function(){checkMainBox(".storage-checkbox-update" ,this)});
-  //如果不用function包裹则会直接执行，因为这个时候参数里面返回值是undefined，而不是函数。把this传进去是为了获取this的check属性。
-  $("#operationCheck").on('change', function(){checkMainBox(".operation-checkbox",this)});
-  $("#operationCheck-update").on('change', function(){checkMainBox(".operation-checkbox-update",this)});
-  $("#areaCheck").on('change', function(){checkMainBox(".area-checkbox",this)});
-  $("#areaCheck-update").on('change', function(){checkMainBox(".area-checkbox-update",this)});
   loadData();
+  loadProvinceData();
   createDialog();
 });
 
-
-
-function checkMainBox( className,ele ){
-  var that = this;
-  $boxList = $(className);
-  for( var i = 0; i<$boxList.length; ++i){
-    var $box = $boxList.get(i);
-    $box.checked = ele.checked;
-  }
-}
-
-function loadCompanyData(){
+function loadProvinceData(){
   $.ajax({
-    type:'POST',
-    url: companyDataUrl,
-    success: function(data){
-      var companyArr = data['data'];
+    type:'GET',
+    url: provinceDataUrl,
+    success:function(data){
+      var dataArr = data['data'];
       var options = "";
-      for ( var i = 0; i < companyArr.length; ++i ){
-        options += "<option value=\"" + companyArr[i].c_id + "\" >" + companyArr[i].name + " </option>";
+      for( var i = 0; i < dataArr.length; ++ i){
+        options += "<option value='" + dataArr[i].ap_id +"'>" + dataArr[i].name + "</option>";
       }
-      $('#selectCompany').append( options );
-      $('#updateCompany').append( options );
+      $("#selectProvince").append( options);
+      $("#updateProvince").append( options);
     }
   });
 }
 
-
 function createDialog(){
   $("#dialog-modal").dialog({
-                height: 500,
-                width: 1000,
+                height: 400,
+                width: 510,
                 dialogClass: "no-close",
                 modal: true,
                 autoOpen: false
@@ -62,50 +42,32 @@ function updateRow(ele){
   var $tr = $(ele).parents('tr');
   var $tdlist = $tr.find( $('td') );
   console.log( $tdlist.length);
-  var u_id = $tdlist.get(0);
-  console.log(u_id);
-  $.ajax({
-    type:'POST',
-    url:dataUrl,
-    data: { 'u_id' : $(u_id).html() },
-    success:function(data){
-      console.log(data);
-      var userItem = data['data'][0];
-      $('#updateCompany').val( userItem['c_id'] );
-      $('#updateName').val( userItem['name'] );
-      $('#updateUid').val( userItem['u_id'] );
-      $('#updateForm').find('input[type="checkbox"]').attr("checked",false);
-      var strs = userItem['auth'].split(',');
-      for( var i = 0 ; i<strs.length; ++i ){
-        if( strs[i] !== '' )
-        {
-          var condition = "input[value='" + strs[i] +"']";
-          //console.log(condition);
-          //用prop成功修改属性，用attr失败。
-          $('#updateForm').find(condition).prop("checked",true);
-          //console.log(box);
-          
-        }
-      }
-      $("#dialog-modal").dialog( "open");
-    }
-  });
+  var ac_id = $tdlist.get(0);
+  var ap_id = $tdlist.get(2);
+  var name = $tdlist.get(1);
+  var remark = $tdlist.get(3);
+  console.log(ac_id);
+  $("#updateProvince").val( $(ap_id).html() );
+  $("#ac_id").val( $(ac_id).html() );
+  $("#updateName").val( $(name).html() );
+  $("#updateRemark").val( $(remark).html() );
+  $("#dialog-modal").dialog( "open");
 }
 
 function deleteRow(ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
   console.log( $tr.find('td').html() );
-  var u_id = $tr.find('td').html();
+  var ac_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
       url:delUrl,
-      data: {'u_id' : u_id },
+      data: {'ac_id' : ac_id },
       success: function(data){
         console.log(data);
-        if( data['data'] != false ){
+        if( data['status'] != false ){
           var table = $('#sample-table-2').DataTable();
           table.row('.remove').remove().draw();
           alert("删除成功！");
@@ -129,16 +91,10 @@ $('#updateBtn').click( function(){
   $.ajax({
     type:'POST',
     url: updateUrl,
-    data:{
-        u_id : $("#updateUid").val(),
-        name : $("#updateName").val(),
-        c_id : $("#updateCompany").val(),
-        pwd : stripPwd( $("#updatePwd").val() ),
-        auth : serializeAuth("#updateForm"),
-      },
+    data:$('#updateForm').serialize(),
     success: function(data){
       console.log(data);
-      if( data['status'] == 1 ){
+      if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
         $("#dialog-modal").dialog("close");
@@ -148,14 +104,6 @@ $('#updateBtn').click( function(){
   }
   );
 });
-
-function stripPwd( pwd){
-  $res = $.trim( pwd );
-  if( $res !== "" )
-    return $.md5($res);
-  else
-    return "";
-}
   
 $('#submitBtn').click( function(){
   var inputs = $('#contentForm').find('input');
@@ -172,18 +120,11 @@ $('#submitBtn').click( function(){
     $.ajax({
       type:'POST',
       url: createUrl,
-      data:{
-        name : $("input[name='name']").val(),
-        c_id : $("#selectCompany").val(),
-        account : $.md5( $("input[name='newAccount']").val() ),
-        pwd : $.md5( $("input[name='newPwd']").val() ),
-        auth : serializeAuth("#contentForm"),
-      },
-      success: function(data,textStatus, jqXHR){
+      data:$('#contentForm').serialize(),
+      success: function(data){
         console.log(data);
         if( data['status'] !== 0 ){
           alert("添加成功!");
-          console.log(data);
           clearInput();
           loadData();
         }
@@ -191,17 +132,6 @@ $('#submitBtn').click( function(){
     });
   } 
 });
-
-function serializeAuth( authName ){
-  var res = "";
-  var $authArr = $(authName).find("input[type='checkbox']");
-  for ( var i = 0 ; i < $authArr.length; ++i){
-    var tempObj = $authArr.get(i);
-    if( tempObj.checked === true )
-      res += $(tempObj).val() + ",";
-  }
-  return res;
-}
 
 function clearInput(){
   var inputs = $('#contentForm').find('input');
@@ -222,8 +152,8 @@ function loadData(){
     dataType:"json", 
     url: dataUrl,
     success: function( data){
-      //console.log(data);
-      var MccBigArr = data['data'];
+      console.log(data);
+      var dataArr = data['data'];
       var rows = [];
       var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
 																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
@@ -233,12 +163,13 @@ function loadData(){
 																	<i class=\"icon-trash bigger-130\"></i>\
 																</a>\
 															</div></td>';
-      for( var i=0; i<MccBigArr.length; ++i ){
-        var item = MccBigArr[i];
+      for( var i=0; i<dataArr.length; ++i ){
+        var item = dataArr[i];
         var row = [];
-        row.push( item["u_id"] );
+        row.push( item["ac_id"] );
         row.push( item["name"] );
-        row.push( item["c_id"] );
+        row.push( item["ap_id"] );
+        row.push( item["remark"]);
         row.push( item["create_user"] );
         row.push( item["create_time"] );
         row.push( item["edit_user"] );
@@ -257,12 +188,13 @@ function loadData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
+                        null,
                         null,  
+                        null,
                         null, 
                         null,
                         null, 
                         null, 
-                        null,
                         null,
                         { "bSortable": false }
                       ],
@@ -279,7 +211,8 @@ function loadData(){
                 }
       });
       }
-      oTable1.fnClearTable();
+     oTable1.fnClearTable();
+     if( row.length > 0 )
       oTable1.fnAddData( rows );
     }
   }

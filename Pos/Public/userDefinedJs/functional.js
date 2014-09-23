@@ -15,11 +15,9 @@ function activeTab(){
 		var target = $li.get( tab );
     console.log(tab);
 		$(target).addClass('active');
-    if( tab >= 8 && tab <=13 ){
-      $("#operate_menu").css("display", "block");
-    }
-    if( tab >= 2 && tab <=7 ){
-      $("#storage_menu").css("display", "block");
+    var ul_id = $(target).parent('ul').attr('id');
+    if( ul_id != "undefined" ){
+      $("#"+ul_id).css("display", "block");
     }
 }
 
