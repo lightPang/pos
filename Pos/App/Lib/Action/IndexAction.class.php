@@ -9,6 +9,7 @@ class IndexAction extends CommonAction {
     	$this->doAuth();
     	$this->display();
     }
+    
     public function login(){
     	$account = $this->_post('account');
 		$pwd = $this->_post('pwd');
