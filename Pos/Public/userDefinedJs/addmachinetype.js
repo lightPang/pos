@@ -3,10 +3,12 @@ $(document).ready(function(){
 	createDialog();
 });
 
+var types = ["POS机", "键盘", "SIM卡", "其它"];
+
 function createDialog(){
   $("#dialog-modal").dialog({
-                height: 450,
-                width: 400,
+                height: 850,
+                width: 700,
                 dialogClass: "no-close",
                 modal: true,
                 autoOpen: false
@@ -20,10 +22,20 @@ function updateRow(ele){
   console.log( $tdlist.length);
   var mt_id = $tdlist.get(0);
   var mt_name = $tdlist.get(1);
-  var mt_remark = $tdlist.get(2);
+  var mt_number = $tdlist.get(2);
+  var mt_type = jQuery.inArray( $( $tdlist.get(3) ).html(), types);
+  var is_wired = $( $tdlist.get(4) ).html() == "有" ? 0 : 1;
+  var is_keyboard = $( $tdlist.get(5) ).html() == "是" ? true : false;
+  var is_simed = $( $tdlist.get(6) ).html() =="是" ? true : false;
+  var mt_remark = $tdlist.get(7);
   console.log( $(mt_name).html() );
-  $("#mb_id").val( $(mt_id).html() );
+  $("#mt_id").val( $(mt_id).html() );
   $("#updateName").val( $(mt_name).html() );
+  $("#updateNumber").val( $(mt_number).html() );
+  $("#updateType option").eq(mt_type).attr("selected", true);
+  $("input[name=update_is_wired]").eq(is_wired).attr("checked",'checked');
+  $("input[name=update_is_keyboard]").attr("checked", is_keyboard);
+  $("input[name=update_is_simed]").attr("checked", is_simed);
   $("#updateRemark").val( $(mt_remark).html());
   $("#dialog-modal").dialog( "open");
 }
@@ -32,13 +44,13 @@ function deleteRow(ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
   console.log( $tr.find('td').html() );
-  var mb_id = $tr.find('td').html();
+  var mt_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:'/pos/Pos/index.php/Operation/delMCCBigItem',
-      data: {'mb_id' : mb_id },
+      url:'/pos/Pos/index.php/MachineType/delete',
+      data: {'mt_id' : mt_id },
       success: function(data){
         console.log(data);
         if( data['data'] != false ){
@@ -60,23 +72,72 @@ $('#cancelBtn').click( function(){
 });
 
 $('#updateBtn').click( function(){
-  var url = $('#updateForm').attr('action');
-  $("#updateBtn").attr('disabled',true);
-  console.log(url);
-  $.ajax({
-    type:'POST',
-    url: url,
-    data: $('#updateForm').serialize(),
-    success: function(data){
-      console.log(data);
-      if( data['status'] == 1 ){
-        loadMCCBigData();
-        alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
-      }
+  var url = $('#updateForm').attr('action'),
+      mt_id=$('#mt_id').val(),
+      mt_name=$("input[name=updateName]").val(),
+      mt_number=$("input[name=updateNumber]").val(),
+      type=$("#updateType").val(),
+      is_wired=$("input[name=update_is_wired]:checked").val(),
+      is_keyboard=$("input[name=update_is_keyboard]:checked").val() ? 1 : 0,
+      is_simed=$("input[name=update_is_simed]:checked").val() ? 1 : 0,
+      remark=$("#updateRemark").val();
+
+  if(mt_name == ""){
+    $('#update_error_name').html("机器名称不能为空");
     }
+  if(mt_number == ""){
+    $('#update_error_number').html("机型号不能为空");
   }
-  );
+  if(mt_name!="" && mt_number!=""){
+    $("#updateBtn").attr('disabled',true);
+
+    console.log(url);
+    $.ajax({
+      type:'POST',
+      url: url,
+      data: { 'mt_id' : mt_id,
+              'mt_name' : mt_name,
+              'mt_number' : mt_number,
+              'mt_type' : type,
+              'is_wired' : is_wired,
+              'is_keyboard' : is_keyboard,
+              'is_simed' : is_simed,
+              'remark' : remark},
+      success: function(data){
+        console.log(data);
+        if( data['status'] == 1 ){
+          loadMCTData();
+          alert( "修改成功！");
+          $("#dialog-modal").dialog("close");
+        }
+        else{
+          alert( "修改失败！");
+        }
+
+        $("#updateBtn").attr('disabled',false);
+      }
+      }
+    );
+  } 
+});
+
+//input area focus and blur event
+$('input[name=updateName]').focus(function(){
+  $('#update_error_name').html("");
+})
+.blur(function(){
+  if($(this).val() == ""){
+    $('#update_error_name').html("机器名称不能为空");
+  }
+});
+
+$('input[name=updateNumber]').focus(function(){
+  $('#update_error_number').html("");
+})
+.blur(function(){
+  if($(this).val() == ""){
+    $('#update_error_number').html("机型号不能为空");
+  }
 });
 
 $('#addbtn').click(function(event){
@@ -87,9 +148,7 @@ $('#addbtn').click(function(event){
 			mt_name=$("input[name=mt_name]").val(),
 			mt_number=$("input[name=mt_number]").val(),
 			type=$("#type").val(),
-			is_wired=$("input[name=is_wired]:checked").val() ? 1 : 0,
-			is_identified=$("input[name=is_identified]:checked").val() ? 1 : 0,
-			is_worked=$("input[name=is_worked]:checked").val() ? 1 : 0,
+			is_wired=$("input[name=is_wired]:checked").val(),
 			is_keyboard=$("input[name=is_keyboard]:checked").val() ? 1 : 0,
 			is_simed=$("input[name=is_simed]:checked").val() ? 1 : 0,
 			remark=$("#remark").val();
@@ -106,10 +165,8 @@ $('#addbtn').click(function(event){
 				   {mp_id:mp_id,
 				   	mt_name:mt_name,
 				   	mt_number:mt_number,
-				   	type:type,
+				   	mt_type:type,
 				   	is_wired:is_wired,
-				   	is_identified:is_identified,
-				   	is_worked:is_worked,
 				   	is_keyboard:is_keyboard,
 				   	is_simed:is_simed,
 				   	remark:remark},
@@ -151,7 +208,7 @@ $('input[name=mt_number]').focus(function(){
 	if($(this).val() == ""){
 		$('#error_number').html("机型号不能为空");
 	}
-});;
+});
 
 function loadMCTData(){
   $.ajax({
@@ -159,7 +216,7 @@ function loadMCTData(){
     dataType:"json", 
     url:"/pos/Pos/index.php/MachineType/search",
     success: function( data){
-      var MCTArr = data['data']; alert(MCTArr.toSource());
+      var MCTArr = data['data'];
       var rows = [];
       var editHtml = '<tr>'+ 
                 '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
@@ -176,11 +233,9 @@ function loadMCTData(){
         row.push( item["mt_id"] );
         row.push( item["mt_name"] );
         row.push( item["mt_number"] );
-        row.push( item["type"] );
-        row.push( item["is_wired"] == 1 ? '是' : '否' );
-        row.push( item["is_identified"] == 1 ? '是' : '否' );
+        row.push( types[ item["mt_type"] ]);
+        row.push( item["is_wired"] == 1 ? '有' : '无' );
         row.push( item["is_keyboard"] == 1 ? '是' : '否' );
-        row.push( item["is_worked"] == 1 ? '是' : '否' );
         row.push( item["is_simed"] == 1 ? '是' : '否' );
         row.push( item["remark"]);
         row.push( item["create_time"] );
@@ -200,7 +255,7 @@ function loadMCTData(){
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
                         null,  null, null,null, null, null,null,
-                        null,null, null, null,null, { "bSortable": false }
+                        null,null, null, { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

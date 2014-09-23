@@ -26,6 +26,19 @@
 			}			
 		}
 
+		public function delete(){
+			if($this->doAuth("manageMachineType")){
+				if(isset( $_POST['mt_id']) ){
+		        $sModel = M('Machinetype');
+		        $map['mt_id'] = $_POST['mt_id'];
+		        $res = $sModel->where($map)->delete();
+		        $this->ajaxReturn( $res, "123", $res );
+		      }
+			}
+	      
+	    }
+
+
 		public function search(){
 			if($this->doAuth("manageMachineType")){
 				$mtModel = M('Machinetype');
@@ -42,5 +55,23 @@
 				$this->ajaxReturn( $data, "123", 1 );
 			}		
 		}
+
+		public function update(){
+		if($this->doAuth("manageMachineType")){
+			if( isset( $_POST['mt_id'] )){
+				$mtModel = M('Machinetype');
+				$data = $this->_post();
+				$data['edit_user'] = $_SESSION['u_id'] ;
+				$data['edit_time'] = date('Y-m-d H:i:s',time());
+				$mtModel->save($data);
+
+				$this->ajaxReturn( $data, "123", 1 );
+			}
+			
+			$this->ajaxReturn( null, "123", 0 );
+		}
+      	
+    }
+
 	}
 ?>
