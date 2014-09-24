@@ -1,0 +1,10 @@
+.space-8{
+  min-height:15px;
+}
+.margin-left-5{
+  margin-left:5px;
+}
+.file-box{ position:relative;width:230px} 
+.txt{ height:26px; border:1px solid #cdcdcd; width:120px; } 
+.filebtn{ background-color:#FFF; border:1px solid #CDCDCD;height:26px; width:70px; vertical-align:middle;} 
+.file{ position:absolute; top:0; left:12px; height:24px; filter:alpha(opacity:0);opacity: 0;width:190px }
