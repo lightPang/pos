@@ -23,6 +23,10 @@
 
     public function machineStoring(){
         $this->doAuth();
+        $mtModel = M('Machinetype');
+        $machineTypes = $mtModel->field('mt_id, mt_name, mt_number')->select();
+        
+        $this->assign("machineTypes", $machineTypes);
         $this->display();
     }
 

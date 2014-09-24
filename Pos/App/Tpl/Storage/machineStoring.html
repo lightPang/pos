@@ -29,48 +29,82 @@
           <div class="tab-content">
             <div id="add" class="tab-pane in active">
               <div class="row">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal"  id="addOrderForm" role="form">
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
-                    </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
-                    </div>
-          
-                
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
+                    <label class="col-sm-1 control-label no-padding-right" > 设备机型</label>
+                    <div class="col-sm-3">
+                      <select id="m_type" class="form-control">
+                        <volist name="machineTypes" id="machineType">
+                          <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
+                        </volist>
+                      </select>
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ??? </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username"  />
+                    <label class="col-sm-1 control-label no-padding-right" > 机器编码 </label>
+                    <div class="col-sm-4">
+                        <input type="text" id="m_code" placeholder="机器编码"  />
+                        <button class="btn btn-sm btn-primary" id="addMachineBtn" type="button">
+                          增加机器
+                          <i class="icon-arrow-right icon-on-right"></i>
+                        </button>      
                     </div>
-                    <div class="col-sm-1"></div>
-                
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
-                    </div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> ???</label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" placeholder="Username" />
+
+                    <label class="col-sm-1 control-label no-padding-right" > 机器列表 </label>
+                    <div class="col-sm-3">
+                        <textarea id="m_list" class="form-control" placeholder="机器列表" style="width: 275px; height: 130px;" disabled="disabled"></textarea>
+                        <button class="btn btn-sm btn-primary" id="clearMachineBtn" type="button">
+                          清除
+                        </button> 
                     </div>
                   </div> 
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <div class="col-md-9 "> </div>
-                    <div class="col-sm-3 ">
-                      <button class="btn btn-info" type="button">
+                    <label class="col-sm-1 control-label no-padding-right" > 数量 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="quantity" name="quantity" placeholder="数量"  disabled="disabled"/>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" > 单价 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="price" name="price" placeholder="单价"  />
+                        <div class="red" id="error_price"></div>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" > 总价 </label>
+                    <div class="col-sm-1">
+                        <input type="text" id="sum_price" name="sum_price" placeholder="总价"  />
+                        <div class="red" id="error_sum_price"></div>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 付款状态</label>
+                    <div class="col-sm-1">
+                      <select id="pay_state" class="form-control">
+                        <option value="1">完成</option>
+                        <option value="2">未付</option>
+                        <option value="3">付款部分</option>
+                      </select>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 备注 </label>
+                    <div class="col-sm-6">
+                        <textarea class="autosize-transition form-control" id="remark" name="remark" placeholder="备注"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="center">
+                      <button class="btn btn-info" type="button" id="addBtn">
                         <i class="icon-ok bigger-110"></i>
                           Submit
                       </button>
@@ -115,5 +149,6 @@
       </div>
     </div>
 
+    <script src="__PUBLIC__/userDefinedJs/machinestoring.js"></script>
   </body>
 </html>
