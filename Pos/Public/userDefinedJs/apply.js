@@ -1,27 +1,53 @@
 var rootUrl = "/pos/Pos/index.php/";
-var createUrl =  rootUrl + "Area/createDistrict";
-var updateUrl = rootUrl + "Area/updateDistrict";
-var delUrl = rootUrl + "Area/delDistrict";
-var dataUrl = rootUrl + "Area/getDistrictData";
+var createUrl =  rootUrl + "Apply/createApplication";
+var updateUrl = rootUrl + "Apply/updateApplication";
+var delUrl = rootUrl + "Area/delApplication";
+var dataUrl = rootUrl + "Area/getApplicationData";
 var provinceDataUrl = rootUrl + "Area/getProvinceData";
 var cityDataUrl = rootUrl + "Area/getCityData";
+var districtDataUrl = rootUrl + "Area/getDistrictData";
+var bankDataUrl = rootUrl + "Bank/getBankData";
+var bankOperatorDataUrl = rootUrl + "Bank/getOperatorData";
+var clientPlatformUrl = rootUrl + "Operation/getClientPlatformData";
+var clientAttrUrl = rootUrl + "Operation/getClientAttrData";
+var mccItemDataUrl = rootUrl + "Operation/getMccItemData";
 
 $(document).ready(function(){
-  loadData();
-  loadProvinceData();
-  loadCityData();
-  //refreshCityData('#select');
-  createDialog();
+  //loadData();
+  loadExtraData('Province',provinceDataUrl,'ap_id');
+  loadExtraData('City', cityDataUrl,'ac_id','ap_id');
+  loadExtraData( 'District', districtDataUrl,'ad_id','ac_id' );
+  loadExtraData( 'Bank', bankDataUrl,'b_id' );
+  loadExtraData( 'BankOperator', bankOperatorDataUrl,'bo_id' );
+  loadExtraData( 'Ca_id', clientAttrUrl,'ca_id' );
+  loadExtraData( 'Cp_id', clientPlatformUrl,'cp_id' );
+  loadExtraData( 'Mi_id', mccItemDataUrl,'mi_id' );
+  //createDialog();
 });
 //传的是函数指针！！！！！不能再调用函数了！！！！！！
 $("#selectProvince").change( function(){
-  refreshCityData("#select");
+  refreshLinkedData("Province","City",'#select');
+});
+
+$("#updateCity").change( function(){
+  refreshLinkedData("City","District",'#select');
 });
 
 $("#updateProvince").change( function(){
   refreshCityData("#update");
 });
 
+function refreshLinkedData( source, target, type){
+  var sourceEle = type + source;
+  var targetEle = type + target;
+  console.log( sourceEle);
+  console.log( $(sourceEle));
+  var source_value = $(sourceEle).val();
+  var targetOption = "option[class='" + source_value + "']";
+  $(targetEle).find("option").css('display', 'none');
+  $(targetEle).val( $($(targetEle).find(targetOption)).val() );
+  $( $(targetEle).find( targetOption) ).css('display', 'inherit');
+}
 
 function refreshCityData(type){
   var eleId = type + "Province";
@@ -35,35 +61,26 @@ function refreshCityData(type){
   $(selectOption).css('display', 'inherit');
 }
 
-function loadCityData(){
+function loadExtraData(name,dataUrl,id,class_id){
+console.log( dataUrl );
   $.ajax({
     type:'GET',
-    url: cityDataUrl,
+    url: dataUrl,
     success:function(data){
       console.log(data);
       var dataArr = data['data'];
       var options = "";
+      var displayStr = "'>";
+      
       for( var i = 0 ; i < dataArr.length; ++ i ){
-        options += "<option value = '" + dataArr[i].ac_id + "' class = '" + dataArr[i].ap_id + "' style='display:none;'>" + dataArr[i].name + "</option>";
+        if( typeof(class_id) != "undefined" )
+          displayStr = "' class = '" + dataArr[i][class_id] + displayStr;
+        options += "<option value = '" + dataArr[i][id] + displayStr + dataArr[i].name + "</option>";
       } 
-      $("#selectCity").append( options);
-      $("#updateCity").append( options);
-    }
-  });
-}
-
-function loadProvinceData(){
-  $.ajax({
-    type:'GET',
-    url: provinceDataUrl,
-    success:function(data){
-      var dataArr = data['data'];
-      var options = "";
-      for( var i = 0; i < dataArr.length; ++ i){
-        options += "<option value='" + dataArr[i].ap_id +"'>" + dataArr[i].name + "</option>";
-      }
-      $("#selectProvince").append( options);
-      $("#updateProvince").append( options);
+      var selectName = "#select" + name;
+      var updateName = "#update" + name;
+      $(selectName).append( options);
+      //$(updateName).append( options);
     }
   });
 }

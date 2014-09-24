@@ -212,7 +212,7 @@ function loadData(){
       });
       }
      oTable1.fnClearTable();
-     if( row.length > 0 )
+     if( rows.length > 0 )
       oTable1.fnAddData( rows );
     }
   }

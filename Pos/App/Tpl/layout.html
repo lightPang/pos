@@ -385,7 +385,7 @@
             <if condition="$manageStorage egt 1">
             <li id="storage_li">
 							<a class="dropdown-toggle" href="#/activeTab/">
-								<i class="icon-text-width"></i>
+								<i class="icon-inbox"></i>
 								<span class="menu-text"> 仓库管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
@@ -436,7 +436,7 @@
             <if condition="$operation egt 1">
             <li id="operation_li">
               <a class="dropdown-toggle" href="__APP__/Operation/index/activeTab/">
-								<i class="icon-text-width"></i>
+								<i class="icon-globe"></i>
 								<span class="menu-text"> 运营管理 </span>
 								<b class="arrow icon-angle-down"></b>
 							</a>
@@ -522,6 +522,33 @@
 									<a href="__APP__/Area/district/activeTab/">
 										<i class="icon-double-angle-right"></i>
 										公司区域管理
+									</a>
+								</li>
+                </if>
+							</ul>	
+						</li>
+            </if>
+            <if condition="$bankManage egt 1">
+            <li id="storage_li">
+							<a class="dropdown-toggle" href="#/activeTab/">
+								<i class="icon-key"></i>
+								<span class="menu-text"> 银行管理 </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+							<ul class="submenu" style="display:none;" id="bank_menu">
+                <if condition="$bankInfo egt 1">
+								<li>
+									<a href="__APP__/Bank/bankInfo/activeTab/">
+										<i class="icon-double-angle-right"></i>
+										银行信息管理
+									</a>
+								</li>
+                </if>
+                <if condition="$bankOperator egt 1">
+								<li>
+									<a href="__APP__/Bank/bankOperator/activeTab/" >
+										<i class="icon-double-angle-right"></i>
+										银行经办管理
 									</a>
 								</li>
                 </if>

@@ -59,12 +59,12 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectCa_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户类别</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectMi_id" class="form-control">
                       </select>
                     </div>
                     
@@ -85,24 +85,24 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属省份</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectProvince" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属城市</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectCity" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所在区域</label>
                     <div class="col-sm-2 ">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectDistrict" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
                     <div class="col-xs-1">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectRate_inner" class="form-control">
                       </select>
                     </div>
                     
@@ -112,25 +112,24 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单银行</label>
                     <div class="col-sm-2 ">
-                      <select id="form-field-select-1" class="form-control">
+                      <select  id="selectBank" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 开户银行</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
-                      </select>
+                      <input type="text" name="b_id" placeholder="开户银行"  />
                     </div>
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属平台</label>
                     <div class="col-sm-2">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectCp_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
                     <div class="col-sm-1">
-                      <select id="form-field-select-1" class="form-control">
+                      <select id="selectRate_outer" class="form-control">
                       </select>
                     </div>
                     
@@ -180,7 +179,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
                     <div class="col-sm-2">
-                        <select id="form-field-select-1" class="form-control"></select>
+                        <select id="selectBankOperator" class="form-control"></select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 身份证号 </label>
@@ -362,6 +361,8 @@
         </div>
       </div>
     </div>
-
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/apply.js"></script>
   </body>
 </html>
