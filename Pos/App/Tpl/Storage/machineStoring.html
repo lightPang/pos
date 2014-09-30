@@ -137,6 +137,104 @@
       </div>
     </div>
 
+    <div id="dialog-modal" title="修改设备型号"  style="display: none">
+        <div class="dialog-content">
+        <form class="form-horizontal" role="form" method="post" action="__APP__/MachineStoring/updateOrder" id="updateForm">
+          <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 订单号 </label>
+              <div class="col-sm-3">
+                  <input type="text" id="orderNumber" name="orderNumber" placeholder="订单号"  disabled="disabled"/>
+              </div>
+            </div> 
+
+            <div class="space-4"></div>
+           <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 设备机型</label>
+              <div class="col-sm-3">
+                <select id="update_m_type" class="form-control">
+                  <volist name="machineTypes" id="machineType">
+                    <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
+                  </volist>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-4"></div>
+            <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 机器编码 </label>
+              <div class="col-sm-3">
+                  <textarea id="update_m_list" class="form-control" placeholder="机器编码" style="width: 275px; height: 130px;"></textarea>
+                  <button class="btn btn-sm btn-primary" id="update_clearMachineBtn" type="button">
+                    清除
+                  </button> 
+              </div>
+            </div> 
+
+            <div class="space-4"></div>
+            <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 数量 </label>
+              <div class="col-sm-2">
+                  <input type="text" id="update_quantity" name="quantity" placeholder="数量"  disabled="disabled"/>
+              </div>
+
+              <label class="col-sm-1 control-label no-padding-right" > 单价 </label>
+              <div class="col-sm-2">
+                  <input type="text" id="update_price" name="update_price" placeholder="单价"  />
+                  <div class="red" id="update_error_price"></div>
+              </div>
+
+              <label class="col-sm-1 control-label no-padding-right" > 总价 </label>
+              <div class="col-sm-1">
+                  <input type="text" id="update_sum_price" name="update_sum_price" placeholder="总价"  />
+                  <div class="red" id="update_error_sum_price"></div>
+              </div>
+            </div> 
+
+            <div class="space-4"></div>
+            <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 付款状态</label>
+              <div class="col-sm-1">
+                <select id="update_pay_state" class="form-control">
+                  <option value="1">完成</option>
+                  <option value="2">未付</option>
+                  <option value="3">付款部分</option>
+                </select>
+              </div>
+            </div> 
+
+            <div class="space-4"></div>
+            <div class="form-group">
+              <label class="col-sm-1 control-label no-padding-right" > 备注 </label>
+              <div class="col-sm-6">
+                  <textarea class="autosize-transition form-control" id="update_remark" name="update_remark" placeholder="备注"></textarea>
+              </div>
+            </div>
+
+
+          <input id="o_id" type="hidden" name="o_id" />
+          
+          <div class="space-4"></div>
+          <div class="form-group">
+            <div class="col-md-3 "> </div>
+            <div class="col-sm-6 ">
+              <div style='float: left;'>
+              <button id="updateBtn" class="btn btn-info" type="button">
+              <i class="icon-ok bigger-110"></i>
+                提交
+              </button>
+              </div>
+              <div style='float: left;'>
+              <button id="cancelBtn" class="btn btn-danger" type="button">
+              <i class="icon-reply bigger-110"></i>
+                取消
+              </button>
+              </div>
+            </div>
+          </div>
+                  
+        </form>
+        </div>
+    </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
     <script src="__PUBLIC__/userDefinedJs/machinestoring.js"></script>
