@@ -27,6 +27,34 @@ function updateRow(ele){
   $("#dialog-modal").dialog( "open");
 }
 
+$('#cancelBtn').click( function(){
+  $("#dialog-modal").dialog('close');
+});
+
+$('#updateBtn').click( function(){
+  var url = $('#updateForm').attr('action');
+  $("#updateBtn").attr('disabled',true);
+  console.log(url);
+  $.ajax({
+    type:'POST',
+    url: url,
+    data: $('#updateForm').serialize(),
+    success: function(data){
+      console.log(data);
+      if( data['status'] == 1 ){
+        loadSData();
+        alert( "修改成功！");
+        $("#dialog-modal").dialog("close");
+      }
+      else{
+        alert( "修改失败！");  
+      }
+      $("#updateBtn").attr('disabled',false);
+    }
+  }
+  );
+});
+
 function deleteRow(ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
@@ -172,7 +200,8 @@ function loadSData(){
       });
       }
       oTable1.fnClearTable();
-      oTable1.fnAddData( rows );
+      if(rows.length > 0)
+        oTable1.fnAddData( rows );
     }
   }
   );
