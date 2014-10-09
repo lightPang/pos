@@ -124,8 +124,11 @@ $('#addbtn').click(function(event){
       success: function(data){
         console.log(data);
         alert(data['info']);
-        if(data['info'] == 1)
+        if(data['status'] == 1){
           clearInput();
+          loadSData();
+        }
+          
         $('#addbtn').attr('disabled', false);
       }
     });

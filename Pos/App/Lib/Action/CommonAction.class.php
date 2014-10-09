@@ -57,5 +57,17 @@
       }
       return $resArr;
     }
+
+    protected function getName($arr=null, $key=null){
+      if($arr && $key){
+        for($i=0; $i<count($arr); $i++){
+          if($arr[$i]['id'] == $key){
+            return $arr[$i]['name'];
+          }
+        }
+      }
+
+      return null;
+    }
   }
 ?>

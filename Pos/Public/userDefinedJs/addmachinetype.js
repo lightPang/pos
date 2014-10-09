@@ -172,6 +172,7 @@ $('#addbtn').click(function(event){
 				   	remark:remark},
 				   	function(data){
 				   		alert(data);
+              loadMCTData();
 				   	})
 			.complete(function(){
 				$('#addbtn').attr('disabled', false);

@@ -37,6 +37,15 @@
 
     public function machineDispatch(){
         $this->doAuth();
+
+        $cModel = M('Company');
+        $companys = $cModel->field("c_id, name")->select();
+
+        $mtModel = M('Machinetype');
+        $machineTypes = $mtModel->field('mt_id, mt_name, mt_number')->select();
+
+        $this->assign("companys", $companys);
+        $this->assign("machineTypes", $machineTypes);
         $this->display();
     }
 
