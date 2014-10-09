@@ -59,6 +59,7 @@ function deleteRow(ele){
 
 $('#cancelBtn').click( function(){
   $("#dialog-modal").dialog('close');
+  $("#updateBtn").attr('disabled',false); 
 });
 
 $('#updateBtn').click( function(){
@@ -75,6 +76,7 @@ $('#updateBtn').click( function(){
         loadMCCBigData();
         alert( "修改成功！");
         $("#dialog-modal").dialog("close");
+        $("#updateBtn").attr('disabled',false); 
       }
     }
   }
