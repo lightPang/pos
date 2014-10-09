@@ -4,6 +4,19 @@
 .margin-left-5{
   margin-left:5px;
 }
+
+.mg-rg-20{
+  margin-right:20px !important;
+}
+
+select{
+  width:100%;
+}
+
+select:disabled {
+  background-color:#eee!important;
+}
+
 .file-box{ position:relative;width:230px} 
 .txt{ height:26px; border:1px solid #cdcdcd; width:120px; } 
 .filebtn{ background-color:#FFF; border:1px solid #CDCDCD;height:26px; width:70px; vertical-align:middle;} 

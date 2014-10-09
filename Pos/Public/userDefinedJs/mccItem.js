@@ -248,6 +248,7 @@ function loadData(){
       });
       }
       oTable1.fnClearTable();
+      if( rows.length > 0 )
       oTable1.fnAddData( rows );
     }
   }
