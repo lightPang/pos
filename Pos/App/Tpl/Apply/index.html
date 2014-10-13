@@ -5,6 +5,7 @@
 
     <layout name="layout" />
     <link  rel="stylesheet" href="__PUBLIC__/userDefinedCss/apply.css" />
+    <link rel="stylesheet" href="__PUBLIC__/userDefinedCss/dialog.css" />
   </head>
   <body>
     <div class="row">
@@ -37,21 +38,21 @@
           <div class="tab-content">
             <div id="checkin" class="tab-pane in active">
               <div class="row">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="contentForm" role="form" action="__APP__/Apply/createApplication" method="post" enctype="multipart/form-data">
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户名称 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="商户名称"  />
+                        <input type="text" class="required" name="client_name" placeholder="商户名称"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 正式名称 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="正式名称"  />
+                        <input type="text" class="required" name="formal_name" placeholder="正式名称"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户地址 </label>
                     <div class="col-sm-3">
-                        <input type="text" size="50" name="number" placeholder="商户地址"  />
+                        <input type="text" size="50" class="required" name="client_addr" placeholder="商户地址"  />
                     </div>
                   </div>
                   <div class="space-4"></div>
@@ -59,23 +60,23 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性</label>
                     <div class="col-sm-2">
-                      <select id="selectCa_id" class="form-control">
+                      <select id="selectCa_id" name="ca_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户类别</label>
                     <div class="col-sm-2">
-                      <select id="selectMi_id" class="form-control">
+                      <select id="selectMi_id" name="mi_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单日期</label>
                     <div class="col-sm-2 ">
-                        <input type="date" id="form-field-1" name="number"   />
+                        <input type="date" class="required" name="ac_time" name="number"   />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
                     <div class="col-sm-1">
-                      <select id="form-field-select-1" class="form-control">
+                      <select name="is_urgent" class="form-control">
                         <option value="1">是</option>
                         <option value="0">否</option>
                       </select>
@@ -85,24 +86,24 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属省份</label>
                     <div class="col-sm-2">
-                      <select id="selectProvince" class="form-control">
+                      <select id="selectProvince" name="ap_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属城市</label>
                     <div class="col-sm-2">
-                      <select id="selectCity" class="form-control">
+                      <select id="selectCity" name="ac_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所在区域</label>
                     <div class="col-sm-2 ">
-                      <select id="selectDistrict" class="form-control">
+                      <select id="selectDistrict" name="ad_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
                     <div class="col-xs-1">
-                      <select id="selectRate_inner" class="form-control">
+                      <select id="selectRate_inner" name="cr_inner_id" class="form-control">
                       </select>
                     </div>
                     
@@ -112,24 +113,24 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单银行</label>
                     <div class="col-sm-2 ">
-                      <select  id="selectBank" class="form-control">
+                      <select  id="selectBank" class="required" name="bill_b_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 开户银行</label>
                     <div class="col-sm-2">
-                      <input type="text" name="b_id" placeholder="开户银行"  />
+                      <input type="text" class="required" name="account_b_id" placeholder="开户银行"  />
                     </div>
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属平台</label>
                     <div class="col-sm-2">
-                      <select id="selectCp_id" class="form-control">
+                      <select id="selectCp_id" name="cp_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
                     <div class="col-sm-1">
-                      <select id="selectRate_outer" class="form-control">
+                      <select id="selectRate_outer" name="cr_outer_id" class="form-control">
                       </select>
                     </div>
                     
@@ -139,36 +140,73 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 入账账号 </label>
                     <div class="col-sm-5">
-                        <input type="text" size="57" id="form-field-1" name="number" placeholder="正式名称"  />
+                        <input type="text" class="required" size="57"  name="account_num" placeholder="正式名称"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 入账名称 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="正式名称"  />
+                        <input type="text" class="required" name="account_name" placeholder="入账名称"  />
                     </div>
                     
                   </div> 
+                  <div class="space-8"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 法人姓名 </label>
+                    <div class="col-sm-2">
+                        <input type="text" class="required" name="legal_name" placeholder="法人姓名"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 身份证号码 </label>
+                    <div class="col-sm-2">
+                        <input type="text" class="required" name="passport_num" placeholder="身份证号码"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 法人固话 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="legal_tel" placeholder="法人固话"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 装机联系人 </label>
+                    <div class="col-sm-2">
+                        <input type="text" class="required" name="contact_name" placeholder="装机联系人"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人手机 </label>
+                    <div class="col-sm-2">
+                        <input type="text" class="required" name="contact_phone" placeholder="联系人手机"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人传真 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="contact_fax" placeholder="联系人传真"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
                   
                   <div class="space-8"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
                     <div class="col-sm-2">
-                        <select id="form-field-select-1" class="form-control"></select>
+                        <select id="selectBankOperator" name="bp_id" class="form-control"></select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 被授权人 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="被授权人"  />
+                        <input type="text" name="auth_person" placeholder="被授权人"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 登记日期 </label>
                     <div class="col-sm-2">
-                        <input type="date" />
+                        <input type="date" class="required" name="register_date"/>
                     </div>
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 营业执照 </label>
                     <div class="col-sm-1">
-                        <select>
+                        <select name="has_license">
                           <option value="1">有</option>
                           <option value="0">无</option>
                         </select>
@@ -177,70 +215,81 @@
                   <div class="space-4"></div>
  
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 经办人手机 </label>
                     <div class="col-sm-2">
-                        <select id="selectBankOperator" class="form-control"></select>
+                        <input type="text" id="bp_phone" name="bp_phone" placeholder="银行经办人手机"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 身份证号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="被授权人身份证号"  />
+                        <input type="text" name="auth_person_passport" placeholder="被授权人身份证号"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 启用日期 </label>
                     <div class="col-sm-2">
-                        <input type="date"  />
+                        <input type="date" class="required" name="active_date" />
                     </div>
+                  </div>
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属机构 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="belonged_org" placeholder="所属机构"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 风险承诺书 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise" placeholder="入网风险承诺书"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 行员名 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="banker_name" placeholder="行员名"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机构号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="org_num" placeholder="机构号"  />
+                    </div>     
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 承诺书地址 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise_addr" placeholder="入网风险承诺书（地址）"  />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 行员号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="banker_num" placeholder="行员号"  />
+                    </div>
+                
                   </div>
                   <div class="space-4"></div>
                   
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 营业执照 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="营业执照编号"  />
+                        <input type="text" class="required" name="license_num" placeholder="营业执照编号"  />
+                    </div>
+                    
+                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1">承诺书结算 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise_close" placeholder="入网风险承诺书（结算）"  />
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 申请人卡号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="申请人卡号"  />
-                    </div>
-
-                  </div>
-                  <div class="space-4"></div>
-                  
-                  <div class="space-8"></div>
-                  <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 经办人手机 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="银行经办人手机"  />
-                    </div>
-                    
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 风险承诺书 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="入网风险承诺书"  />
-                    </div>
-                    
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 法人固话 </label>
-                    <div class="col-sm-2">
-                        <input type="text" name="number" placeholder="法人固话"  />
+                        <input type="text" name="applier_card_num" placeholder="申请人卡号"  />
                     </div>     
                   </div>
                   <div class="space-4"></div>
                   
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 装机联系人 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="装机联系人"  />
-                    </div>
                     
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人手机 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 归档编号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="联系人手机"  />
-                    </div>
-                    
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人固话 </label>
-                    <div class="col-sm-2">
-                        <input type="text" name="number" placeholder="联系人固话"  />
+                        <input type="text" name="file_num" placeholder="归档编号"  />
                     </div>
                   </div>
                   <div class="space-4"></div>
@@ -249,23 +298,23 @@
                   <div class="form-group">
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">协议：</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' id='textfield' placeholder="协议" class='txt' />  
+                        <input type='text' id='contract_file' placeholder="协议" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="contract_file" class="file" size="28" onchange="document.getElementById('contract_file').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">税务登记：</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' placeholder="税务登记" id='textfield' class='txt' />  
+                        <input type='text'  placeholder="税务登记" id='tax_file' class='txt' />  
                         <input type='button' class='filebtn'  value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="tax_file" class="file" id="fileField" size="28" onchange="document.getElementById('tax_file').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">营业执照</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' id='textfield' placeholder="营业执照" class='txt' />  
+                        <input type='text'  id='license_file' placeholder="营业执照" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="license_file" class="file" id="fileField" size="28" onchange="document.getElementById('license_file').value=this.value" />
                       </div>
                   </div>
                   <div class="space-4"></div>
@@ -273,33 +322,82 @@
                   <div class="form-group">
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">卡复印件：</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' id='textfield' placeholder="卡及账号复印件" class='txt' />  
+                        <input type='text' id='card_file' placeholder="卡及账号复印件" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="card_file" class="file" id="fileField" size="28" onchange="document.getElementById('card_file').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">身份证复印</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' id='textfield' placeholder="身份证复印件" class='txt' />  
+                        <input type='text' id='passport_file' placeholder="身份证复印件" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="passport_file" class="file" id="fileField" size="28" onchange="document.getElementById('passport_file').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">授权委托书</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' name='textfield' id='textfield' placeholder="业务授权委托书" class='txt' />  
+                        <input type='text' id='auth_file' placeholder="业务授权委托书" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="fileField" class="file" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value" />
+                        <input type="file" name="auth_file" class="file" id="fileField" size="28" onchange="document.getElementById('auth_file').value=this.value" />
+                      </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片1</label>
+                      <div class="col-sm-2 file-box">
+                        <input type='text' id='client_img_1' placeholder="商户图片1" class='txt' />  
+                        <input type='button' class='filebtn' value='浏览...' />
+                        <input type="file" name="client_img_1" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_1').value=this.value" />
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片2</label>
+                      <div class="col-sm-2 file-box">
+                        <input type='text' id='client_img_2' placeholder="商户图片2" class='txt' />  
+                        <input type='button' class='filebtn' value='浏览...' />
+                        <input type="file" name="client_img_2" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_2').value=this.value" />
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片3</label>
+                      <div class="col-sm-2 file-box">
+                        <input type='text' id='client_img_3' placeholder="商户图片3" class='txt' />  
+                        <input type='button' class='filebtn' value='浏览...' />
+                        <input type="file" name="client_img_3" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_3').value=this.value" />
                       </div>
                   </div>
                   <div class="space-4"></div>
                   
                   <div class="space-8"></div>
-
+                  <div  class="dataTables_wrapper" role="grid">
+                    <input type="hidden" id="si_list" name="si_list" value="1"/>
+                    <button class="btn btn-info" id="addSiBtn" type="button">
+                      <i class="icon-ok bigger-110"></i>
+                        新增
+                    </button>
+                    <table id="machineListTable" class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>编号</th>
+                          <th>安装地址</th>
+                          <th>拓展人</th>
+                          <th>机型型号</th>
+                          <th>键盘型号</th>
+                          <th>SIM卡型号</th>
+                          <th>年费</th>
+                          <th>押金</th>
+                          <th>备注</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="space-8"></div>
                   <div class="form-group">
                     <div class="col-md-10 "> </div>
                     <div class="col-sm-2 ">
-                      <button class="btn btn-info" type="button">
+                      <button class="btn btn-info" id="submitBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
                           Submit
                       </button>
@@ -359,10 +457,119 @@
           </div>
 
         </div>
+        
+      <div id="setup_item" title="增加机器"  style="display: none">
+        <div class="dialog-content">
+          <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="createSiForm">
+                  <div class="form-group">
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 安装地址 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="si_addr" class="required" name="addr" placeholder="安装地址"/>
+                      </div>
+                      <div class="col-sm-1"></div> 
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 固定电话 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="si_phone" class="required" name="phone" placeholder="固定电话"/>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+                    
+                    <div class="form-group">
+                      
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 机器型号 </label>
+                      <div class="col-sm-3">
+                          <select id="selectSi_m_type" name="m_type"></select>
+                      </div>
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 键盘型号 </label>
+                      <div class="col-sm-3">
+                          <select id="selectSi_keyboard_type" name="keyboard_type" ></select>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+                    
+                    <div class="form-group">
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> SIM卡型号 </label>
+                      <div class="col-sm-3">
+                          <select id="selectSi_sim_type" name="sim_type" disabled="true"></select>
+                      </div>
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> SIM卡电话卡 </label>
+                      <div class="col-sm-3">
+                          <select id="si_sim_id" name="sim_id" disabled="true"></select>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 是否需要年费 </label>
+                      <div class="col-sm-2">
+                          <input type="radio" name="has_annual" value=1 class="ace"/><span class="lbl mg-rg-20"> 是</span>
+                          <input type="radio" name="has_annual" value=0 class="ace" checked="checked"/><span class="lbl"> 否</span>
+                      </div>
+                      <div class="col-sm-1"></div> 
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 年费 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="si_annual_fee" name="annual_fee" placeholder="年费" disabled="true"/>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+                    
+                     <div class="form-group">
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 是否需要押金 </label>
+                      <div class="col-sm-2">
+                          <input type="radio" name="has_deposit" value=1 class="ace"/><span class="lbl mg-rg-20"> 是</span>
+                          <input type="radio" name="has_deposit" value=0 class="ace" checked="checked"/><span class="lbl"> 否</span>
+                      </div>
+                      <div class="col-sm-1"></div> 
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 押金 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="si_deposit_fee" name="deposit_fee" placeholder="押金" disabled="true"/>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+                    
+                    <div class="form-group " >
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 拓展人 </label>
+                      <div class="col-sm-3">
+                          <select id="selectSi_expand_user" name="expand_user"></select>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group " >
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 备注</label>
+                      <div class="col-sm-4 ">
+                          <textarea class="autosize-transition form-control"  id="si_remark" name="remark" placeholder="备注"></textarea>
+                      </div>
+                    </div>
+                    
+            <input id="si_id" type="hidden" name="si_id" />
+            
+            <div class="space-4"></div>
+            <div class="form-group">
+              <div class="col-md-4 "> </div>
+              <div class="col-sm-6 ">
+                <div style='float: left;'>
+                <button id="updateSiBtn" class="btn btn-info" type="button">
+                <i class="icon-ok bigger-110"></i>
+                  提交
+                </button>
+                </div>
+                <div style='float: left;'>
+                <button id="cancelSiBtn" class="btn btn-danger" type="button">
+                <i class="icon-reply bigger-110"></i>
+                  取消
+                </button>
+                </div>
+              </div>
+            </div>
+                    
+          </form>
+        </div>
+      </div>
+
       </div>
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
     <script src="__PUBLIC__/userDefinedJs/apply.js"></script>
+    <script src="__PUBLIC__/js/jquery.form.js"></script>
   </body>
 </html>

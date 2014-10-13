@@ -315,9 +315,17 @@
         $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
       }
       else if( isset( $_SESSION['u_id' ]) ){
-        $cr = M('client_rate');
-        $data = $cr->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+        if( isset($_GET['type'] ) ){
+          $cr = M('client_rate');
+          $map['is_inner'] = $_GET['type'];
+          $data = $cr->where($map)->select();
+          $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        }
+        else{
+          $cr = M('client_rate');
+          $data = $cr->select();
+          $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        }
       }
     }
     

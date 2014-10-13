@@ -40,11 +40,15 @@
 
 
 		public function search(){
-			if($this->doAuth("manageMachineType")){
+			if(isset($_SESSION['u_id'])){
 				$mtModel = M('Machinetype');
 
 				if(isset($_POST['mt_id'])){
 					$map['mt_id'] = $_POST['mt_id'];
+					$data = $mtModel->where($map)->select();
+				}
+				if( isset( $_GET['type'])){
+					$map['mt_type'] = $_GET['type'];
 					$data = $mtModel->where($map)->select();
 				}
 				else{
