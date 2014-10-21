@@ -28,48 +28,41 @@
 
           <div class="tab-content">
             <div id="submited" class="tab-pane in active">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      申请人
-                    </th>
-                    <th>
-                      商户号
-                    </th>
-                    <th>
-                      类型
-                    </th>
-                    <th>
-                      关联银行
-                    </th>
-                  </tr>
-                </thead>
-              </table>
+              <div class="dataTables_wrapper" role="grid">
+                <table id="submited_table" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>申请单号</th>
+                      <th>商户名称</th>
+                      <th>创建时间</th>
+                      <th>创建者</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div id="approved" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      申请人
-                    </th>
-                    <th>
-                      商户号
-                    </th>
-                    <th>
-                      类型
-                    </th>
-                    <th>
-                      关联银行
-                    </th>
-                    <th>
-                      审批结果
-                    </th>
-                  </tr>
-                </thead>
-              </table>
+               <div class="dataTables_wrapper" role="grid">
+                <table id="approved_table" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>申请单号</th>
+                      <th>商户名称</th>
+                      <th>创建时间</th>
+                      <th>创建者</th>
+                      <th>审批结果</th>
+                      <th>审批时间</th>
+                      <th>审批者</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
@@ -77,5 +70,365 @@
       </div>
     </div>
 
+     <div id="dialog-modal" title="????"  style="display: none">
+        <div class="dialog-content">
+          <div class="row">
+                <form class="form-horizontal" id="contentForm" role="form">
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户名称 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="client_name" disabled="disabled" placeholder="商户名称"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 正式名称 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="formal_name" disabled="disabled" placeholder="正式名称"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户地址 </label>
+                    <div class="col-sm-3">
+                        <input type="text" size="50" name="client_addr" disabled="disabled" placeholder="商户地址"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="ca_id" disabled="disabled" placeholder="商户属性"  />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户类别</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="mi_id" disabled="disabled" placeholder="商户类别"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单日期</label>
+                    <div class="col-sm-2 ">
+                        <input type="text" name="ac_time" disabled="disabled" placeholder="收单日期"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
+                    <input type="text" class="col-sm-1" name="is_urgent" disabled="disabled" placeholder="是否加急"  />
+                  </div> 
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属省份</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="ap_id" disabled="disabled" placeholder="所属省份"  />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属城市</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="ac_id" disabled="disabled" placeholder="所属城市"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所在区域</label>
+                    <div class="col-sm-2 ">
+                      <input type="text" name="ad_id" disabled="disabled" placeholder="所在区域"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
+                    <input type="text" class="col-sm-1" name="cr_inner_id" disabled="disabled" placeholder="费率【内】"  />
+                    
+                  </div> 
+                  
+                  <div class="form-group">
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单银行</label>
+                    <div class="col-sm-2 ">
+                      <input type="text" name="bill_b_id" disabled="disabled" placeholder="收单银行"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 开户银行</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="account_b_id" disabled="disabled" placeholder="开户银行"  />
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属平台</label>
+                    <div class="col-sm-2">
+                      <input type="text" name="cp_id" disabled="disabled" placeholder="所属平台"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
+                    <input type="text" class="col-sm-1" name="cr_outer_id" disabled="disabled" placeholder="费率【外】"  />
+                    
+                  </div> 
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 入账账号 </label>
+                    <div class="col-sm-5">
+                        <input type="text" size="57"  name="account_num" disabled="disabled" placeholder="正式名称"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 入账名称 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="account_name" disabled="disabled" placeholder="入账名称"  />
+                    </div>
+                    
+                  </div> 
+                  <div class="space-8"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 法人姓名 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="legal_name" disabled="disabled" placeholder="法人姓名"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 身份证号码 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="passport_num" disabled="disabled" placeholder="身份证号码"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 法人固话 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="legal_tel" disabled="disabled" placeholder="法人固话"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 装机联系人 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="contact_name" disabled="disabled" placeholder="装机联系人"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人手机 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="contact_phone" disabled="disabled" placeholder="联系人手机"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 联系人传真 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="contact_fax" disabled="disabled" placeholder="联系人传真"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  
+                  <div class="space-8"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="bp_id" disabled="disabled" placeholder="银行经办人"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 被授权人 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="auth_person" disabled="disabled" placeholder="被授权人"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 登记日期 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="register_date" disabled="disabled" placeholder="登记日期"  />
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 营业执照 </label>
+                    <input type="text" class="col-sm-1" name="has_license" disabled="disabled" placeholder="营业执照"  />
+                  </div>
+                  <div class="space-4"></div>
+ 
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 经办人手机 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="bp_phone" name="bp_phone" disabled="disabled" placeholder="银行经办人手机"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 身份证号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="auth_person_passport" disabled="disabled" placeholder="被授权人身份证号"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 启用日期 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="active_date" disabled="disabled" placeholder="启用日期"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属机构 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="belonged_org" disabled="disabled" placeholder="所属机构"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 风险承诺书 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise" disabled="disabled" placeholder="入网风险承诺书"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 行员名 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="banker_name" disabled="disabled" placeholder="行员名"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机构号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="org_num" disabled="disabled" placeholder="机构号"  />
+                    </div>     
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 承诺书地址 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise_addr" disabled="disabled" placeholder="入网风险承诺书（地址）"  />
+                    </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 行员号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="banker_num" disabled="disabled" placeholder="行员号"  />
+                    </div>
+                
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 营业执照 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="license_num" disabled="disabled" placeholder="营业执照编号"  />
+                    </div>
+                    
+                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1">承诺书结算 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="promise_close" disabled="disabled" placeholder="入网风险承诺书（结算）"  />
+                    </div>
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 申请人卡号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="applier_card_num" disabled="disabled" placeholder="申请人卡号"  />
+                    </div>     
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                    
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 归档编号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="file_num" disabled="disabled" placeholder="归档编号"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="space-8"></div>
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">协议：</label>
+                      <div class="col-sm-2">
+                        <a id="contract_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">税务登记：</label>
+                      <div class="col-sm-2">
+                        <a id="tax_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">营业执照</label>
+                      <div class="col-sm-2">
+                        <a id="license_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">卡复印件：</label>
+                      <div class="col-sm-2">
+                        <a id="card_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">身份证复印</label>
+                      <div class="col-sm-2">
+                        <a id="passport_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">授权委托书</label>
+                      <div class="col-sm-2">
+                        <a id="auth_file" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                  </div>
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片1</label>
+                      <div class="col-sm-2">
+                        <a id="client_img_1" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片2</label>
+                      <div class="col-sm-2">
+                        <a id="client_img_2" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                      
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片3</label>
+                      <div class="col-sm-2">
+                        <a id="client_img_3" onclick="downloadPic(this)">
+                          <button class="btn btn-sm btn-primary">
+                            <i class="icon-search"></i>
+                            查看
+                          </button>
+                        </a>
+                      </div>
+                  </div>
+                  <div class="space-8"></div>
+                  <div class="space-8"></div>
+                  <div class="space-8"></div>
+                  <div class="space-8"></div>
+                    <hr style="width:90%;center:center;">
+                  <div class="form-group">
+                    <div class="center">
+                      <button class="btn btn-info" id="agreeBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          同意
+                      </button>
+                      <button class="btn btn-info" id="disagreeBtn" type="button">
+                          拒绝
+                      </button>
+                      <button class="btn btn-info" id="cancelBtn" type="button">
+                          取消
+                      </button>
+                    </div>
+                  </div>  
+              </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+    <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="__PUBLIC__/js/jquery.form.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/approve.js"></script>
   </body>
 </html>

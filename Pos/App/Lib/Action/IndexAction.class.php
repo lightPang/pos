@@ -1,5 +1,6 @@
 <?php
-// 本类由系统自动生成，仅供测试用途
+
+import("@.ORG.Access");
 class IndexAction extends CommonAction {
     public function index(){
       $this->display();
@@ -38,6 +39,11 @@ class IndexAction extends CommonAction {
     }
 
     public function test2(){
-      echo "test2";
+      $fModel = M('file');
+      $map['file_id'] = 243;
+
+      $data = $fModel->where($map)->select()[0];
+      header('Content-Disposition: attachment; filename="' . $data['name'] . '"'); 
+      echo $data['content'];
     }
 }
