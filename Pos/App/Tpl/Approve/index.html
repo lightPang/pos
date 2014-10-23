@@ -75,6 +75,14 @@
           <div class="row">
                 <form class="form-horizontal" id="contentForm" role="form">
                   <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 申请单号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="so_id" disabled="disabled" placeholder="申请单号"  />
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+
+                  <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户名称 </label>
                     <div class="col-sm-2">
                         <input type="text" name="client_name" disabled="disabled" placeholder="商户名称"  />
@@ -426,6 +434,42 @@
               </div>
         </div>
     </div>
+
+    <div id="reject-dialog" title="审批拒绝"  style="display: none">
+      <div class="dialog-content">
+        <form class="form-horizontal" role="form"  id="reject-form">
+          <input id="reject-so_id" type="hidden" name="reject-so_id" />
+          <div class="space-4"></div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" > 拒绝理由 </label>
+            <div class="col-sm-7">
+                <textarea class="autosize-transition form-control" id="reject-feedback" name="reject-feedback" placeholder="拒绝理由"></textarea>
+            </div>
+          </div>
+
+          <div class="space-4"></div>
+          <div class="form-group">
+            <div class="col-md-3 "> </div>
+            <div class="col-sm-6 ">
+              <div style='float: left;'>
+                <button id="reject-Btn" class="btn btn-info" type="button">
+                <i class="icon-ok bigger-110"></i>
+                  提交
+                </button>
+              </div>
+
+              <div style='float: left;'>
+                <button id="reject-cancelBtn" class="btn btn-danger" type="button">
+                  <i class="icon-reply bigger-110"></i>
+                    取消
+                  </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
     <script src="__PUBLIC__/js/jquery.form.js"></script>
