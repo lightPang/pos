@@ -211,6 +211,36 @@
           <input id="agree_do_id" type="hidden" name="do_id" />
           <div class="space-4"></div>
           <div class="form-group">
+            <label class="col-sm-2 control-label no-padding-right" > 选择机器 </label>
+            <select id="form-field-select-4" class="width-80 chosen-select tag-input-style" data-placeholder="Choose a Country..." multiple="" >
+              <option value=""> </option>
+              <option value="AL">Alabama</option>
+              <option value="AK">Alaska</option>
+              <option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option>
+            </select>
+
+            <div id="form_field_select_4_chosen" class="chosen-container chosen-container-multi" style="width: 347px;" title="">
+              <ul class="chosen-choices">
+                <li class="search-field">
+                  <input class="default" type="text" style="width: 144px;" autocomplete="off" value="Choose a Country...">
+                </li>
+              </ul>
+              <div class="chosen-drop">
+                <ul class="chosen-results">
+                  <li class="active-result" data-option-array-index="0" style=""> </li>
+                  <li class="active-result" data-option-array-index="1" style="">Alabama</li>
+                  <li class="result-selected" data-option-array-index="2" style="">Alaska</li>
+                  <li class="active-result" data-option-array-index="3" style="">Arizona</li>
+                  <li class="active-result" data-option-array-index="4" style="">Arkansas</li>
+                  <li class="active-result" data-option-array-index="5" style="">California</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-4"></div>
+          <div class="form-group">
             <label class="col-sm-2 control-label no-padding-right" > 备注 </label>
             <div class="col-sm-7">
                 <textarea class="autosize-transition form-control" id="agree_remark" name="remark" placeholder="备注"></textarea>
@@ -276,6 +306,7 @@
     </div>
   <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
   <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+  <script src="__PUBLIC__/js/chosen.jquery.min.js"></script>
   <script src="__PUBLIC__/userDefinedJs/machineDispatch.js"></script>
   </body>
 </html>

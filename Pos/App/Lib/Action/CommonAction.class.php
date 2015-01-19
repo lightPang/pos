@@ -24,6 +24,9 @@
         }
         $this->assign('activeTab', $_GET['activeTab'] );
       }
+      else{
+        redirect('/pos/pos/', 2, iconv('utf-8', 'gbk//IGNORE', '请先登录...') );
+      }
 
       return $flag;
     }
