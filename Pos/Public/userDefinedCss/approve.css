@@ -1,0 +1,22 @@
+.line{
+  margin-bottom:5px;
+  font-size: 14px;
+}
+
+.bottom{
+  clear: both; 
+}
+
+.border-bottom{
+  border-bottom:1px dashed #000; 
+  margin-bottom: 8px;
+}
+
+#submitPage{
+  text-align: right;
+  margin-right:15px;
+}
+
+.jump_page_txt{
+  height:42px;
+  }

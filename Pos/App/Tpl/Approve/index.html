@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>asdf</title>
-
+    <link rel="stylesheet" href="__PUBLIC__/userDefinedCss/approve.css" />
     <layout name="layout" />
   </head>
   <body>
@@ -28,25 +28,24 @@
 
           <div class="tab-content">
             <div id="submited" class="tab-pane in active">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      申请人
-                    </th>
-                    <th>
-                      商户号
-                    </th>
-                    <th>
-                      类型
-                    </th>
-                    <th>
-                      关联银行
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
+              <div id="submitContent">
+                <p>数据加载中</p>
+              </div>
+              <div id="submitPage">
+              </div>
+              <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="text" class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="loadUADataByPage(0)">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <input id="submitPageCount" type="hidden" value="{$submitPage}"/>
+            </div><!--first tabend -->
 
             <div id="approved" class="tab-pane">
               <table class="table table-hover">
@@ -71,11 +70,12 @@
                 </thead>
               </table>
             </div>
-          </div>
+          </div><!--tab content end -->
 
         </div>
       </div>
     </div>
 
   </body>
+  <script src="__PUBLIC__/userDefinedJs/approve.js"></script>
 </html>
