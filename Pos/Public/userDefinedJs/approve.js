@@ -1,11 +1,18 @@
 var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "Area/createCity";
 var UaDataUrl = rootUrl + "Approve/getUADataByPage";
+var aprDataUrl = rootUrl + "Approve/getAprDataByPage";
+var siDataUrl = rootUrl + "SetupItem/getSiData";
+var machineUrl = rootUrl + "Storage/validateSerial";
+var updateMachineUrl = rootUrl + "Storage/updateMachine";
 $(document).ready(function(){
   loadUADataByPage(0);
+  loadAprDataByPage(0);
+  createDialog();
 });
+
 /****
-function used to show unapproved setup_order item
+function used to show setup_order item on the page
 
 data is the array of setup_order, when the length of data is 0
 
@@ -13,7 +20,7 @@ it means that there is no unapproved setup_order
 
 inHtml is the html text to be added into div.
 ****/
-function loadUnApprovedData(data){
+function loadData(data,type){
   var inHtml = "";
   var headHtml = '<div class="panel panel-default"> \
                   <div class="panel-heading"> \
@@ -26,8 +33,9 @@ function loadUnApprovedData(data){
 
   var botHtml = '</div></div></div>';
 
-  if( data.length === 0 ){
-    inHtml = "<p>暂无未审批订单</p>"; 
+  if( data==null || data.length === 0 ){
+    inHtml = "<p>暂无订单</p>"; 
+
   }
   else{
     
@@ -162,10 +170,12 @@ function loadUnApprovedData(data){
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
-                        <div class="border-bottom"></div> \
-                        <div  class="dataTables_wrapper" role="grid"> \
-                          <input type="hidden" id="si_list" name="si_list" value="1"/> \
-                          <table id="machineListTable" class="table table-striped table-bordered table-hover"> \
+                        <div class="border-bottom"></div>';
+        if( type == 0 )
+          contentHtml +='<input type="hidden" value="'+ data[i]['so_id'] +'" class="siList'+ i.toString() + '"/>\
+                        <input type="hidden" value="' + data[i]['si_list'] +'" id="siList' + i.toString() +'"/>';
+        contentHtml += '<div  class="dataTables_wrapper" role="grid"> \
+                          <table class="table table-striped table-bordered table-hover"> \
                             <thead> \
                               <tr> \
                                 <th>编号</th> \
@@ -175,32 +185,69 @@ function loadUnApprovedData(data){
                                 <th>键盘型号</th> \
                                 <th>SIM卡型号</th> \
                                 <th>年费</th> \
-                                <th>押金</th> \
-                                <th>备注</th> \
-                              </tr> \
+                                <th>押金</th>';
+      if( type == 0 )
+        contentHtml +=        '</tr> \
                             </thead> \
-                            <tbody> \
-                            </tbody> \
+                            <tbody>';
+      else{
+        contentHtml +=      '<th>机身编码</th> \
+                              <th>备注</th></tr> \
+                            </thead> \
+                            <tbody>';
+      }
+      var tableHtml = '';
+      for( var j = 0; j<data[i]['siList'].length; ++j ){
+        tableHtml += '<tr>'
+                      +  '<td>' + data[i]['siList'][j]['si_id'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['addr'] +'</td>'
+                      +  '<td>' + data[i]['siList'][j]['expand_user'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['m_type'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['keyboard_type'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['sim_type'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['annual_fee'] + '</td>'
+                      +  '<td>' + data[i]['siList'][j]['deposit_fee'] + '</td>';
+        if( type==0)
+          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
+        else{
+          tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
+                      +   '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
+        }
+      }
+      var tableEndHtml = ' </tbody> \
                           </table> \
                         </div> \
-                        <div class="space-8"></div> \
+                        <div class="space-8"></div> ';
+      var confirmBtn =  '\
                         <div class="form-group"> \
                           <div class="col-md-10 "> </div> \
                           <div class="col-sm-2 "> \
-                            <button class="btn btn-info" id="submitBtn" type="button"> \
+                            <button class="btn btn-info" onclick="passApply(siList'+ i.toString() +')" type="button"> \
                               <i class="icon-ok bigger-110"></i> \
-                                Submit \
+                                通过 \
+                            </button> \
+                            <button class="btn btn-danger" id="rejectBtn" type="button"> \
+                              <i class="icon-trash bigger-110"></i> \
+                                拒绝 \
                             </button> \
                           </div> \
-                        </div>  \
-                      </div>';
-      contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml+contentHtml + botHtml;
+                        </div>  ';
+      var endHtml =  '</div>';
+      if(type == 1 )
+        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml +tableEndHtml +endHtml;
+      else
+        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + confirmBtn + endHtml;
       inHtml += contentHtml;
     }
   }
-
-  $("#submitContent").html('');
-  $("#submitContent").html(inHtml);
+  if( type == 0 ){
+    $("#submitContent").html('');
+    $("#submitContent").html(inHtml);
+  }
+  else{
+    $('#approvedContent').html('');
+    $('#approvedContent').html( inHtml);
+  }
 }
 
 /****
@@ -211,19 +258,60 @@ pageNum is the pageNum of the setup_order, when it is initialized to 0,
 it means that the first page of data will be loaded
 
 ****/
-function loadUADataByPage(pageNum){
+function loadUADataByPage(pageNum,isJump){
+  var submitPageCount = $("#submitPageCount").val();
+  var reg = /^\d+$/;
+  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
+    alert("抱歉，输入的页码数不合法！");
+    return;
+  }
   $.ajax({
     type: "POST",
     dataType:"json", 
     url: UaDataUrl,
     data: {'pageNum':pageNum},
     success: function(data){
-      loadUnApprovedData(data['data']);
-
+      loadData(data['data'],0);
     }
   });
-  paging(pageNum);
+  paging(pageNum,0);
   $liList = $("#submitPage").find('li');
+  for( var i = 0; i < $liList.length; ++i ){
+    $a = $liList.eq(i);
+    var tabValue = $a.find('a').html();
+    if( tabValue -1== pageNum ){
+      $a.addClass('disabled');
+    }
+  }
+}
+
+/****
+function used to load approved setup_order item from sever
+
+pageNum is the pageNum of the setup_order, when it is initialized to 0,
+
+it means that the first page of data will be loaded
+
+****/
+function loadAprDataByPage(pageNum,isJump){
+  var aprPageCount = $("#aprPageCount").val();
+  var reg = /^\d+$/;
+  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
+    alert("抱歉，输入的页码数不合法！");
+    return;
+  }
+  $.ajax({
+    type: "POST",
+    dataType:"json", 
+    url: aprDataUrl,
+    data: {'pageNum':pageNum},
+    success: function(data){
+      console.log(data);
+      loadData(data['data'],1);
+    }
+  });
+  paging(pageNum,1);
+  $liList = $("#aprPage").find('li');
   for( var i = 0; i < $liList.length; ++i ){
     $a = $liList.eq(i);
     var tabValue = $a.find('a').html();
@@ -248,23 +336,185 @@ function used to initialize the paging button
 
 only five paging button will be shown and the origin is the starting page num
 ****/
-function paging(origin){
-  var submitPageCount = $("#submitPageCount").val();
+function paging(origin,type){
+  if( type == 0 ){
+    var countId = "#submitPageCount";
+    var columnId = "#submitPage";
+  }
+  else{
+    var countId = "#aprPageCount";
+    var columnId = "#aprPage";
+  }
+  var pageCount = $(countId).val();
   var leftLiClass = '';
   var rightLiClass = '';
   if( origin == 0 )
     leftLiClass = 'class="disabled"';
-  if( origin == submitPageCount - 1 )
+  if( origin == pageCount - 1 )
     rightLiClass = 'class="disabled"';
   var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a><<</a></li>';
-  if( submitPageCount == 0 ) return;
+  if( pageCount == 0 ) return;
   for( var i = origin-4; i < origin+5; ++i ){
-    if( i <0 || i >= submitPageCount ) continue;
+    if( i <0 || i >= pageCount ) continue;
     else{
       var liHtml = '<li><a href="javascript:alterPage('+ i.toString() +')" >'+(i +1 ).toString()+'</a></li>';
       pageHtml += liHtml;
     }
   }
   pageHtml += '<li '+ rightLiClass +' ><a>>></a></li></ul>';
-  $("#submitPage").html(pageHtml);
+  $(columnId).html(pageHtml);
 }
+
+/****
+function used to jump to a page of the whole data,two parameter will be used
+
+*jumpType 0 means jumpToUaData 1 means jumpToApData
+
+*jumpToPage the page will jump to .
+
+****/
+
+function jumpToPage(){
+  var jumpType = $(".jumpType").val();
+  var jumpToPage = $("#jumpToPage").val();
+  if( jumpType == 0 ){
+    loadUADataByPage( jumpToPage-1,1 );
+  }
+  else{
+    loadAprDataByPage( jumpToPage-1,1);
+  }
+}
+
+/****
+function used to create a dialog
+
+****/
+function createDialog(){
+  $("#setup_item").dialog({
+    height: 400,
+    width: 1000,
+    modal: true,
+    dialogClass: "no-close",
+    autoOpen: false
+    });
+}
+
+/****
+function used to validate the serial number of the machines 
+
+the validation process includes two parts
+
+first, it will match the number with the machine type
+
+second, it will see whether there are same numbers
+
+****/
+function validateSerial(){
+  $typeObj = $("#setup_item .type");
+  var typeList = "";
+  for( var i = 0; i < $typeObj.length; ++i ){
+    typeList += $typeObj.eq(i).val() + ',';
+  }
+  var numberList = "";
+  $machineObj = $("#setup_item .number");
+  for( var i = 0 ; i < $machineObj.length; ++i){
+    numberList += $machineObj.eq(i).val() + ',';
+  }
+  var isVlidated = true;
+  $.ajax({
+    type:'post',
+    url :machineUrl,
+    data:{
+      'typeList':typeList,
+      'numberList':numberList
+    },
+    async:false,
+    success:function(data){
+      console.log(data);
+      if( data['status'] == false )
+        isVlidated = false;
+    }
+    });
+  return isVlidated;
+}
+
+/****
+function used to initial the dialog to fill in data about machines
+
+****/
+function passApply(siObj){
+  var siList = $(siObj).val();
+  var soId = "." + $(siObj).attr('id');
+  console.log(soId);
+  $("#confirmSoId").val( $(soId).val() );
+  $.ajax({
+    type:'post',
+    url:siDataUrl,
+    data:{
+      'si_list':siList
+    },
+    success:function(data){
+      var tbodyHtml = "";
+      var siArr = data['data'];
+      for( var i = 0 ; i<siArr.length; ++i ){
+        tbodyHtml += '<tr>' + '<td>' + siArr[i]['si_id'] + '<input type="hidden" name="si_id[]" value="' + siArr[i]['si_id'] + '" /></td>'
+                  +  '<td>' + siArr[i]['addr'] + '</td>'
+                  +  '<td>' + siArr[i]['expand_user'] + '</td>'
+                   +  '<td>' + siArr[i]['m_type'] + '<input type="hidden" name="m_type" class="type" value="' + siArr[i]['m_type'] + '" /></td>'
+                  +  '<td>' + siArr[i]['keyboard_type'] + '</td>'
+                  +  '<td>' + siArr[i]['sim_type'] + '</td>'
+                  +  '<td>  <input type="text" class="col-bg-5 number" name="m_code[]" /></td>'
+                  +  '<td>' + siArr[i]['annual_fee'] + '</td>'
+                  +  '<td>' + siArr[i]['deposit_fee'] + '</td>'
+                  +  '<td>' + siArr[i]['remark'] + '</td></tr>';
+      }
+      $("#setup_item").find('tbody').html(tbodyHtml);
+      $("#updateBtn").attr('disabled',false);
+      $("#setup_item").dialog('open');
+    }
+    });
+}
+
+/****
+function used to cancel the dialog
+****/
+$("#cancelBtn").click(function(){
+  $("#updateBtn").attr('disabled',false);
+  $("#setup_item").dialog('close');
+  });
+
+/****
+function used to update machine info
+****/
+$("#updateBtn").click(function(){
+  $("#updateBtn").attr('disabled',true);
+  var inputs = $('#confirmSiForm').find('input');
+  var flag = 1;
+  for( var i = 0; i < inputs.length; ++i ){
+    if( $(inputs[i]).val() === "" ){
+      alert( "请完整填写表单内容！" );
+      $(inputs[i]).focus();
+      flag = 0;
+      break;
+    }
+  }
+  if( flag === 1 ){
+    if(validateSerial() == true ){
+      $.ajax({
+        type:'POST',
+        url: updateMachineUrl,
+        data:$('#confirmSiForm').serialize(),
+        success: function(data){
+          if( data['status'] !== 0 ){
+            alert("保存成功!");
+            loadUADataByPage(0);
+            loadAprDataByPage(0);
+          }
+        }
+      });
+    }
+    else{
+      alert("机器编码填写有误，请重新确认！");
+    }
+  } 
+  });
