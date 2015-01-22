@@ -23,6 +23,7 @@ class IndexAction extends CommonAction {
 				session_start();
 				$_SESSION['user'] = $user['name'];
 				$_SESSION['u_id'] = $user['u_id'];
+        $_SESSION['c_id'] = $user['c_id'];
 				echo 'true';
 				exit;
 			}

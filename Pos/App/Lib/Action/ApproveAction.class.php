@@ -9,7 +9,7 @@
       $map['state'] = 1;
       $approvedPage = $sqlModel->where($map)->count();
       $this->assign('submitPage',$submitPage);
-      $this->assign('approvedPage',$approvedPage);
+      $this->assign('aprPage',$approvedPage);
       $this->display();
     }
 
@@ -18,8 +18,31 @@
         $map['state'] = 0;
         $sqlModel = M('setup_order');
         $data = $sqlModel->where($map)->select();
+        foreach ($data as $value => $key) {
+          $map['si_id'] = array('in', $key['si_list']);
+          $siModel = M('setup_item');
+          $siList = $siModel->where($map)->select();
+          $data[$value]['siList'] = $siList;
+        }
         $this->ajaxReturn( $data, "123", 'ok' );
       }
+    }
+
+    public function getAprDataByPage(){
+      $this->doAuth();
+      $aprMap['state'] = 1;
+      $sqlModel = M("setup_order");
+      $pageNum = $_POST['pageNum'];
+      if( preg_match("/^\d+$/", $pageNum)){
+        $data = $sqlModel->where($aprMap)->limit($pageNum*5,5)->select();
+        foreach ($data as $value => $key) {
+          $map['si_id'] = array('in', $key['si_list']);
+          $siModel = M('setup_item');
+          $siList = $siModel->where($map)->select();
+          $data[$value]['siList'] = $siList;
+        }
+        $this->ajaxReturn( $data, "123", 'ok' );
+      } 
     }
   }
 

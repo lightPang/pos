@@ -21,19 +21,13 @@
 
     public function getSiData(){
       //echo 123;
-      if( $this->doAuth("setupApply") == true && isset($_POST['si_list']) ){
+      if( isset( $_SESSION['u_id'] ) && isset($_POST['si_list']) ){
 
         $si_list = explode(",", $_POST['si_list']);
         $sqlModel = M('setup_item');
         $data = array();
-        foreach ($si_list as $si_id) {
-          $map['mi_id'] = $si_id;
-          $item = $sqlModel->where($map)->select();
-          if( $item!=false){
-            array_push($data, $item[0]);
-          }
-        }
-        $this->updateUserInfo( $data);
+        $map['mi_id'] = array('in',$si_list);
+        $data = $sqlModel->where($map)->select();
         $this->ajaxReturn( $data,"ok", count($data));
       }
     }
