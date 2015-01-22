@@ -24,7 +24,7 @@ function loadData(data,type){
   var inHtml = "";
   var headHtml = '<div class="panel panel-default"> \
                   <div class="panel-heading"> \
-                    <h4 class="panel-title">  \
+                    <h4 class="panel-title" style="display:inline">  \
                       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#';
   var midHtml = '"><i class="icon-angle-down bigger-110" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>';
   var downHtml = '</a></h4></div><div class="panel-collapse collapse in" id="';
@@ -40,6 +40,8 @@ function loadData(data,type){
   else{
     
     for( var i = 0; i<data.length; ++i ){
+      if( type == 1 )
+        var downHtml = '</a></h4><input type="checkbox" class="apr-checkbox" name="mdb" value = "' +data[i]['so_id'] +'"/></div><div class="panel-collapse collapse in" id="';
       var contentHtml = "";
       var titleHtml = "&nbsp;" + data[i]['so_number'] + "&nbsp;" + data[i]['client_name'] + "&nbsp;";
       var idHtml = data[i]['so_number'];
