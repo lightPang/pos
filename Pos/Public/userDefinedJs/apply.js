@@ -41,7 +41,7 @@ $(document).ready(function(){
   createSiDialog();
   //createDialog();
   
-  loadSiTableData();
+  //loadSiTableData();
   
 });
 
@@ -132,7 +132,7 @@ function loadSiTableData(){
     data: { "si_list" : si_list}, 
     url: siDataUrl,
     success: function( data){
-      console.log("ok");
+      if( data['data'] == null ) return;
       console.log(data);
       var dataArr = data['data'];
       var rows = [];

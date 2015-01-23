@@ -411,48 +411,45 @@
             </div>
 
             <div id="submited" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      申请人
-                    </th>
-                    <th>
-                      商户号
-                    </th>
-                    <th>
-                      类型
-                    </th>
-                    <th>
-                      关联银行
-                    </th>
-                  </tr>
-                </thead>
-              </table>
+              <div id="submitContent">
+                <p>数据加载中</p>
+              </div>
+              <div id="submitPage" class="pos-page">
+              </div>
+              <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="hidden" class="jumpType" value = "0" />
+                    <input type="text" id="jumpToPage"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <input id="submitPageCount" type="hidden" value="{$submitPage}"/>
             </div>
 
             <div id="approved" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      申请人
-                    </th>
-                    <th>
-                      商户号
-                    </th>
-                    <th>
-                      类型
-                    </th>
-                    <th>
-                      关联银行
-                    </th>
-                    <th>
-                      审批结果
-                    </th>
-                  </tr>
-                </thead>
-              </table>
+              <div id="aprContent">
+                <p>数据加载中</p>
+              </div>
+              <div id="aprPage" class="pos-page">
+              </div>
+              <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="hidden" class="jumpType" value = "0" />
+                    <input type="text" id="jumpToPage"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <input id="aprPageCount" type="hidden" value="{$aprPage}"/>
             </div>
           </div>
 
@@ -569,7 +566,10 @@
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <!--
     <script src="__PUBLIC__/userDefinedJs/apply.js"></script>
+  -->
+    <script src="__PUBLIC__/userDefinedJs/applySubmit.js"></script>
     <script src="__PUBLIC__/js/jquery.form.js"></script>
   </body>
 </html>

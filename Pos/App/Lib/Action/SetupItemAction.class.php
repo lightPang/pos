@@ -23,10 +23,10 @@
       //echo 123;
       if( isset( $_SESSION['u_id'] ) && isset($_POST['si_list']) ){
 
-        $si_list = explode(",", $_POST['si_list']);
+        $si_list  = $_POST['si_list'];
         $sqlModel = M('setup_item');
         $data = array();
-        $map['mi_id'] = array('in',$si_list);
+        $map['si_id'] = array('in',$si_list);
         $data = $sqlModel->where($map)->select();
         $this->ajaxReturn( $data,"ok", count($data));
       }

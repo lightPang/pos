@@ -12,12 +12,7 @@
   margin-bottom: 8px;
 }
 
-#submitPage{
-  text-align: right;
-  margin-right:15px;
-}
-
-#aprPage{
+.pos-page{
   text-align: right;
   margin-right:15px;
 }
