@@ -24,6 +24,20 @@
               </a>
             </li>
 
+            <li>
+              <a data-toggle="tab" href="#mdb">
+                <i class="icon-cloud bigger-110"></i>
+                已生成MDB
+              </a>
+            </li>
+
+            <li>
+              <a data-toggle="tab" href="#loaded">
+                <i class="icon-check bigger-110"></i>
+                已回填
+              </a>
+            </li>
+
           </ul>
 
           <div class="tab-content">
@@ -31,16 +45,16 @@
               <div id="submitContent">
                 <p>数据加载中</p>
               </div>
-              <div id="submitPage">
+              <div id="submitPage" class="pos-page">
               </div>
               <div class="row">
                 <div class="col-md-10"></div>
                 <div class="col-md-2">
                   <div class="input-group">
                     <input type="hidden" class="jumpType" value = "0" />
-                    <input type="text" id="jumpToPage"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <input type="text" id="submitJump"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                      <button class="btn btn-default" type="button" onclick="jumpPage('submitJump',0)">Go!</button>
                     </span>
                   </div>
                 </div>
@@ -68,22 +82,86 @@
               <div id="approvedContent">
                 <p>数据加载中</p>
               </div>
-              <div id="aprPage">
+              <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-10 "> </div>
+                    <div class="col-sm-2">
+                      <button  class="btn btn-info" type="button" onclick="produceMDB()">
+                        <i class="icon-ok bigger-110"></i>
+                          生成MDB
+                      </button>
+                    </div>
+                  </div>
+              <div id="aprPage" class="pos-page">
               </div>
               <div class="row">
                 <div class="col-md-10"></div>
                 <div class="col-md-2">
                   <div class="input-group">
                     <input type="hidden" id="jumpType" value = "1" />
-                    <input type="text" id="jumpToAprPage"class="form-control jump_page_txt" placeholder="共 {$aprPage} 页">
+                    <input type="text" id="aprJump"class="form-control jump_page_txt" placeholder="共 {$aprPage} 页">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                      <button class="btn btn-default" type="button" onclick="jumpPage('aprJump',1)">Go!</button>
                     </span>
                   </div>
                 </div>
               </div>
               <input id="aprPageCount" type="hidden" value="{$aprPage}"/>
             </div>
+
+            <div id="mdb" class="tab-pane">
+              <div id="mdbContent">
+                <p>数据加载中</p>
+              </div>
+              <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-10 "> </div>
+                    <div class="col-sm-2">
+                      <button  class="btn btn-info" type="button" onclick="produceMDB()">
+                        <i class="icon-ok bigger-110"></i>
+                          生成MDB
+                      </button>
+                    </div>
+                  </div>
+              <div id="mdbPage" class="pos-page">
+              </div>
+              <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="hidden" id="jumpType" value = "1" />
+                    <input type="text" id="mdbJump"class="form-control jump_page_txt" placeholder="共 {$mdbPage} 页">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="jumpPage('mdbJump',2)">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <input id="mdbPageCount" type="hidden" value="{$mdbPage}"/>
+            </div>
+
+            <div id="loaded" class="tab-pane">
+              <div id="loadedContent">
+                <p>数据加载中</p>
+              </div>
+              <div class="space-4"></div>
+              <div id="loadedPage" class="pos-page">
+              </div>
+              <div class="row">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <input type="hidden" id="jumpType" value = "1" />
+                    <input type="text" id="loadedJump"class="form-control jump_page_txt" placeholder="共 {$loadedPage} 页">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" onclick="jumpPage('loadedJump',3)">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <input id="loadedPageCount" type="hidden" value="{$loadedPage}"/>
+            </div>
+
           </div><!--tab content end -->
 
         </div><!--tab table end-->
@@ -138,4 +216,5 @@
     <script src="__PUBLIC__/userDefinedJs/approve.js"></script>
   </body>
   <script src="__PUBLIC__/userDefinedJs/approve.js"></script>
+  <script src="__PUBLIC__/userDefinedJs/approveMDB.js"></script>
 </html>

@@ -17,7 +17,7 @@ class IndexAction extends CommonAction {
 		if($account && $pwd) {
 			$userDao = M('User');
 			$where = 'account = '."'$account'".' AND pwd = '."'$pwd'";
-			$user = $userDao->where($where)->field('u_id, name')->select()[0];
+			$user = $userDao->where($where)->field('u_id, name,c_id')->select()[0];
 			
 			if($user) {
 				session_start();

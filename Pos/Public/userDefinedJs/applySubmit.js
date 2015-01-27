@@ -1,19 +1,142 @@
 var rootUrl = "/pos/Pos/index.php/";
-var createUrl =  rootUrl + "Area/createCity";
-var UaDataUrl = rootUrl + "Approve/getUADataByPage";
-var aprDataUrl = rootUrl + "Approve/getAprDataByPage";
-var mdbDataUrl = rootUrl + "Approve/getMDBDataByPage";
-var loadedDataUrl = rootUrl + "Approve/getloadedDataByPage";
-var siDataUrl = rootUrl + "SetupItem/getSiData";
-var machineUrl = rootUrl + "Storage/validateSerial";
-var updateMachineUrl = rootUrl + "Storage/updateMachine";
+var UaDataUrl = rootUrl + "Apply/getSubmitDataByPage";
+var aprDataUrl = rootUrl + "Apply/getPassedDataByPage";
+
 $(document).ready(function(){
-  loadUADataByPage(0);
+  loadSubmitDataByPage(0);
   loadAprDataByPage(0);
-  loadedDataByPage(0);
-  loadMdbDataByPage(0);
-  createDialog();
 });
+
+/****
+function used to load setup_order item which has been submited from sever
+
+pageNum is the pageNum of the setup_order, when it is initialized to 0,
+
+it means that the first page of data will be loaded
+
+****/
+function loadSubmitDataByPage(pageNum,isJump){
+  var pageCount = $("#submitPageCount").val();
+  var reg = /^\d+$/;
+  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
+    alert("抱歉，输入的页码数不合法！");
+    return;
+  }
+  $.ajax({
+    type: "POST",
+    dataType:"json", 
+    url: UaDataUrl,
+    data: {'pageNum':pageNum},
+    success: function(data){
+      loadData(data['data'],0);
+    }
+  });
+  paging(pageNum,0);
+  $liList = $("#submitPage").find('li');
+  for( var i = 0; i < $liList.length; ++i ){
+    $a = $liList.eq(i);
+    var tabValue = $a.find('a').html();
+    if( tabValue -1== pageNum ){
+      $a.addClass('disabled');
+    }
+  }
+}
+
+/****
+function used to load approved setup_order item from sever
+
+pageNum is the pageNum of the setup_order, when it is initialized to 0,
+
+it means that the first page of data will be loaded
+
+****/
+function loadAprDataByPage(pageNum,isJump){
+  var pageCount = $("#aprPageCount").val();
+  var reg = /^\d+$/;
+  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
+    alert("抱歉，输入的页码数不合法！");
+    return;
+  }
+  $.ajax({
+    type: "POST",
+    dataType:"json", 
+    url: aprDataUrl,
+    data: {'pageNum':pageNum},
+    success: function(data){
+      loadData(data['data'],1);
+    }
+  });
+  paging(pageNum,1);
+  $liList = $("#aprPage").find('li');
+  for( var i = 0; i < $liList.length; ++i ){
+    $a = $liList.eq(i);
+    var tabValue = $a.find('a').html();
+    if( tabValue -1== pageNum ){
+      $a.addClass('disabled');
+    }
+  }
+}
+
+/****
+function used to initialize the paging button
+
+only five paging button will be shown and the origin is the starting page num
+****/
+function paging(origin,type){
+  if( type == 0 ){
+    var countId = "#submitPageCount";
+    var columnId = "#submitPage";
+  }
+  else if( type==1){
+    var countId = "#aprPageCount";
+    var columnId = "#aprPage";
+  }
+  var pageCount = $(countId).val();
+  if( pageCount % 5 != 0 )
+    pageCount = parseInt(pageCount /5) + 1;
+  else if( pageCount != 0 )
+    pageCount = parseInt(pageCount /5)+ 2;
+  var leftLiClass = '';
+  var rightLiClass = '';
+  if( origin == 0 )
+    leftLiClass = 'class="disabled"';
+  if( origin == pageCount - 1 )
+    rightLiClass = 'class="disabled"';
+  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a href="javascript:alterPage('+ (origin-1).toString() + ','+type.toString()+')"><<</a></li>';
+  if( pageCount == 0 ) return;
+  for( var i = origin-4; i < origin+5; ++i ){
+    if( i <0 || i >= pageCount ) continue;
+    else{
+      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() + ','+type.toString()+')" >'+(i +1 ).toString()+'</a></li>';
+      pageHtml += liHtml;
+    }
+  }
+  pageHtml += '<li '+ rightLiClass +' ><a href="javascript:alterPage('+ (origin+1).toString() + ','+type.toString()+')">>></a></li></ul>';
+  $(columnId).html(pageHtml);
+}
+
+/***
+*function used load different page of data
+*
+***/
+function alterPage(page,type,isJump){
+  if( type == 0 ){
+    loadSubmitDataByPage( page,isJump );
+  }
+  else{
+    loadAprDataByPage( page,isJump);
+  }
+}
+
+/***
+*function used to jump page
+*
+***/
+function jumpPage(id,type){
+  id = "#"+id;
+  var page = $(id).val() - 1;
+  alterPage( page, type,1);
+}
 
 /****
 function used to show setup_order item on the page
@@ -27,6 +150,7 @@ it means that there is no setup_order
 inHtml is the html text to be added into div.
 ****/
 function loadData(data,type){
+
   var inHtml = "";
   var headHtml = '<div class="panel panel-default"> \
                   <div class="panel-heading"> \
@@ -46,8 +170,6 @@ function loadData(data,type){
   else{
     
     for( var i = 0; i<data.length; ++i ){
-      if( type == 1 || type == 2)
-        var downHtml = '</a></h4><input type="checkbox" class="apr-checkbox" name="mdb" /><input type="hidden" class="apr-soId" value = "' +data[i]['so_id'] +'"/></div><div class="panel-collapse collapse in" id="';
       var contentHtml = "";
       var titleHtml = "&nbsp;" + data[i]['so_number'] + "&nbsp;" + data[i]['client_name'] + "&nbsp;";
       var idHtml = data[i]['so_number'];
@@ -139,49 +261,46 @@ function loadData(data,type){
                               <Button onclick="downloadFile('+data[i]['contract_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >税务登记：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['tax_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 control-div no-padding-right" >营业执照：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['license_file_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
                         <div class="line"> \
                             <div class="col-sm-1 no-padding-right" >卡复印件：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['card_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >身份证复印</div> \
-                            <div class="col-sm-2 file-box">  \
+                            <div class="col-sm-2 ">  \
                               <Button onclick="downloadFile('+data[i]['passport_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 control-div no-padding-right" >授权委托书</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['auth_file_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
                         <div class="line"> \
                             <div class="col-sm-1 no-padding-right" >商户图片1</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2"> \
                              <Button onclick="downloadFile('+data[i]['client_img_1_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >商户图片2</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['client_img_2_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >商户图片3</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                              <Button onclick="downloadFile('+data[i]['client_img_3_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
                         <div class="border-bottom"></div>';
-        if( type == 0 )
-          contentHtml +='<input type="hidden" value="'+ data[i]['so_id'] +'" class="siList'+ i.toString() + '"/>\
-                        <input type="hidden" value="' + data[i]['si_list'] +'" id="siList' + i.toString() +'"/>';
         contentHtml += '<div  class="dataTables_wrapper" role="grid"> \
                           <table class="table table-striped table-bordered table-hover"> \
                             <thead> \
@@ -198,12 +317,6 @@ function loadData(data,type){
         contentHtml +=        '<th>备注</th></tr> \
                             </thead> \
                             <tbody>';
-      else if( type != 3){
-        contentHtml +=      '<th>机身编码</th> \
-                              <th>备注</th></tr> \
-                            </thead> \
-                            <tbody>';
-      }
       else{
         contentHtml +=      '<th>机身编码</th> \
                              <th>终端编码</th>\
@@ -223,11 +336,7 @@ function loadData(data,type){
                       +  '<td>' + data[i]['siList'][j]['annual_fee'] + '</td>'
                       +  '<td>' + data[i]['siList'][j]['deposit_fee'] + '</td>';
         if( type==0)
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
-        else if(type != 3){
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
-                      +   '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
-        }
+          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>'; 
         else{
           tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
                       +   '<td>' + data[i]['siList'][j]['m_tcode'] + '</td>'
@@ -238,25 +347,8 @@ function loadData(data,type){
                           </table> \
                         </div> \
                         <div class="space-8"></div> ';
-      var confirmBtn =  '\
-                        <div class="form-group"> \
-                          <div class="col-md-10 "> </div> \
-                          <div class="col-sm-2 "> \
-                            <button class="btn btn-info" onclick="passApply(siList'+ i.toString() +')" type="button"> \
-                              <i class="icon-ok bigger-110"></i> \
-                                通过 \
-                            </button> \
-                            <button class="btn btn-danger" id="rejectBtn" type="button"> \
-                              <i class="icon-trash bigger-110"></i> \
-                                拒绝 \
-                            </button> \
-                          </div> \
-                        </div>  ';
       var endHtml =  '</div>';
-      if(type != 0 )
-        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml +tableEndHtml +endHtml;
-      else
-        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + confirmBtn + endHtml;
+        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + endHtml;
       inHtml += contentHtml;
     }
   }
@@ -265,380 +357,8 @@ function loadData(data,type){
     $("#submitContent").html(inHtml);
   }
   else if( type == 1 ){
-    $('#approvedContent').html('');
-    $('#approvedContent').html( inHtml);
-  }
-  else if ( type == 2 ){
-    $('#mdbContent').html('');
-    $('#mdbContent').html( inHtml);
-  }
-  else{
-    $('#loadedContent').html('');
-    $('#loadedContent').html( inHtml);
+    $('#aprContent').html('');
+    $('#aprContent').html( inHtml);
   }
 }
 
-/****
-function used to load unapproved setup_order item from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadUADataByPage(pageNum,isJump){
-  var submitPageCount = $("#submitPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url: UaDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      loadData(data['data'],0);
-    }
-  });
-  paging(pageNum,0);
-  $liList = $("#submitPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-
-/****
-function used to load approved setup_order item from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadAprDataByPage(pageNum,isJump){
-  var pageCount = $("#aprPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url: aprDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],1);
-    }
-  });
-  paging(pageNum,1);
-  $liList = $("#aprPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-/****
-function used to load the setup_order items which has been transferred into mdb from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadMdbDataByPage(pageNum, isJump){
-  var pageCount = $("#mdbPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url:mdbDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],2);
-    }
-  });
-  paging(pageNum,2);
-  $liList = $("#mdbPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-
-/****
-function used to load the setup_order items which has been reloaded by mdb from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadedDataByPage(pageNum, isJump){
-  var pageCount = $("#loadedPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url:loadedDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],3);
-    }
-  });
-  paging(pageNum,3);
-  $liList = $("#loadedPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-
-/****
-function used to download img from server
-
-id is the file id .
-
-****/
-function downloadFile(id){
-  window.open('/pos/Pos/index.php/File/downloadFileById/id/'+id);
-}
-
-/****
-function used to initialize the paging button
-
-only five paging button will be shown and the origin is the starting page num
-****/
-function paging(origin,type){
-  if( type == 0 ){
-    var countId = "#submitPageCount";
-    var columnId = "#submitPage";
-  }
-  else if( type==1){
-    var countId = "#aprPageCount";
-    var columnId = "#aprPage";
-  }
-  else if( type == 2){
-    var countId = "#mdbPageCount";
-    var columnId = "#mdbPage";
-  }
-  else{
-    var countId = "#loadedPageCount";
-    var columnId = "#loadedPage";
-  }
-  var pageCount = $(countId).val();
-  if( pageCount % 5 != 0 )
-    pageCount = parseInt(pageCount /5) + 1;
-  else
-    pageCount = parseInt(pageCount /5);
-  var leftLiClass = '';
-  var rightLiClass = '';
-  if( origin == 0 )
-    leftLiClass = 'class="disabled"';
-  if( origin == pageCount - 1 )
-    rightLiClass = 'class="disabled"';
-  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a href="javascript:alterPage('+ (origin-1).toString() + ','+type.toString()+')"><<</a></li>';
-  if( pageCount == 0 ) return;
-  for( var i = origin-4; i < origin+5; ++i ){
-    if( i <0 || i >= pageCount ) continue;
-    else{
-      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() + ','+type.toString()+')" >'+(i +1 ).toString()+'</a></li>';
-      pageHtml += liHtml;
-    }
-  }
-  pageHtml += '<li '+ rightLiClass +' ><a href="javascript:alterPage('+ (origin+1).toString() + ','+type.toString()+')">>></a></li></ul>';
-  $(columnId).html(pageHtml);
-}
-
-/****
-function used to jump to a page of the whole data,two parameter will be used
-
-*jumpType 0 means jumpToUaData 1 means jumpToApData
-
-*jumpToPage the page will jump to .
-
-****/
-function alterPage(page,type,isJump){
-  if( type == 0 ){
-    loadUADataByPage( page,isJump );
-  }
-  else if( type == 1 ){
-    loadAprDataByPage( page,isJump);
-  }
-  else if( type == 2){
-    loadMdbDataByPage( page, isJump );
-  }
-  else{
-    loadedDataByPage( page, isJump );
-  }
-}
-
-/***
-*function used to jump page
-*
-***/
-function jumpPage(id,type){
-  id = "#"+id;
-  var page = $(id).val() - 1;
-  alterPage( page, type,1);
-}
-
-/****
-function used to create a dialog
-
-****/
-function createDialog(){
-  $("#setup_item").dialog({
-    height: 400,
-    width: 1000,
-    modal: true,
-    dialogClass: "no-close",
-    autoOpen: false
-    });
-}
-
-/****
-function used to validate the serial number of the machines 
-
-the validation process includes two parts
-
-first, it will match the number with the machine type
-
-second, it will see whether there are same numbers
-
-****/
-function validateSerial(){
-  $typeObj = $("#setup_item .type");
-  var typeList = "";
-  for( var i = 0; i < $typeObj.length; ++i ){
-    typeList += $typeObj.eq(i).val() + ',';
-  }
-  var numberList = "";
-  $machineObj = $("#setup_item .number");
-  for( var i = 0 ; i < $machineObj.length; ++i){
-    numberList += $machineObj.eq(i).val() + ',';
-  }
-  var isVlidated = true;
-  $.ajax({
-    type:'post',
-    url :machineUrl,
-    data:{
-      'typeList':typeList,
-      'numberList':numberList
-    },
-    async:false,
-    success:function(data){
-      console.log(data);
-      if( data['status'] == false )
-        isVlidated = false;
-    }
-    });
-  return isVlidated;
-}
-
-/****
-function used to initial the dialog to fill in data about machines
-
-****/
-function passApply(siObj){
-  var siList = $(siObj).val();
-  var soId = "." + $(siObj).attr('id');
-  console.log(soId);
-  $("#confirmSoId").val( $(soId).val() );
-  $.ajax({
-    type:'post',
-    url:siDataUrl,
-    data:{
-      'si_list':siList
-    },
-    success:function(data){
-      var tbodyHtml = "";
-      var siArr = data['data'];
-      for( var i = 0 ; i<siArr.length; ++i ){
-        tbodyHtml += '<tr>' + '<td>' + siArr[i]['si_id'] + '<input type="hidden" name="si_id[]" value="' + siArr[i]['si_id'] + '" /></td>'
-                  +  '<td>' + siArr[i]['addr'] + '</td>'
-                  +  '<td>' + siArr[i]['expand_user'] + '</td>'
-                   +  '<td>' + siArr[i]['m_type'] + '<input type="hidden" name="m_type" class="type" value="' + siArr[i]['m_type'] + '" /></td>'
-                  +  '<td>' + siArr[i]['keyboard_type'] + '</td>'
-                  +  '<td>' + siArr[i]['sim_type'] + '</td>'
-                  +  '<td>  <input type="text" class="col-bg-5 number" name="m_code[]" /></td>'
-                  +  '<td>' + siArr[i]['annual_fee'] + '</td>'
-                  +  '<td>' + siArr[i]['deposit_fee'] + '</td>'
-                  +  '<td>' + siArr[i]['remark'] + '</td></tr>';
-      }
-      $("#setup_item").find('tbody').html(tbodyHtml);
-      $("#updateBtn").attr('disabled',false);
-      $("#setup_item").dialog('open');
-    }
-    });
-}
-
-/****
-function used to cancel the dialog
-****/
-$("#cancelBtn").click(function(){
-  $("#updateBtn").attr('disabled',false);
-  $("#setup_item").dialog('close');
-  });
-
-/****
-function used to update machine info
-****/
-$("#updateBtn").click(function(){
-  $("#updateBtn").attr('disabled',true);
-  var inputs = $('#confirmSiForm').find('input');
-  var flag = 1;
-  for( var i = 0; i < inputs.length; ++i ){
-    if( $(inputs[i]).val() === "" ){
-      alert( "请完整填写表单内容！" );
-      $(inputs[i]).focus();
-      flag = 0;
-      break;
-    }
-  }
-  if( flag === 1 ){
-    if(validateSerial() == true ){
-      $.ajax({
-        type:'POST',
-        url: updateMachineUrl,
-        data:$('#confirmSiForm').serialize(),
-        success: function(data){
-          if( data['status'] !== 0 ){
-            alert("保存成功!");
-            loadUADataByPage(0);
-            loadAprDataByPage(0);
-          }
-        }
-      });
-    }
-    else{
-      alert("机器编码填写有误，请重新确认！");
-    }
-  } 
-  });

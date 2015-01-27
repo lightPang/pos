@@ -4,9 +4,49 @@ class ApplyAction extends CommonAction {
     public function index(){
       $this->doAuth();
       $this->assign("activeTab", $_GET["activeTab"]);
+      $map['state'] = 0;
+      $map['u_id'] = $_SESSION['u_id'];
+      $soModel = M("setup_order");
+      $submitPage = $soModel->where($map)->count() ;
+      $map['state'] = array('gt',0);
+      $aprPage = $soModel->where($map)->count() ;
+      $this->assign( 'submitPage', $submitPage);
+      $this->assign( 'aprPage', $aprPage);
       $this->display();
     }
     
+    public function getSubmitDataByPage(){
+      $this->doAuth();
+      $uaMap['state'] = 0;
+      $uaMap['c_id'] = $_SESSION['c_id'];
+      $uaMap['u_id'] = $_SESSION['u_id'];
+      $sqlModel = M('setup_order');
+      $data = $sqlModel->where($uaMap)->select();
+      foreach ($data as $value => $key) {
+        $map['si_id'] = array('in', $key['si_list']);
+        $siModel = M('setup_item');
+        $siList = $siModel->where($map)->select();
+        $data[$value]['siList'] = $siList;
+      }
+      $this->ajaxReturn( $data, "123", 'ok' );
+    }
+
+    public function getPassedDataByPage(){
+      $this->doAuth();
+      $uaMap['state'] = array('gt',0);
+      //$uaMap['c_id'] = $_SESSION['c_id'];
+      $uaMap['u_id'] = $_SESSION['u_id'];
+      $sqlModel = M('setup_order');
+      $data = $sqlModel->where($uaMap)->select();
+      foreach ($data as $value => $key) {
+        $map['si_id'] = array('in', $key['si_list']);
+        $siModel = M('setup_item');
+        $siList = $siModel->where($map)->select();
+        $data[$value]['siList'] = $siList;
+      }
+      $this->ajaxReturn( $data, "123", 'ok' );
+    }
+
     public function createApplication(){
       if( $this->doAuth("setupApply") == true ){
         $sqlModel = M('setup_order');
@@ -52,6 +92,7 @@ class ApplyAction extends CommonAction {
         $data['ac_time'] = date('Y-m-d H:i:s',strtotime($data['ac_time']));
         $data['register_date'] = date('Y-m-d H:i:s',strtotime($data['register_date']));
         $data['active_date'] = date('Y-m-d H:i:s',strtotime($data['active_date']));
+        $data['u_id'] = $_SESSION['u_id'];
         $res = $sqlModel->add($data);
         $this->ajaxReturn( $data,"ok", 0 );
         

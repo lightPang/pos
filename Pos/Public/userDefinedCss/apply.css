@@ -17,6 +17,25 @@ select:disabled {
   background-color:#eee!important;
 }
 
+.line{
+  margin-bottom:5px;
+  font-size: 14px;
+}
+
+.bottom{
+  clear: both; 
+}
+
+.border-bottom{
+  border-bottom:1px dashed #000; 
+  margin-bottom: 8px;
+}
+
+.pos-page{
+  text-align: right;
+  margin-right:15px;
+}
+
 .file-box{ position:relative;width:230px} 
 .txt{ height:26px; border:1px solid #cdcdcd; width:120px; } 
 .filebtn{ background-color:#FFF; border:1px solid #CDCDCD;height:26px; width:70px; vertical-align:middle;} 
