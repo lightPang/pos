@@ -1,6 +1,6 @@
 var rootUrl = "/pos/Pos/index.php/";
-var UaDataUrl = rootUrl + "Approve/getSubmitDataByPage";
-var aprDataUrl = rootUrl + "Approve/getPassedDataByPage";
+var UaDataUrl = rootUrl + "Apply/getSubmitDataByPage";
+var aprDataUrl = rootUrl + "Apply/getPassedDataByPage";
 
 $(document).ready(function(){
   loadSubmitDataByPage(0);
@@ -63,10 +63,10 @@ function loadAprDataByPage(pageNum,isJump){
     url: aprDataUrl,
     data: {'pageNum':pageNum},
     success: function(data){
-      loadData(data['data'],0);
+      loadData(data['data'],1);
     }
   });
-  paging(pageNum,0);
+  paging(pageNum,1);
   $liList = $("#aprPage").find('li');
   for( var i = 0; i < $liList.length; ++i ){
     $a = $liList.eq(i);
@@ -93,26 +93,49 @@ function paging(origin,type){
   }
   var pageCount = $(countId).val();
   if( pageCount % 5 != 0 )
-    pageCount = pageCount / 5 + 1;
-  else
-    pageCount = pageCount / 5;
+    pageCount = parseInt(pageCount /5) + 1;
+  else if( pageCount != 0 )
+    pageCount = parseInt(pageCount /5)+ 2;
   var leftLiClass = '';
   var rightLiClass = '';
   if( origin == 0 )
     leftLiClass = 'class="disabled"';
   if( origin == pageCount - 1 )
     rightLiClass = 'class="disabled"';
-  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a><<</a></li>';
+  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a href="javascript:alterPage('+ (origin-1).toString() + ','+type.toString()+')"><<</a></li>';
   if( pageCount == 0 ) return;
   for( var i = origin-4; i < origin+5; ++i ){
     if( i <0 || i >= pageCount ) continue;
     else{
-      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() +')" >'+(i +1 ).toString()+'</a></li>';
+      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() + ','+type.toString()+')" >'+(i +1 ).toString()+'</a></li>';
       pageHtml += liHtml;
     }
   }
-  pageHtml += '<li '+ rightLiClass +' ><a>>></a></li></ul>';
+  pageHtml += '<li '+ rightLiClass +' ><a href="javascript:alterPage('+ (origin+1).toString() + ','+type.toString()+')">>></a></li></ul>';
   $(columnId).html(pageHtml);
+}
+
+/***
+*function used load different page of data
+*
+***/
+function alterPage(page,type,isJump){
+  if( type == 0 ){
+    loadSubmitDataByPage( page,isJump );
+  }
+  else{
+    loadAprDataByPage( page,isJump);
+  }
+}
+
+/***
+*function used to jump page
+*
+***/
+function jumpPage(id,type){
+  id = "#"+id;
+  var page = $(id).val() - 1;
+  alterPage( page, type,1);
 }
 
 /****
@@ -127,6 +150,7 @@ it means that there is no setup_order
 inHtml is the html text to be added into div.
 ****/
 function loadData(data,type){
+
   var inHtml = "";
   var headHtml = '<div class="panel panel-default"> \
                   <div class="panel-heading"> \
@@ -237,41 +261,41 @@ function loadData(data,type){
                               <Button onclick="downloadFile('+data[i]['contract_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >税务登记：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['tax_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 control-div no-padding-right" >营业执照：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['license_file_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
                         <div class="line"> \
                             <div class="col-sm-1 no-padding-right" >卡复印件：</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['card_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >身份证复印</div> \
-                            <div class="col-sm-2 file-box">  \
+                            <div class="col-sm-2 ">  \
                               <Button onclick="downloadFile('+data[i]['passport_file_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 control-div no-padding-right" >授权委托书</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['auth_file_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
                         </div> \
                         <div class="line"> \
                             <div class="col-sm-1 no-padding-right" >商户图片1</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2"> \
                              <Button onclick="downloadFile('+data[i]['client_img_1_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >商户图片2</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                               <Button onclick="downloadFile('+data[i]['client_img_2_id']+')">下载</Button> \
                             </div> \
                             <div class="col-sm-1 no-padding-right" >商户图片3</div> \
-                            <div class="col-sm-2 file-box"> \
+                            <div class="col-sm-2 "> \
                              <Button onclick="downloadFile('+data[i]['client_img_3_id']+')">下载</Button> \
                             </div> \
                             <div class="bottom"></div> \
@@ -290,7 +314,7 @@ function loadData(data,type){
                                 <th>年费</th> \
                                 <th>押金</th>';
       if( type == 0 )
-        contentHtml +=        '</tr> \
+        contentHtml +=        '<th>备注</th></tr> \
                             </thead> \
                             <tbody>';
       else{
@@ -312,11 +336,7 @@ function loadData(data,type){
                       +  '<td>' + data[i]['siList'][j]['annual_fee'] + '</td>'
                       +  '<td>' + data[i]['siList'][j]['deposit_fee'] + '</td>';
         if( type==0)
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
-        else if(type != 3){
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
-                      +   '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
-        }
+          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>'; 
         else{
           tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
                       +   '<td>' + data[i]['siList'][j]['m_tcode'] + '</td>'
@@ -328,7 +348,7 @@ function loadData(data,type){
                         </div> \
                         <div class="space-8"></div> ';
       var endHtml =  '</div>';
-        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + confirmBtn + endHtml;
+        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + endHtml;
       inHtml += contentHtml;
     }
   }

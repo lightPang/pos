@@ -17,6 +17,20 @@ select:disabled {
   background-color:#eee!important;
 }
 
+.line{
+  margin-bottom:5px;
+  font-size: 14px;
+}
+
+.bottom{
+  clear: both; 
+}
+
+.border-bottom{
+  border-bottom:1px dashed #000; 
+  margin-bottom: 8px;
+}
+
 .pos-page{
   text-align: right;
   margin-right:15px;

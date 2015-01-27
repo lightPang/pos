@@ -15,6 +15,38 @@ class ApplyAction extends CommonAction {
       $this->display();
     }
     
+    public function getSubmitDataByPage(){
+      $this->doAuth();
+      $uaMap['state'] = 0;
+      $uaMap['c_id'] = $_SESSION['c_id'];
+      $uaMap['u_id'] = $_SESSION['u_id'];
+      $sqlModel = M('setup_order');
+      $data = $sqlModel->where($uaMap)->select();
+      foreach ($data as $value => $key) {
+        $map['si_id'] = array('in', $key['si_list']);
+        $siModel = M('setup_item');
+        $siList = $siModel->where($map)->select();
+        $data[$value]['siList'] = $siList;
+      }
+      $this->ajaxReturn( $data, "123", 'ok' );
+    }
+
+    public function getPassedDataByPage(){
+      $this->doAuth();
+      $uaMap['state'] = array('gt',0);
+      //$uaMap['c_id'] = $_SESSION['c_id'];
+      $uaMap['u_id'] = $_SESSION['u_id'];
+      $sqlModel = M('setup_order');
+      $data = $sqlModel->where($uaMap)->select();
+      foreach ($data as $value => $key) {
+        $map['si_id'] = array('in', $key['si_list']);
+        $siModel = M('setup_item');
+        $siList = $siModel->where($map)->select();
+        $data[$value]['siList'] = $siList;
+      }
+      $this->ajaxReturn( $data, "123", 'ok' );
+    }
+
     public function createApplication(){
       if( $this->doAuth("setupApply") == true ){
         $sqlModel = M('setup_order');

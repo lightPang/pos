@@ -34,7 +34,7 @@
             </li>
 
           </ul>
-
+          
           <div class="tab-content">
             <div id="checkin" class="tab-pane in active">
               <div class="row">
@@ -421,9 +421,9 @@
                 <div class="col-md-2">
                   <div class="input-group">
                     <input type="hidden" class="jumpType" value = "0" />
-                    <input type="text" id="jumpToPage"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <input type="text" id="submitJump"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                      <button class="btn btn-default" type="button" onclick="jumpPage('submitJump',0)">Go!</button>
                     </span>
                   </div>
                 </div>
@@ -442,9 +442,9 @@
                 <div class="col-md-2">
                   <div class="input-group">
                     <input type="hidden" class="jumpType" value = "0" />
-                    <input type="text" id="jumpToPage"class="form-control jump_page_txt" placeholder="共 {$submitPage} 页">
+                    <input type="text" id="aprJump"class="form-control jump_page_txt" placeholder="共 {$aprPage} 页">
                     <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" onclick="jumpToPage()">Go!</button>
+                      <button class="btn btn-default" type="button" onclick="jumpPage('aprJump',1)">Go!</button>
                     </span>
                   </div>
                 </div>
@@ -566,9 +566,7 @@
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
 		<script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
-    <!--
     <script src="__PUBLIC__/userDefinedJs/apply.js"></script>
-  -->
     <script src="__PUBLIC__/userDefinedJs/applySubmit.js"></script>
     <script src="__PUBLIC__/js/jquery.form.js"></script>
   </body>

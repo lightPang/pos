@@ -195,7 +195,7 @@ function loadData(data,type){
                                 <th>年费</th> \
                                 <th>押金</th>';
       if( type == 0 )
-        contentHtml +=        '</tr> \
+        contentHtml +=        '<th>备注</th></tr> \
                             </thead> \
                             <tbody>';
       else if( type != 3){
@@ -454,25 +454,25 @@ function paging(origin,type){
   }
   var pageCount = $(countId).val();
   if( pageCount % 5 != 0 )
-    pageCount = pageCount / 5 + 1;
+    pageCount = parseInt(pageCount /5) + 1;
   else
-    pageCount = pageCount / 5;
+    pageCount = parseInt(pageCount /5);
   var leftLiClass = '';
   var rightLiClass = '';
   if( origin == 0 )
     leftLiClass = 'class="disabled"';
   if( origin == pageCount - 1 )
     rightLiClass = 'class="disabled"';
-  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a><<</a></li>';
+  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a href="javascript:alterPage('+ (origin-1).toString() + ','+type.toString()+')"><<</a></li>';
   if( pageCount == 0 ) return;
   for( var i = origin-4; i < origin+5; ++i ){
     if( i <0 || i >= pageCount ) continue;
     else{
-      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() +')" >'+(i +1 ).toString()+'</a></li>';
+      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() + ','+type.toString()+')" >'+(i +1 ).toString()+'</a></li>';
       pageHtml += liHtml;
     }
   }
-  pageHtml += '<li '+ rightLiClass +' ><a>>></a></li></ul>';
+  pageHtml += '<li '+ rightLiClass +' ><a href="javascript:alterPage('+ (origin+1).toString() + ','+type.toString()+')">>></a></li></ul>';
   $(columnId).html(pageHtml);
 }
 
@@ -484,16 +484,29 @@ function used to jump to a page of the whole data,two parameter will be used
 *jumpToPage the page will jump to .
 
 ****/
-
-function jumpToPage(){
-  var jumpType = $(".jumpType").val();
-  var jumpToPage = $("#jumpToPage").val();
-  if( jumpType == 0 ){
-    loadUADataByPage( jumpToPage-1,1 );
+function alterPage(page,type,isJump){
+  if( type == 0 ){
+    loadUADataByPage( page,isJump );
+  }
+  else if( type == 1 ){
+    loadAprDataByPage( page,isJump);
+  }
+  else if( type == 2){
+    loadMdbDataByPage( page, isJump );
   }
   else{
-    loadAprDataByPage( jumpToPage-1,1);
+    loadedDataByPage( page, isJump );
   }
+}
+
+/***
+*function used to jump page
+*
+***/
+function jumpPage(id,type){
+  id = "#"+id;
+  var page = $(id).val() - 1;
+  alterPage( page, type,1);
 }
 
 /****
