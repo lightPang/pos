@@ -421,16 +421,6 @@ function loadedDataByPage(pageNum, isJump){
 }
 
 /****
-function used to download img from server
-
-id is the file id .
-
-****/
-function downloadFile(id){
-  window.open('/pos/Pos/index.php/File/downloadFileById/id/'+id);
-}
-
-/****
 function used to initialize the paging button
 
 only five paging button will be shown and the origin is the starting page num

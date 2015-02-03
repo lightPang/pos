@@ -2,7 +2,7 @@
   class CommonAction extends Action{
     protected function index(){}
     
-    protected function doAuth($content=null){
+    protected function doAuth($content){
       $flag = false;
 
       if( isset( $_SESSION['u_id'] ) ){
@@ -12,7 +12,8 @@
         $authStr = $data[0]['auth'];
         $authArr = explode(',', $authStr);
         $i = 1;
-
+        if( $content == null )
+          $flag = true;
         foreach( $authArr as $auth ){
           if( $auth != "" ){
             $this->assign( $auth, $i );
@@ -26,6 +27,43 @@
       }
 
       return $flag;
+    }
+
+    public function getInfoData(){
+      if( $this->doAuth() ){
+        $data = array();
+        $provinceModel = M('area_province');
+        $data['province'] = $provinceModel->select();
+        $cityModel = M("area_city");
+        $data['city'] = $cityModel->select();
+        $districtModel = M('area_district');
+        $data['district'] = $districtModel->select();
+        $bankModel = M('bank');
+        $data['bank'] = $bankModel->select();
+        $bankOpModel = M('bank_operator');
+        $data['bankop'] = $bankOpModel->select();
+        $caModel = M('client_attr');
+        $data['clientAttr'] = $caModel->select();
+        $cpModel = M('client_platform');
+        $data['clientPlatform'] = $cpModel->select();
+        $userModel = M('user');
+        $data['user'] = $userModel->field('u_id,name')->select();
+        $mpModel = M('machinetype');
+        $mpMap['mt_type'] = 0;
+        $data['machineType'] = $mpModel->where($mpMap)->select();
+        $mpMap['mt_type'] = 1;
+        $data['keyboardType'] = $mpModel->where($mpMap)->select();
+        $mpMap['mt_type'] = 2;
+        $data['sim'] = $mpModel->where($mpMap)->select();
+        $miModel = M('mcc_item');
+        $data['mcc'] = $miModel->select();
+        $crModel = M('client_rate');
+        $crMap['is_inner'] = 1;
+        $data['ri'] = $crModel->where($crMap)->select();
+        $crMap['is_inner'] = 0;
+        $data['ro'] = $crModel->where($crMap)->select();
+        $this->ajaxReturn($data, 'ok','123');
+      }
     }
     protected function updateUserInfo($arr){
       $user = M('user');
