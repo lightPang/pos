@@ -3,45 +3,11 @@ var createUrl =  rootUrl + "Apply/createApplication";
 var updateUrl = rootUrl + "Apply/updateApplication";
 var delUrl = rootUrl + "Area/delApplication";
 var dataUrl = rootUrl + "Area/getApplicationData";
-var provinceDataUrl = rootUrl + "Area/getProvinceData";
-var cityDataUrl = rootUrl + "Area/getCityData";
-var districtDataUrl = rootUrl + "Area/getDistrictData";
-var bankDataUrl = rootUrl + "Bank/getBankData";
-var bankOperatorDataUrl = rootUrl + "Bank/getOperatorData";
-var clientPlatformUrl = rootUrl + "Operation/getClientPlatformData";
-var clientAttrUrl = rootUrl + "Operation/getClientAttrData";
-var mccItemDataUrl = rootUrl + "Operation/getMccItemData";
-var clientRateDataUrl = rootUrl + "Operation/getClientRateData/type/";
-var createSetupItemUrl = rootUrl + "SetupItem/create";
-var userDataUrl = rootUrl + "User/getUserData";
-var machineTypeUrl = rootUrl + "MachineType/search/type/0";
-var keyboardDataUrl = rootUrl + "MachineType/search/type/1";
-var simDataUrl = rootUrl + "MachineType/search/type/2";
-var siDataUrl = rootUrl + "SetupItem/getSiData"
+
 $(document).ready(function(){
   //loadData();
   //load data of main page
-  
-  loadExtraData('Province',provinceDataUrl,'ap_id','name');
-  loadExtraData('City', cityDataUrl,'ac_id','name','ap_id');
-  loadExtraData( 'District', districtDataUrl,'ad_id','name','ac_id' );
-  loadExtraData( 'Bank', bankDataUrl,'b_id','name' );
-  loadExtraData( 'BankOperator', bankOperatorDataUrl,'bo_id','name' );
-  loadExtraData( 'Ca_id', clientAttrUrl,'ca_id','name' );
-  loadExtraData( 'Cp_id', clientPlatformUrl,'cp_id','name' );
-  loadMccData( 'Mi_id', mccItemDataUrl,'mi_id' );
-  loadRateData('Rate_inner', 1);
-  loadRateData('Rate_outer',0);
-
-  // load data of dialog 
-  loadExtraData( 'Si_expand_user',userDataUrl,'u_id','name');
-  loadExtraData('Si_m_type', machineTypeUrl, 'mt_id','mt_name');
-  loadExtraData('Si_keyboard_type', keyboardDataUrl, 'mt_id','mt_name');
-  loadExtraData('Si_sim_type', simDataUrl, 'mt_id','mt_name');
   createSiDialog();
-  //createDialog();
-  
-  //loadSiTableData();
   
 });
 
@@ -236,71 +202,6 @@ function refreshCityData(type){
   $(citySelect).find("option").css('display', 'none');
   $(citySelect).val( $(selectOption).val() );
   $(selectOption).css('display', 'inherit');
-}
-
-function loadExtraData(name,dataUrl,id,attr_name,class_id){
-  $.ajax({
-    type:'GET',
-    url: dataUrl,
-    success:function(data){
-      
-      var dataArr = data['data'];
-      var options = "";
-      var displayStr = "'>";
-      
-      for( var i = 0 ; i < dataArr.length; ++ i ){
-        if( typeof(class_id) != "undefined" )
-          displayStr = "' class = '" + dataArr[i][class_id] + displayStr;
-        options += "<option value = '" + dataArr[i][id] + displayStr + dataArr[i][attr_name] + "</option>";
-      } 
-      var selectName = "#select" + name;
-      var updateName = "#update" + name;
-      if( name===""){
-      console.log(data);
-      console.log( options);}
-      $(selectName).append( options);
-      //$(updateName).append( options);
-    }
-  });
-}
-
-function loadMccData(name,dataUrl){
-  $.ajax({
-    type:'GET',
-    url: dataUrl,
-    success:function(data){
-      var dataArr = data['data'];
-      var options = "";
-      var displayStr = "'>"; 
-      for( var i = 0 ; i < dataArr.length; ++ i ){
-        options += "<option value = '" + dataArr[i]['mi_id'] + displayStr + dataArr[i].code + ' ' +dataArr[i].remark + "</option>";
-      } 
-      var selectName = "#select" + name;
-      var updateName = "#update" + name;
-      $(selectName).append( options);
-      //$(updateName).append( options);
-    }
-  });
-}
-
-function loadRateData(name,type){
-  var dataUrl = clientRateDataUrl + type;
-  $.ajax({
-    type:'GET',
-    url: dataUrl,
-    success:function(data){
-      var dataArr = data['data'];
-      var options = "";
-      var displayStr = "'>"; 
-      for( var i = 0 ; i < dataArr.length; ++ i ){
-        options += "<option value = '" + dataArr[i]['cr_id'] + displayStr + dataArr[i].rate  + "</option>";
-      } 
-      var selectName = "#select" + name;
-      var updateName = "#update" + name;
-      $(selectName).append( options);
-      //$(updateName).append( options);
-    }
-  });
 }
 
 function createDialog(){

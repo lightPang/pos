@@ -42,3 +42,12 @@ function updateTabIndex(){
   }
 }
 
+/****
+function used to download img from server
+
+id is the file id .
+
+****/
+function downloadFile(id){
+  window.open('/pos/Pos/index.php/File/downloadFileById/id/'+id);
+}
