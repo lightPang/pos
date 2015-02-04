@@ -5,6 +5,8 @@ var addRecordUrl = rootUrl + "Check/addRecord";
 $(document).ready(function(){
   loadMachineData(0);
 });
+
+
 $("#returnBtn").click(function(){
   $("#record").css('display','none');
   $("#table-div").css('display', 'block');
@@ -16,9 +18,11 @@ function addRecord(){
       type:'post',
       url : addRecordUrl,
       success:function(data){ 
+        var reg = new RegExp("<[^>]+>","g" );
+        data = data.replace( reg,"" );
+        data = JSON.parse(data);
         console.log( data );
-        $("#siList").val( $("#siList").val() + data['status'] + ',')
-        loadCheckList( $("#siList").val() );
+        loadCheckList( $("#siRecord").val() );
         alert("保存成功！");
       }
     });
@@ -37,19 +41,20 @@ function checkInput(){
   return true;
 }
 
-function loadCheckList( check_list){
+function loadCheckList( si_id ){
   $("#table-div").css('display', 'none');
   $("#record").css('display','block');
-  $("#siList").val( check_list );
+  $("#siRecord").val( si_id );
   $.ajax({
     type : 'post',
     dataType:"json",
     data:{
-      'check_list' : check_list
+      'si_id' : si_id
     },
     url : checkListUrl,
     success : function(data){
       var recordList = data['data'];
+      console.log( data);
       var inHtml = "";
       var tr = '';
       var si_id = "";
@@ -59,18 +64,17 @@ function loadCheckList( check_list){
         tr = "<tr>";
         tr += "<td>" + recordItem['time'] + "</td>";
         var addSign = '';
-        if( recordList['is_add'] == 1 ){
+        if( recordItem['is_add'] == 1 ){
           addSign = '<i class="icon-ok"</i>';
         }
-        tr += "<td>" + addSign + "</td>";
-        tr += "<td>" + recordItem['userName'] + "</td>"
+        tr += "<td>" + addSign + "</td>"
+            + "<td>" + recordItem['userName'] + "</td>"
             + "<td>" + recordItem['confirm_code'] + "</td>"
-            + "<td><button onclick='downloadFile(" + recordItem['img_id'] +")下载</button></td>"
-            + "<td>" + recordItem['remark'] + "</tr>";
+            + "<td><button onclick='downloadFile(" + recordItem['img_id'] +")'>下载</button></td>"
+            + "<td>" + recordItem['remark'] + "</td></tr>";
         inHtml += tr;
       }
       $("#record-table").find('tbody').html(inHtml);
-      $("#siRecord").val( si_id );
     }
   });
 }
@@ -98,7 +102,7 @@ function loadMachineData(district_id){
         row.push( item['check_time']);
         row.push( item['checkUser']);
         row.push( calDays(item['check_time']));
-        row.push( btnTxt+ item['check_list']  + btnTxtEnd);
+        row.push( btnTxt+ item['si_id']  + btnTxtEnd);
         rows.push(row);
       }
       var oTable;
@@ -139,8 +143,6 @@ function calDays(date){
   //var date = "2015-1-06 11:17:03";
   //var date2 = "2014-10-09 11:17:03";
   date = datetime_to_unix( date);
-  //date2 = datetime_to_unix(date2);
-
   var date2 = (new Date()).valueOf();
   var days=Math.floor((date2 - date)/(24*3600*1000));
   return days;
