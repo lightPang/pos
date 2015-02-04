@@ -31,5 +31,28 @@
         $this->ajaxReturn( $data,"ok", count($data));
       }
     }
+
+    public function getSetupItemByDistrict(){
+      if( $this->doAuth() ){
+        $siModel = M('setup_item');
+        $userModel = M('user');
+        $userData = $userModel->field('u_id,name')->select();
+        $district_id = $_POST['district_id'];
+        if( $district_id != 0 )
+          $siMap['ad_id'] = $district_id;
+        $siMap['setup_state'] = 1;
+        $data = $siModel->where($siMap)->select();
+        
+        foreach ($data as $key => $value) {
+          foreach ($userData as $userItem) {
+            if( $userItem['u_id'] == $value['check_user']){
+              $data[$key]['checkUser'] = $userItem['name'];
+              break;
+            }
+          }
+        }
+        $this->ajaxReturn($data,'ok' ,'123');
+      }
+    }
   }
 ?>
