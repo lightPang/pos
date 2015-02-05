@@ -12,7 +12,7 @@ $(document).ready(function(){
           $('#sbtn').attr("disabled", true);
           $.post(url, {account:$.md5(account), pwd:$.md5(pwd)}, function(data){
             if(data=='true'){
-              location.href="index.php/Index/home";
+              location.href="Index/home";
             }
             else if(data=='fail'){
               alert('账号或密码错误！');

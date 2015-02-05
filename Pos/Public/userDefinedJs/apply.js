@@ -60,6 +60,10 @@ $("#updateSiBtn").click( function(){
       break;
     }
   }
+  if($("#si_list").val()=="" ){
+    alert("请填写装机信息！");
+    flag = 0;
+  }
   if( flag === 1 ){
     $("#updateSiBtn").attr('disabled',true);
     $("#createSiForm").ajaxSubmit({
@@ -294,6 +298,10 @@ $('#submitBtn').click( function(){
       flag = 0;
       break;
     }
+  }
+  if($("#si_list").val()=="" ){
+    alert("请填写装机信息！");
+    flag = 0;
   }
   if( flag === 1 ){
     $("#contentForm").ajaxSubmit({

@@ -28,7 +28,7 @@ function loadSubmitDataByPage(pageNum,isJump){
     url: UaDataUrl,
     data: {'pageNum':pageNum},
     success: function(data){
-      loadData(data['data'],0);
+      loadListData(data['data'],0);
     }
   });
   paging(pageNum,0);
@@ -63,7 +63,7 @@ function loadAprDataByPage(pageNum,isJump){
     url: aprDataUrl,
     data: {'pageNum':pageNum},
     success: function(data){
-      loadData(data['data'],1);
+      loadListData(data['data'],1);
     }
   });
   paging(pageNum,1);
@@ -149,8 +149,7 @@ it means that there is no setup_order
 
 inHtml is the html text to be added into div.
 ****/
-function loadData(data,type){
-
+function loadListData(data,type){
   var inHtml = "";
   var headHtml = '<div class="panel panel-default"> \
                   <div class="panel-heading"> \
