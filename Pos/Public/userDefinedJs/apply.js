@@ -3,11 +3,10 @@ var createUrl =  rootUrl + "Apply/createApplication";
 var updateUrl = rootUrl + "Apply/updateApplication";
 var delUrl = rootUrl + "Area/delApplication";
 var dataUrl = rootUrl + "Area/getApplicationData";
-var siDataUrl = rootUrl + "SetupItem/getSiData"
+var siDataUrl = rootUrl + "SetupItem/getSiData";
+var createSetupItemUrl = rootUrl + "SetupItem/create";
 
 $(document).ready(function(){
-  //loadData();
-  //load data of main page
   createSiDialog();
   
 });
@@ -61,10 +60,6 @@ $("#updateSiBtn").click( function(){
       break;
     }
   }
-  if($("#si_list").val()=="" ){
-    alert("请填写装机信息！");
-    flag = 0;
-  }
   if( flag === 1 ){
     $("#updateSiBtn").attr('disabled',true);
     $("#createSiForm").ajaxSubmit({
@@ -74,16 +69,21 @@ $("#updateSiBtn").click( function(){
       console.log(data);
        if( data['status'] > 0 ){
           alert("操作成功!");
-          var si_list = $('input[name="si_list"]').val();
-          if( si_list == "" ){
-            $('input[name="si_list"]').val( data['status'] );
+          var siListId = "#si_list";
+          if($("#si_id").val() != '' ){
+            siListId = "#update_si_list";
           }
-          else{
-            si_list += "," + data['status'].toString();
-            $('input[name="si_list"]').val( si_list);
-          } 
+          var si_list = $( siListId ).val();
+          si_list +=  data['status'].toString() + ",";
+          $( siListId ).val( si_list);
+
+          if($("#si_id").val() != '' )
+            loadUpdateSiTableData();
+          else
+            loadSiTableData();
+           
           clearInput("#createSiForm");
-          loadSiTableData();
+          
           $("#setup_item").dialog('close');
           $("#updateSiBtn").attr('disabled',false);
         }
@@ -93,6 +93,7 @@ $("#updateSiBtn").click( function(){
 });
 $("#cancelSiBtn").click(function(){
   $("#setup_item").dialog('close');
+  $("#setup_item").find('input').val('');
   $("#updateSiBtn").attr('disabled',false);
 });
 function loadSiTableData(){
@@ -227,7 +228,7 @@ function updateRow(ele){
   $("#ad_id").val( $(ad_id).html() );
   $("#updateName").val( $(name).html() );
   $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+  $("#setup_item").dialog( "open");
 }
 
 function deleteRow(ele){
@@ -304,8 +305,6 @@ $('#submitBtn').click( function(){
       console.log(data);
        if( data['status'] !== 0 ){
           alert("添加成功!");
-          //clearInput();
-          //loadData();
         }
     }
     });

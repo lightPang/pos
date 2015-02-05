@@ -18,7 +18,14 @@
         $this->ajaxReturn( $data, "ok",$res);
       }
     }
-
+    public function getSetupItem(){
+      if( $this->doAuth() && isset($_POST['si_id'] )){
+        $sqlModel = M('setup_item');
+        $siMap['si_id'] = $_POST['si_id'];
+        $data = $sqlModel->where( $siMap )->select();
+        $this->ajaxReturn( $data[0], 'ok','123');
+      }
+    }
     public function getSiData(){
       //echo 123;
       if( isset( $_SESSION['u_id'] ) && isset($_POST['si_list']) ){

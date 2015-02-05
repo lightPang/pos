@@ -1,5 +1,8 @@
-var soDataUrl = '/pos/Pos/index.php/Apply/getSoData';
-var soItemUrl = '/pos/Pos/index.php/Apply/getSoItem'
+var rootUrl = '/pos/Pos/index.php/';
+var soDataUrl = rootUrl + 'Apply/getSoData';
+var soItemUrl = rootUrl + '/Apply/getSoItem';
+var delSetupItemUrl = rootUrl + 'SetupItem/del';
+var setupItemUrl = rootUrl + 'SetupItem/getSetupItem';
 $(document).ready(function(){
   loadOrderData();
   loadEditSetupOrder( 1 );
@@ -218,8 +221,8 @@ function loadUpdateSiTableData(){
       var dataArr = data['data'];
       var rows = [];
       var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-                                <a class=\"green\" href=\"#\" onclick=\"editUpdateRow(this)\">\
-                                  <i class=\"icon-pencil bigger-130\"></i>\
+                                <a class=\"green\" href=\"#\" onclick=\"editUpdateRow(';
+      var editHtmlEnd =          ')\"><i class=\"icon-pencil bigger-130\"></i>\
                                 </a>\
                                 <a class=\"red\" href=\"#\" onclick=\"deleteUpdateRow(this)\">\
                                   <i class=\"icon-trash bigger-130\"></i>\
@@ -237,7 +240,7 @@ function loadUpdateSiTableData(){
         row.push( item["annual_fee"] );
         row.push( item["deposit_fee"]);
         row.push( item["remark"]);
-        row.push( editHtml  );
+        row.push( editHtml + item['si_id'] + editHtmlEnd  );
         rows.push(row);
       }
       var oTable1;
@@ -283,22 +286,33 @@ function loadUpdateSiTableData(){
   );
 }
 
-function editUpdateRow(){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var ad_id = $tdlist.get(0);
-  var ap_id = $tdlist.get(1);
-  var ac_id = $tdlist.get(2);
-  var name = $tdlist.get(3);
-  var remark = $tdlist.get(4);
-  console.log(ad_id);
-  $("#updateProvince").val( $(ap_id).html() );
-  $("#updateCity").val( $(ac_id).html() );
-  $("#ad_id").val( $(ad_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+function editUpdateRow( si_id ){
+  $.ajax({
+    type:'post',
+    url: setupItemUrl,
+    data :{
+      'si_id' : si_id
+    },
+    success: function(data){
+      var setupItem = data['data'];
+      console.log( setupItem );
+      $("#si_addr").val( setupItem['addr'] );
+      $("#si_phone").val( setupItem['phone'] );
+      $("#si_m_type").val( setupItem['m_type'] );
+      $("si_keyboard_type").val( setupItem['keyboard_type'] );
+      $("#si_sim_type").val( setupItem['sim_type'] );
+      $("#si_sim_id").val( setupItem['sim_id'] );
+      $("input[type='radio'][name='has_annual'][value='"+setupItem['has_annual']+"']").attr('checked','checked');
+      $("#si_annual_fee").val( setupItem['annual_fee'] );
+      $("input[type='radio'][name='has_deposit'][value='"+setupItem['has_deposit']+"']").attr('checked','checked');    
+      $("#si_deposit_fee").val( setupItem['deposit_fee']);
+      $("#si_expand_user").val( setupItem['expand_user'] );
+      $("#si_remark").val( setupItem['remark'] );
+      $("#si_id").val( setupItem['si_id'] );
+      $("#setup_item").dialog( "open");
+    }
+  });
+  
 }
 
 function deleteUpdateRow(){
@@ -310,7 +324,7 @@ function deleteUpdateRow(){
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:delUrl,
+      url:delSetupItemUrl,
       data: {'si_id' : si_id },
       success: function(data){
         console.log(data);

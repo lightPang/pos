@@ -18,10 +18,10 @@ function loadInfoData(){
       loadExtraData( 'bo_id', data['bankop'],'bo_id','name' );
       loadExtraData( 'ca_id', data['clientAttr'],'ca_id','name' );
       loadExtraData( 'cp_id', data['clientPlatform'],'cp_id','name' );
-      loadExtraData( 'Si_expand_user',data['user'],'u_id','name');
-      loadExtraData('Si_m_type', data['machineType'], 'mt_id','mt_name');
-      loadExtraData('Si_keyboard_type', data['keyboardType'], 'mt_id','mt_name');
-      loadExtraData('Si_sim_type', data['sim'], 'mt_id','mt_name');
+      loadExtraData( 'si_expand_user',data['user'],'u_id','name');
+      loadExtraData('si_m_type', data['machineType'], 'mt_id','mt_name');
+      loadExtraData('si_keyboard_type', data['keyboardType'], 'mt_id','mt_name');
+      loadExtraData('si_sim_type', data['sim'], 'mt_id','mt_name');
 
       loadMccData( 'mi_id',data['mcc'],'mi_id' );
       loadRateData('cr_inner_id',data['ri'], 1);
