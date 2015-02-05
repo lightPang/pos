@@ -3,6 +3,7 @@ var createUrl =  rootUrl + "Apply/createApplication";
 var updateUrl = rootUrl + "Apply/updateApplication";
 var delUrl = rootUrl + "Area/delApplication";
 var dataUrl = rootUrl + "Area/getApplicationData";
+var siDataUrl = rootUrl + "SetupItem/getSiData"
 
 $(document).ready(function(){
   //loadData();
@@ -172,16 +173,20 @@ function loadSiTableData(){
   );
 }
 //传的是函数指针！！！！！不能再调用函数了！！！！！！
-$("#selectProvince").change( function(){
-  refreshLinkedData("Province","City",'#select');
+$("#ap_id").change( function(){
+  refreshLinkedData("ap_id","ac_id",'#');
 });
 
-$("#selectCity").change( function(){
-  refreshLinkedData("City","District",'#select');
+$("#update_ap_id").change( function(){
+  refreshLinkedData("ap_id","ac_id",'#update_');
 });
 
-$("#updateProvince").change( function(){
-  refreshCityData("#update");
+$("#ac_id").change( function(){
+  refreshLinkedData("ac_id","ad_id",'#');
+});
+
+$("#update_ac_id").change( function(){
+  refreshLinkedData("ac_id","ad_id",'#update_');
 });
 
 function refreshLinkedData( source, target, type){
@@ -194,18 +199,6 @@ function refreshLinkedData( source, target, type){
   $(targetEle).find("option").css('display', 'none');
   $(targetEle).val( $($(targetEle).find(targetOption)).val() );
   $( $(targetEle).find( targetOption) ).css('display', 'inherit');
-}
-
-function refreshCityData(type){
-  var eleId = type + "Province";
-  var citySelect = type + "City";
-  var value = $(eleId).val();
-  console.log( eleId );
-  var selectOption = "option[class='" + value + "']";
-  console.log(  $(selectOption).val() );
-  $(citySelect).find("option").css('display', 'none');
-  $(citySelect).val( $(selectOption).val() );
-  $(selectOption).css('display', 'inherit');
 }
 
 function createDialog(){
@@ -251,7 +244,7 @@ function deleteRow(ele){
       success: function(data){
         console.log(data);
         if( data['status'] != false ){
-          var table = $('#sample-table-2').DataTable();
+          var table = $('#machineListTable').DataTable();
           table.row('.remove').remove().draw();
           alert("删除成功！");
         }

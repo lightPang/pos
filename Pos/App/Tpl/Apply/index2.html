@@ -52,12 +52,12 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性</label>
                     <div class="col-sm-2">
-                      <select id="selectCa_id" name="ca_id" class="form-control">
+                      <select id="ca_id" name="ca_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户类别</label>
                     <div class="col-sm-2">
-                      <select id="selectMi_id" name="mi_id" class="form-control">
+                      <select id="mi_id" name="mi_id" class="form-control">
                       </select>
                     </div>
                     
@@ -78,24 +78,24 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属省份</label>
                     <div class="col-sm-2">
-                      <select id="selectProvince" name="ap_id" class="form-control">
+                      <select id="ap_id" name="ap_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属城市</label>
                     <div class="col-sm-2">
-                      <select id="selectCity" name="ac_id" class="form-control">
+                      <select id="ac_id" name="ac_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所在区域</label>
                     <div class="col-sm-2 ">
-                      <select id="selectDistrict" name="ad_id" class="form-control">
+                      <select id="ad_id" name="ad_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
                     <div class="col-xs-1">
-                      <select id="selectRate_inner" name="cr_inner_id" class="form-control">
+                      <select id="cr_inner_id" name="cr_inner_id" class="form-control">
                       </select>
                     </div>
                     
@@ -105,7 +105,7 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单银行</label>
                     <div class="col-sm-2 ">
-                      <select  id="selectBank" class="required" name="bill_b_id" class="form-control">
+                      <select  id="bill_b_id" class="required" name="bill_b_id" class="form-control">
                       </select>
                     </div>
                     
@@ -116,13 +116,13 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属平台</label>
                     <div class="col-sm-2">
-                      <select id="selectCp_id" name="cp_id" class="form-control">
+                      <select id="cp_id" name="cp_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
                     <div class="col-sm-1">
-                      <select id="selectRate_outer" name="cr_outer_id" class="form-control">
+                      <select id="cr_outer_id" name="cr_outer_id" class="form-control">
                       </select>
                     </div>
                     
@@ -183,7 +183,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
                     <div class="col-sm-2">
-                        <select id="selectBankOperator" name="bo_id" class="form-control"></select>
+                        <select id="bo_id" name="bo_id" class="form-control"></select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 被授权人 </label>
@@ -402,7 +402,28 @@
               </div>
             </div>
 
-            <div id="EditOrder" class="tab-pane in active">
+            <div id="submited" class="tab-pane">
+              <div id="table-div" class="dataTables_wrapper" role="grid" >
+                <table id="order-table" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th >订单编号</th>
+                      <th>商户名称</th>
+                      <th>商户编号</th> 
+                      <th>收单银行</th>
+                      <th>收单日期</th>  
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="EditOrder" class="tab-pane in active">
               <div class="row">
                 <form class="form-horizontal" id="updateForm" role="form" action="__APP__/Apply/createApplication" method="post" enctype="multipart/form-data">
                   <div class="form-group">
@@ -426,12 +447,12 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户属性</label>
                     <div class="col-sm-2">
-                      <select id="update_selectCa_id" name="ca_id" class="form-control">
+                      <select id="update_ca_id" name="ca_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 商户类别</label>
                     <div class="col-sm-2">
-                      <select id="update_selectMi_id" name="mi_id" class="form-control">
+                      <select id="update_mi_id" name="mi_id" class="form-control">
                       </select>
                     </div>
                     
@@ -452,24 +473,24 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属省份</label>
                     <div class="col-sm-2">
-                      <select id="update_selectProvince" name="ap_id" class="form-control">
+                      <select id="update_ap_id" name="ap_id" class="form-control">
                       </select>
                     </div>
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属城市</label>
                     <div class="col-sm-2">
-                      <select id="update_selectCity" name="ac_id" class="form-control">
+                      <select id="update_ac_id" name="ac_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所在区域</label>
                     <div class="col-sm-2 ">
-                      <select id="update_selectDistrict" name="ad_id" class="form-control">
+                      <select id="update_ad_id" name="ad_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
                     <div class="col-xs-1">
-                      <select id="update_selectRate_inner" name="cr_inner_id" class="form-control">
+                      <select id="update_cr_inner_id" name="cr_inner_id" class="form-control">
                       </select>
                     </div>
                     
@@ -479,7 +500,7 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 收单银行</label>
                     <div class="col-sm-2 ">
-                      <select  id="update_selectBank" class="required" name="bill_b_id" class="form-control">
+                      <select  id="update_bill_b_id" class="required" name="bill_b_id" class="form-control">
                       </select>
                     </div>
                     
@@ -490,13 +511,13 @@
 
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属平台</label>
                     <div class="col-sm-2">
-                      <select id="update_selectCp_id" name="cp_id" class="form-control">
+                      <select id="update_cp_id" name="cp_id" class="form-control">
                       </select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
                     <div class="col-sm-1">
-                      <select id="update_selectRate_outer" name="cr_outer_id" class="form-control">
+                      <select id="update_cr_outer_id" name="cr_outer_id" class="form-control">
                       </select>
                     </div>
                     
@@ -557,7 +578,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 银行经办人 </label>
                     <div class="col-sm-2">
-                        <select id="update_selectBankOperator" name="bo_id" class="form-control"></select>
+                        <select id="update_bo_id" name="bo_id" class="form-control"></select>
                     </div>
                     
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 被授权人 </label>
@@ -695,16 +716,16 @@
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">身份证复印</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' id='passport_file' placeholder="身份证复印件" class='txt' />  
+                        <input type='text' id='update_passport_file' placeholder="身份证复印件" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="passport_file" class="file" id="fileField" size="28" onchange="document.getElementById('passport_file').value=this.value" />
+                        <input type="file" name="passport_file" class="file" id="fileField" size="28" onchange="document.getElementById('update_passport_file').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">授权委托书</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' id='auth_file' placeholder="业务授权委托书" class='txt' />  
+                        <input type='text' id='update_auth_file' placeholder="业务授权委托书" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="auth_file" class="file" id="fileField" size="28" onchange="document.getElementById('auth_file').value=this.value" />
+                        <input type="file" name="auth_file" class="file" id="fileField" size="28" onchange="document.getElementById('update_auth_file').value=this.value" />
                       </div>
                   </div>
                   <div class="space-4"></div>
@@ -712,35 +733,36 @@
                   <div class="form-group">
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片1</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' id='client_img_1' placeholder="商户图片1" class='txt' />  
+                        <input type='text' id='update_client_img_1' placeholder="商户图片1" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="client_img_1" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_1').value=this.value" />
+                        <input type="file" name="client_img_1" class="file" id="fileField" size="28" onchange="document.getElementById('update_client_img_1').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片2</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' id='client_img_2' placeholder="商户图片2" class='txt' />  
+                        <input type='text' id='update_client_img_2' placeholder="商户图片2" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="client_img_2" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_2').value=this.value" />
+                        <input type="file" name="client_img_2" class="file" id="fileField" size="28" onchange="document.getElementById('update_client_img_2').value=this.value" />
                       </div>
                       
                       <label class="col-sm-1 control-label no-padding-right" for="form-field-1">商户图片3</label>
                       <div class="col-sm-2 file-box">
-                        <input type='text' id='client_img_3' placeholder="商户图片3" class='txt' />  
+                        <input type='text' id='update_client_img_3' placeholder="商户图片3" class='txt' />  
                         <input type='button' class='filebtn' value='浏览...' />
-                        <input type="file" name="client_img_3" class="file" id="fileField" size="28" onchange="document.getElementById('client_img_3').value=this.value" />
+                        <input type="file" name="client_img_3" class="file" id="fileField" size="28" onchange="document.getElementById('update_client_img_3').value=this.value" />
                       </div>
                   </div>
                   <div class="space-4"></div>
                   
                   <div class="space-8"></div>
                   <div  class="dataTables_wrapper" role="grid">
-                    <input type="hidden" id="si_list" name="si_list" value=""/>
-                    <button class="btn btn-info" id="addSiBtn" type="button">
+                    <input type="hidden" id="update_si_list" name="si_list" value=""/>
+                    <input type="hidden" id="update_si_id" name="si_id" />
+                    <button class="btn btn-info" id="update_addSiBtn" type="button">
                       <i class="icon-ok bigger-110"></i>
                         新增
                     </button>
-                    <table id="machineListTable" class="table table-striped table-bordered table-hover">
+                    <table id="update_machineListTable" class="table table-striped table-bordered table-hover">
                       <thead>
                         <tr>
                           <th>编号</th>
@@ -774,29 +796,6 @@
                   
                 </form>
               </div>
-            </div>
-
-            <div id="submited" class="tab-pane">
-              <div id="table-div" class="dataTables_wrapper" role="grid" >
-                <table id="order-table" class="table table-striped table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th >订单编号</th>
-                      <th>商户名称</th>
-                      <th>商户编号</th> 
-                      <th>收单银行</th>
-                      <th>收单日期</th>  
-                      <th>状态</th>
-                      <th>操作</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    
-                  </tbody>
-                </table>
-              </div>
-
               <div id="showOrder" style="display:none;">
 
                 <div class="row"> 

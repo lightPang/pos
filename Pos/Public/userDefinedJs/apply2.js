@@ -2,6 +2,7 @@ var soDataUrl = '/pos/Pos/index.php/Apply/getSoData';
 var soItemUrl = '/pos/Pos/index.php/Apply/getSoItem'
 $(document).ready(function(){
   loadOrderData();
+  loadEditSetupOrder( 1 );
 });
 
 $("#returnBtn").click(function(){
@@ -14,6 +15,32 @@ function loadEditSetupOrder( soId ){
   $("#table-div").css('display','none');
   $("#showOrder").css('display','none');
   $("#EditOrder").css('display','block');
+  $.ajax({
+    type:'post',
+    dataType:'json',
+    data:{
+      'soId' :soId
+    },
+    url : soItemUrl,
+    success:function(data){
+      var soItem = data['data'];
+      console.log(soItem);
+      if( soItem['ac_time']  != null )
+        soItem['ac_time'] = soItem['ac_time'].split(' ')[0];
+      if( soItem['active_date'] != null )
+        soItem['active_date'] = soItem['active_date'].split(' ')[0];
+      if( soItem['register_date'] != null )
+        soItem['register_date'] = soItem['register_date'].split(' ')[0];
+      for( var key in soItem ){
+        var id = "#update_" + key;
+        if( $(id).length != 0 ){
+          $(id).val( soItem[key] );
+        }
+      }
+
+      loadUpdateSiTableData();
+    }
+  })
 }
 
 function loadSetupOrder(soId){
@@ -27,7 +54,7 @@ function loadSetupOrder(soId){
     },
     url:soItemUrl,
     success:function(data){
-      console.log(data);
+      //console.log(data);
       var soItem  = data['data'];
       for(var key in soItem){
         var id = "#" + key;
@@ -80,6 +107,7 @@ function loadSetupOrder(soId){
     }
   });
 }
+
 
 function loadTable(id,data){
   var html = '';
@@ -175,4 +203,127 @@ function loadOrderData(){
         oTable.fnAddData( rows );
     }
   });
+}
+
+function loadUpdateSiTableData(){
+  var si_list = $("#update_si_list").val();
+  $.ajax({
+    type:'POST',
+    dataType:"json",
+    data: { "si_list" : si_list}, 
+    url: siDataUrl,
+    success: function( data){
+      if( data['data'] == null ) return;
+      console.log(data);
+      var dataArr = data['data'];
+      var rows = [];
+      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+                                <a class=\"green\" href=\"#\" onclick=\"editUpdateRow(this)\">\
+                                  <i class=\"icon-pencil bigger-130\"></i>\
+                                </a>\
+                                <a class=\"red\" href=\"#\" onclick=\"deleteUpdateRow(this)\">\
+                                  <i class=\"icon-trash bigger-130\"></i>\
+                                </a>\
+                              </div></td>';
+      for( var i=0; i<dataArr.length; ++i ){
+        var item = dataArr[i];
+        var row = [];
+        row.push( item["si_id"] );
+        row.push( item["addr"] );
+        row.push( item["expand_user"] );
+        row.push( item["m_type"] );
+        row.push( item["keyboard_type"]);
+        row.push( item["sim_type"] );
+        row.push( item["annual_fee"] );
+        row.push( item["deposit_fee"]);
+        row.push( item["remark"]);
+        row.push( editHtml  );
+        rows.push(row);
+      }
+      var oTable1;
+      if ( $.fn.dataTable.isDataTable( '#update_machineListTable' ) ) {
+        oTable1 = $('#update_machineListTable').dataTable();
+      }
+      else {
+  
+      oTable1 = $('#update_machineListTable').dataTable({
+        "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
+        "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
+        "bPaginate" : true, //是否显示（应用）分页器  
+        "aoColumns" : [
+                        null,
+                        null,  
+                        null,
+                        null,
+                        null, 
+                        null,
+                        null, 
+                        null, 
+                        null,
+                        { "bSortable": false }
+                      ],
+        "oLanguage": { //国际化配置  
+                "sProcessing" : "正在获取数据，请稍后...",    
+                "sLengthMenu" : "显示 _MENU_ 条",    
+                "sZeroRecords" : "没有您要搜索的内容",    
+                "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",    
+                "sInfoEmpty" : "记录数为0",    
+                "sInfoFiltered" : "(全部记录数 _MAX_ 条)",    
+                "sInfoPostFix" : "",    
+                "sSearch" : "搜索",    
+                "sUrl" : "",    
+                }
+      });
+      }
+     oTable1.fnClearTable();
+     if( rows.length > 0 )
+      oTable1.fnAddData( rows );
+    }
+  }
+  );
+}
+
+function editUpdateRow(){
+  var $tr = $(ele).parents('tr');
+  var $tdlist = $tr.find( $('td') );
+  console.log( $tdlist.length);
+  var ad_id = $tdlist.get(0);
+  var ap_id = $tdlist.get(1);
+  var ac_id = $tdlist.get(2);
+  var name = $tdlist.get(3);
+  var remark = $tdlist.get(4);
+  console.log(ad_id);
+  $("#updateProvince").val( $(ap_id).html() );
+  $("#updateCity").val( $(ac_id).html() );
+  $("#ad_id").val( $(ad_id).html() );
+  $("#updateName").val( $(name).html() );
+  $("#updateRemark").val( $(remark).html() );
+  $("#dialog-modal").dialog( "open");
+}
+
+function deleteUpdateRow(){
+  var $tr = $(ele).parents('tr');
+  $tr.addClass('remove');
+  console.log( $tr.find('td').html() );
+  var si_id = $tr.find('td').html();
+  var confirmFlag = confirm("确认要删除吗？");
+  if( confirmFlag === true ){
+    $.ajax({
+      type:'POST',
+      url:delUrl,
+      data: {'si_id' : si_id },
+      success: function(data){
+        console.log(data);
+        if( data['status'] != false ){
+          var table = $('#update_machineListTable').DataTable();
+          table.row('.remove').remove().draw();
+          alert("删除成功！");
+        }
+        else{
+           alert("删除失败！");
+        }
+      }
+    });
+    
+  }
 }
