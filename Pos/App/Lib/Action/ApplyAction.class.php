@@ -123,7 +123,7 @@ class ApplyAction extends CommonAction {
       $this->doAuth();
       $uaMap['state'] = 0;
       $uaMap['c_id'] = $_SESSION['c_id'];
-      $uaMap['u_id'] = $_SESSION['u_id'];
+      //$uaMap['u_id'] = $_SESSION['u_id'];
       $sqlModel = M('setup_order');
       $data = $sqlModel->where($uaMap)->select();
       foreach ($data as $value => $key) {
@@ -192,11 +192,21 @@ class ApplyAction extends CommonAction {
             $resStr = $key;
           }
         }
-        $data['so_number'] = "123";
+        $data['so_number'] = $this->produceSoNum( $data['ac_time'], $data['si_list'],$data['bill_b_id']);
         $data['ac_time'] = date('Y-m-d H:i:s',strtotime($data['ac_time']));
         $data['register_date'] = date('Y-m-d H:i:s',strtotime($data['register_date']));
         $data['active_date'] = date('Y-m-d H:i:s',strtotime($data['active_date']));
+        $data['c_id'] = $_SESSION['c_id'];
         $data['u_id'] = $_SESSION['u_id'];
+        $siDao = M('setup_item');
+        $siList = explode(',', $data['si_list'] );
+        foreach ($siList as $value) {
+          if( $value != '' ){
+            $siMap['si_id'] = $value;
+            $siData['ad_id'] = $data['ad_id'];
+            $siDao->where( $siMap )->save( $siData );
+          }
+        }
         $res = $sqlModel->add($data);
         $this->ajaxReturn( $data,"ok", 0 );
         
@@ -204,6 +214,56 @@ class ApplyAction extends CommonAction {
       else{
         $this->ajaxReturn(null,"not ok" ,0 );
       }
+    }
+
+    protected function produceSoNum($ac_time, $si_list, $b_id){
+      $serialNum = "";
+      $c_id = $_SESSION['c_id'] ;
+      switch ($c_id) {
+        case '1':
+          $serialNum .= 'G';
+          break;
+        
+        default:
+          break;
+      }
+      $time = str_replace('-', '',$ac_time );
+      $serialNum .= $time;
+      $si_id = explode(',', $si_list)[0];
+      $siDao = M('setup_item');
+      $siMap['si_id'] = $si_id;
+      $siData = $siDao->where($siMap)->select()[0];
+      $mTypeDao = M('machinetype');
+      $mTypeMap['mt_id'] = $siData['m_type'];
+      $mTypeData = $mTypeDao->where($mTypeMap)->select()[0];
+      if( $mTypeData['is_wired'] == 1 ){
+        $serialNum .= "Y";
+      }
+      else{
+        $serialNum .= "N";
+      }
+      $bankDao = M('bank');
+      $bankMap['b_id'] = $b_id;
+      $bankData = $bankDao->where($bankMap)->select()[0];
+      $serialNum .= substr($bankData['code'], 0,4);
+      $siListCount = strlen( $si_list ) / 2;
+      if( $siListCount < 10 )
+        $serialNum .= '0'.$siListCount;
+      else
+        $serialNum .= $siListCount;
+      $date1 = date("Y-m-d H:i:s", $ac_time );
+      $date2 = date("Y-m-d H:i:s", strtotime('+1439 min',strtotime($ac_time)));
+      $soMap['ac_time'] = array( 'between', array($date1,$date2) );
+      $soMap['c_id'] = $_SESSION['c_id'];
+      $soDao = M('setup_order');
+      $soCount = $soDao->where( $soMap )->count();
+      $soCount += 1;
+      if( $soCount < 10 )
+        $soCount = '00'.$soCount;
+      else if ( $soCount < 100 )
+        $soCount = '0'.$soCount;
+      $serialNum .= $soCount;
+      return $serialNum;
     }
 
 }

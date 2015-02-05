@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>asdf</title>
-
+    <link  rel="stylesheet" href="__PUBLIC__/userDefinedCss/checkRecord.css" />
     <layout name="layout" />
   </head>
   <body>
@@ -13,57 +13,58 @@
             <li class="active">
               <a data-toggle="tab" href="#register">
                 <i class="green icon-home bigger-110"></i>
-                  记录登记
+                  机器列表
                 </a>
             </li>
 
-            <li>
-              <a data-toggle="tab" href="#unprocessed">
-                <i class="icon-rocket bigger-110"></i>
-                未巡检
-              </a>
-            </li>
-
-            <li>
-              <a data-toggle="tab" href="#processed">
-                <i class="icon-rocket bigger-110"></i>
-                已巡检
-              </a>
-            </li>
+  
 
           </ul>
 
           <div class="tab-content">
             <div id="register" class="tab-pane in active">
-              <div class="row">
-                <form class="form-horizontal" role="form">
+              <div id="table-div" class="dataTables_wrapper" role="grid" >
+                <table id="order-table" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th >机器编号</th>
+                      <th>终端编号</th>
+                      <th>安装地址</th> 
+                      <th>装机时间</th>
+                      <th>最近巡检</th> 
+                      <th>最近巡检人</th> 
+                      <th>未巡检天数</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                      
+                  </tbody>
+                </table>
+              </div>
+              <div id="record" class="row" style="display:none">
+                <form class="form-horizontal" id="record-form" role="form" method="post" enctype="multipart/form-data">
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 记录编号 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证编号 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="tasknumber" placeholder="自动生成"  />
+                        <input type="text" name="confirm_code" placeholder="凭证确认码" class="required" />
                     </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
-                    <div class="col-sm-3">
-                        <textarea class="autosize-transition form-control" id="form-field-11" placeholder="Default Text"></textarea>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成时间 </label>
+                    <div class="col-sm-2">
+                        <input type="date" id="form-field-1" name="time"  class="required" />
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 确认时间 </label>
+                    <label class="col-sm-1 control-label no-padding-right" > 加纸 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="？？？"  />
+                        <input type="checkbox"  name="is_add" class="record-check-box" />
                     </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成时间 </label>
-                    <div class="col-sm-2">
-                        <div class="input-group">
-                            <input id="id-date-picker-1" class="form-control date-picker" type="text" data-date-format="dd-mm-yyyy">
-                            <span class="input-group-addon">
-                            <i class="icon-calendar bigger-110"></i>
-                            </span>
-                        </div>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
+                    <div class="col-sm-3">
+                        <textarea class="autosize-transition form-control" name="remark" placeholder="备注" class="required"></textarea>
                     </div>
                   </div> 
 
@@ -72,72 +73,51 @@
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证上传 </label>
                     <div class="col-sm-3">
                         <div class="ace-file-input ace-file-multiple">
-                            <input id="id-input-file-3" type="file" multiple="">
+                            <input id="id-input-file-3" type="file" class="required" name="img">
                         </div>
                     </div>
                   </div>
-
+                  <input type="hidden" id="siRecord" name="si_id" />
                   <div class="space-4"></div>
                   <div class="form-group">
                     <div class="col-md-9 "> </div>
                     <div class="col-sm-3 ">
-                      <button class="btn btn-info" type="button">
+                      <button class="btn btn-info" type="button" onclick="addRecord()">
                         <i class="icon-ok bigger-110"></i>
-                          Submit
+                          上传记录
                       </button>
                     </div>
                   </div>
-                  
                 </form>
+                <div >
+                  <div class="line">
+                    <Button id="returnBtn">返回</Button>
+                  </div>
+                  <table id="record-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>巡检时间</th>
+                        <th>是否加纸</th>
+                        <th>负责人</th>
+                        <th>确认码</th>
+                        <th>凭证下载</th>
+                        <th>备注</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>    
               </div>
             </div>
-
-            <div id="unprocessed" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      记录编号
-                    </th>
-                    <th>
-                      备注
-                    </th>
-                    <th>
-                      确认时间
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-
-            <div id="processed" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      记录编号
-                    </th>
-                    <th>
-                      备注
-                    </th>
-                    <th>
-                      确认时间
-                    </th>
-                    <th>
-                      完成时间
-                    </th>
-                    <th>
-                      凭证
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
+          </div><!-- tab content end -->
 
         </div>
       </div>
     </div>
-
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+    <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="__PUBLIC__/js/jquery.form.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/checkRecord.js"></script>
   </body>
 </html>

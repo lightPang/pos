@@ -10,6 +10,12 @@ $("#returnBtn").click(function(){
   $("#showOrder").find('span').html('');
 });
 
+function loadEditSetupOrder( soId ){
+  $("#table-div").css('display','none');
+  $("#showOrder").css('display','none');
+  $("#EditOrder").css('display','block');
+}
+
 function loadSetupOrder(soId){
   $("#table-div").css('display','none');
   $("#showOrder").css('display','block');
@@ -97,8 +103,10 @@ function loadOrderData(){
       //console.log( data['data'] );
       var soArr = data['data'];
       var rows = [];
-      var btnTxt = '<a class="green" href="#" onclick="loadSetupOrder('
-      var btnTxtEnd = ')"><i class="icon-print  align-top bigger-110 icon-info-sign"></i></a>';
+      var showBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
+      var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var editBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
+      var editBtnTxtEnd = ')"><i class="icon-print  align-top bigger-110 icon-info-sign"></i></a>';
       for( var i = 0; i < soArr.length; ++i ){
         var item = soArr[i];
         var row = [];
@@ -107,7 +115,32 @@ function loadOrderData(){
         row.push( item['client_number'] );
         row.push( item['billBank']);
         row.push( item['ac_time'] );
-        row.push( item['state']);
+        var stateTxt = '';
+        var btnTxt = '';
+        var btnTxtEnd = '';
+        switch(item['state']){
+          case '0':
+            stateTxt = '暂存';
+            btnTxt = editBtnTxt;
+            btnTxtEnd = editBtnTxtEnd;
+            break;
+          case '1':
+            stateTxt = '已提交';
+            btnTxt = editBtnTxt;
+            btnTxtEnd = editBtnTxtEnd;
+            break;
+          case '2':
+            stateTxt = '审核通过';
+            btnTxt = showBtnTxt;
+            btnTxtEnd = showBtnTxtEnd;
+            break;
+          case '3':
+            stateTxt = '装机完成';
+            btnTxt = showBtnTxt;
+            btnTxtEnd = showBtnTxtEnd;
+            break;
+        }
+        row.push( stateTxt);
         row.push( btnTxt+ item['so_id'] + btnTxtEnd);
         rows.push( row );
       }
