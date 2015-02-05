@@ -233,10 +233,10 @@ function loadUpdateSiTableData(){
         var row = [];
         row.push( item["si_id"] );
         row.push( item["addr"] );
-        row.push( item["expand_user"] );
-        row.push( item["m_type"] );
-        row.push( item["keyboard_type"]);
-        row.push( item["sim_type"] );
+        row.push( item["expandUser"] );
+        row.push( item["mType"] );
+        row.push( item["keyboardType"]);
+        row.push( item["simType"] );
         row.push( item["annual_fee"] );
         row.push( item["deposit_fee"]);
         row.push( item["remark"]);

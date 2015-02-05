@@ -35,6 +35,29 @@
         $data = array();
         $map['si_id'] = array('in',$si_list);
         $data = $sqlModel->where($map)->select();
+        $userDao = M('user');
+        $userData = $userDao->select();
+        $machineDao = M('machinetype');
+        $machineData = $machineDao->select();
+        foreach ($data as $key => $value) {
+          foreach ($userData as $userItem) {
+            if( $value['expand_user'] == $userItem['u_id']){
+              $data[$key]['expandUser'] = $userItem['name'];
+              break;
+            }
+          }
+          foreach ($machineData as $machineItem) {
+            if( $value['m_type'] == $machineItem['mt_id'] ){
+              $data[$key]['mType'] = $machineItem['mt_name'];
+            }
+            else if( $value['keyboard_type'] == $machineItem['mt_id'] ){
+              $data[$key]['keyboardType'] = $machineItem['mt_name'];
+            }
+            else if( $value['sim_type'] == $machinetype['mt_id'] ){
+              $data[$key]['simType'] = $machineItem['mt_name'];
+            }
+          }
+        }
         $this->ajaxReturn( $data,"ok", count($data));
       }
     }
