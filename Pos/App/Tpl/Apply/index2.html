@@ -783,11 +783,16 @@
                   </div>
                   <div class="space-8"></div>
                   <div class="form-group">
-                    <div class="col-md-10 "> </div>
-                    <div class="col-sm-2 ">
-                      <button class="btn btn-info" id="submitBtn" type="button">
+                    <div class="col-md-8 "> </div>
+                    <div class="col-sm-4 ">
+                      <button class="btn btn-info" id="update_submitBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
-                          Submit
+                          提交
+                      </button>
+
+                      <button class="btn btn-info" id="update_returnBtn" type="button">
+                        <i class="icon-share-alt bigger-110"></i>
+                          返回
                       </button>
                     </div>
                   </div>
@@ -1046,6 +1051,8 @@
                     
             
             <input type="hidden" id="si_id" name="si_id"/>
+            <input type="hidden" id="si_so_id" name="so_id" />
+            <div style="display:none;" id="si_type" ></div>
             <div class="space-4"></div>
             <div class="form-group">
               <div class="col-md-4 "> </div>

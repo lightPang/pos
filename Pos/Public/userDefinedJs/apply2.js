@@ -3,6 +3,7 @@ var soDataUrl = rootUrl + 'Apply/getSoData';
 var soItemUrl = rootUrl + '/Apply/getSoItem';
 var delSetupItemUrl = rootUrl + 'SetupItem/del';
 var setupItemUrl = rootUrl + 'SetupItem/getSetupItem';
+
 $(document).ready(function(){
   loadOrderData();
   loadEditSetupOrder( 1 );
@@ -27,7 +28,7 @@ function loadEditSetupOrder( soId ){
     url : soItemUrl,
     success:function(data){
       var soItem = data['data'];
-      console.log(soItem);
+      //console.log(soItem);
       if( soItem['ac_time']  != null )
         soItem['ac_time'] = soItem['ac_time'].split(' ')[0];
       if( soItem['active_date'] != null )
@@ -40,7 +41,6 @@ function loadEditSetupOrder( soId ){
           $(id).val( soItem[key] );
         }
       }
-
       loadUpdateSiTableData();
     }
   })
@@ -217,14 +217,15 @@ function loadUpdateSiTableData(){
     url: siDataUrl,
     success: function( data){
       if( data['data'] == null ) return;
-      console.log(data);
+      //console.log(data);
       var dataArr = data['data'];
       var rows = [];
       var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
                                 <a class=\"green\" href=\"#\" onclick=\"editUpdateRow(';
       var editHtmlEnd =          ')\"><i class=\"icon-pencil bigger-130\"></i>\
-                                </a>\
-                                <a class=\"red\" href=\"#\" onclick=\"deleteUpdateRow(this)\">\
+                                </a>';
+      var delHtml =            '<a class=\"red\" href=\"#\" onclick=\"deleteUpdateRow(';
+      var delHtmlEnd =          ')\">\
                                   <i class=\"icon-trash bigger-130\"></i>\
                                 </a>\
                               </div></td>';
@@ -239,8 +240,8 @@ function loadUpdateSiTableData(){
         row.push( item["simType"] );
         row.push( item["annual_fee"] );
         row.push( item["deposit_fee"]);
-        row.push( item["remark"]);
-        row.push( editHtml + item['si_id'] + editHtmlEnd  );
+        row.push( "<span class='" + item['si_id'] + "'>" + item["remark"] + "</span>");
+        row.push( editHtml + item['si_id'] + editHtmlEnd +delHtml + item['si_id'] + delHtmlEnd );
         rows.push(row);
       }
       var oTable1;
@@ -295,7 +296,7 @@ function editUpdateRow( si_id ){
     },
     success: function(data){
       var setupItem = data['data'];
-      console.log( setupItem );
+      //console.log( setupItem );
       $("#si_addr").val( setupItem['addr'] );
       $("#si_phone").val( setupItem['phone'] );
       $("#si_m_type").val( setupItem['m_type'] );
@@ -309,17 +310,15 @@ function editUpdateRow( si_id ){
       $("#si_expand_user").val( setupItem['expand_user'] );
       $("#si_remark").val( setupItem['remark'] );
       $("#si_id").val( setupItem['si_id'] );
+      $("#si_so_id").val( setupItem['so_id'] );
+      $("#si_type").html('1');
       $("#setup_item").dialog( "open");
     }
   });
   
 }
 
-function deleteUpdateRow(){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var si_id = $tr.find('td').html();
+function deleteUpdateRow(si_id){
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -329,9 +328,16 @@ function deleteUpdateRow(){
       success: function(data){
         console.log(data);
         if( data['status'] != false ){
+          var si_list = $("#update_si_list").val();
+          si_list = si_list.replace( si_id + ',' ,'' );
+          $("#update_si_list").val( si_list);
+          alert("删除成功！");
+          $span = $("#update_machineListTable").find('.'+si_id);
+          $tr = $("."+si_id).parents('td').parents('tr');
+          console.log($tr);
+          $tr.addClass('remove');
           var table = $('#update_machineListTable').DataTable();
           table.row('.remove').remove().draw();
-          alert("删除成功！");
         }
         else{
            alert("删除失败！");

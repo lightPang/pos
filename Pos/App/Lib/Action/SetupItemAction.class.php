@@ -8,14 +8,17 @@
           $data[$key] = $value;
         }
         $sqlModel = M('setup_item');
-        if( $data[$key]['si_id'] == "" ){
+        if( $data['si_id'] == "" ){
           $res = $sqlModel->add($data);
+          $msg = "add";
         }
         else{
-          $map['si_id'] = $data[$key]['si_id'];
-          $res = $sqlModel->where($map)->save($data);
+          $map['si_id'] = $data['si_id'];
+          $sqlModel->where($map)->save($data);
+          $res = 0;
+          $msg = "save";
         }
-        $this->ajaxReturn( $data, "ok",$res);
+        $this->ajaxReturn( $data, $msg,$res);
       }
     }
     public function getSetupItem(){
@@ -59,6 +62,23 @@
           }
         }
         $this->ajaxReturn( $data,"ok", count($data));
+      }
+    }
+
+    public function del(){
+      if( $this->doAuth() && $_POST['si_id'] ){
+        $siModel = M('setup_item');
+        $soModel = M('setup_order');
+        $siMap['si_id'] = $_POST['si_id'];
+        $siData = $siModel->where($siMap)->select()[0];
+        if( $siData['so_id'] != '0' ){
+          $soMap['so_id'] = $siData['so_id'];
+          $soData = $soModel->where($soMap)->select()[0];
+          $si_list['si_list'] = str_replace( $_POST['si_id'].",", '', $soData['si_list']) ;
+          $soModel->where($soMap)->save( $si_list );
+        }
+        $res = $siModel->where($siMap)->delete();
+        $this->ajaxReturn($res, 'ok', 1);
       }
     }
 

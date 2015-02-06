@@ -8,7 +8,6 @@ var createSetupItemUrl = rootUrl + "SetupItem/create";
 
 $(document).ready(function(){
   createSiDialog();
-  
 });
 
 function createSiDialog(){
@@ -46,6 +45,13 @@ $('input[name="has_deposit"]').change(function(){
 });
 
 $("#addSiBtn").click(function(){
+  $("#si_type").html('0');
+  $("#setup_item").dialog('open');
+});
+
+$("#update_addSiBtn").click(function(){
+  $("#si_so_id").val( $("#update_so_id").val() );
+  $("#si_type").html('1');
   $("#setup_item").dialog('open');
 });
 
@@ -67,17 +73,18 @@ $("#updateSiBtn").click( function(){
     url: createSetupItemUrl,
     success: function (data){
       console.log(data);
-       if( data['status'] > 0 ){
+       if( data['status'] >= 0 ){
           alert("操作成功!");
           var siListId = "#si_list";
-          if($("#si_id").val() != '' ){
+          if($("#si_type").html() != '0' ){
             siListId = "#update_si_list";
           }
-          var si_list = $( siListId ).val();
-          si_list +=  data['status'].toString() + ",";
-          $( siListId ).val( si_list);
-
-          if($("#si_id").val() != '' )
+          if( data['status'] != '0' ){
+            var si_list = $( siListId ).val();
+            si_list +=  data['status'].toString() + ",";
+            $( siListId ).val( si_list);
+          }
+          if($("#si_type").html() != '0' )
             loadUpdateSiTableData();
           else
             loadSiTableData();
@@ -109,10 +116,12 @@ function loadSiTableData(){
       var dataArr = data['data'];
       var rows = [];
       var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-                                <a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
+                                <a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd =         ')\">\
                                   <i class=\"icon-pencil bigger-130\"></i>\
                                 </a>\
-                                <a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
+                                <a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtml           =    ')\">\
                                   <i class=\"icon-trash bigger-130\"></i>\
                                 </a>\
                               </div></td>';
@@ -121,14 +130,14 @@ function loadSiTableData(){
         var row = [];
         row.push( item["si_id"] );
         row.push( item["addr"] );
-        row.push( item["expand_user"] );
-        row.push( item["m_type"] );
-        row.push( item["keyboard_type"]);
-        row.push( item["sim_type"] );
+        row.push( item["expandUser"] );
+        row.push( item["mType"] );
+        row.push( item["keyboardType"]);
+        row.push( item["simType"] );
         row.push( item["annual_fee"] );
         row.push( item["deposit_fee"]);
-        row.push( item["remark"]);
-        row.push( editHtml  );
+        row.push( "<span class='" + item['si_id'] + "'>" + item["remark"] + "</span>");
+        row.push( editHtml + item['si_id'] + editHtmlEnd + item['si_id'] + delHtml );
         rows.push(row);
       }
       var oTable1;
@@ -213,41 +222,56 @@ function createDialog(){
             });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var ad_id = $tdlist.get(0);
-  var ap_id = $tdlist.get(1);
-  var ac_id = $tdlist.get(2);
-  var name = $tdlist.get(3);
-  var remark = $tdlist.get(4);
-  console.log(ad_id);
-  $("#updateProvince").val( $(ap_id).html() );
-  $("#updateCity").val( $(ac_id).html() );
-  $("#ad_id").val( $(ad_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html() );
+function updateRow(si_id){
+  $.ajax({
+    type:'post',
+    url: setupItemUrl,
+    data :{
+      'si_id' : si_id
+    },
+    success: function(data){
+      var setupItem = data['data'];
+      $("#si_addr").val( setupItem['addr'] );
+      $("#si_phone").val( setupItem['phone'] );
+      $("#si_m_type").val( setupItem['m_type'] );
+      $("si_keyboard_type").val( setupItem['keyboard_type'] );
+      $("#si_sim_type").val( setupItem['sim_type'] );
+      $("#si_sim_id").val( setupItem['sim_id'] );
+      $("input[type='radio'][name='has_annual'][value='"+setupItem['has_annual']+"']").attr('checked','checked');
+      $("#si_annual_fee").val( setupItem['annual_fee'] );
+      $("input[type='radio'][name='has_deposit'][value='"+setupItem['has_deposit']+"']").attr('checked','checked');    
+      $("#si_deposit_fee").val( setupItem['deposit_fee']);
+      $("#si_expand_user").val( setupItem['expand_user'] );
+      $("#si_remark").val( setupItem['remark'] );
+      $("#si_id").val( setupItem['si_id'] );
+      $("#si_so_id").val( '' );
+      $("#si_type").html('0');
+      $("#setup_item").dialog( "open");
+    }
+  });
   $("#setup_item").dialog( "open");
 }
 
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var ad_id = $tr.find('td').html();
+function deleteRow( si_id ){
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:delUrl,
-      data: {'ad_id' : ad_id },
+      url:delSetupItemUrl,
+      data: {'si_id' : si_id },
       success: function(data){
         console.log(data);
         if( data['status'] != false ){
+          var si_list = $("#si_list").val();
+          si_list = si_list.replace( si_id + ',' ,'' );
+          $("#si_list").val( si_list);
+          alert("删除成功！");
+          $span = $("#machineListTable").find('.'+si_id);
+          $tr = $("."+si_id).parents('td').parents('tr');
+          console.log($tr);
+          $tr.addClass('remove');
           var table = $('#machineListTable').DataTable();
           table.row('.remove').remove().draw();
-          alert("删除成功！");
         }
         else{
            alert("删除失败！");

@@ -10,7 +10,7 @@ function loadInfoData(){
     url:infoDataUrl,
     success: function(res){
       var data = res['data'];
-      console.log(data);
+      //console.log(data);
       loadExtraData('ap_id',data['province'],'ap_id','name');
       loadExtraData('ac_id', data['city'],'ac_id','name','ap_id');
       loadExtraData( 'ad_id', data['district'],'ad_id','name','ac_id' );

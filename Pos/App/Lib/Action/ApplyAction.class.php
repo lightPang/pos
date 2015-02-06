@@ -207,7 +207,12 @@ class ApplyAction extends CommonAction {
             $siDao->where( $siMap )->save( $siData );
           }
         }
-        $res = $sqlModel->add($data);
+        if( $data['so_id'] != '' ){
+          $soMap['so_id'] = $data['so_id'] ;
+          $res = $sqlModel->where( $soMap )->save( $data );
+        }
+        else
+          $res = $sqlModel->add($data);
         $this->ajaxReturn( $data,"ok", 0 );
         
       }
