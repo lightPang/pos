@@ -15,6 +15,42 @@ class Access {
             exit($e->getMessage());
         }
     }
+    /*
+    *新增
+    *$_table    string 表名
+    *$_addData  array(key=>value) 插入数据
+    *@return    返回受上一个 SQL 语句影响的行数
+    */
+    function addAll($_table, Array $_addArr) {
+        $_sql = "";
+        for( $i = 0 ; $i < count($_addArr); ++$i ){
+            $_addFields = array();
+            $_addValues = array();
+            $_addData = $_addArr[$i];
+            foreach ($_addData as $_key=>$_value) {
+                $_addFields[] = $_key;
+                $_addValues[] = $_value;
+            }
+            $_addFields = implode(',', $_addFields);
+            $_addValues = implode("','", $_addValues);
+
+            $_sql = "INSERT INTO $_table ($_addFields) VALUES ('$_addValues')";
+            $_sql = iconv('utf-8', 'gbk//IGNORE', $_sql);echo $_sql;
+            try {
+            $_stmt = $this->_pdo->prepare($_sql);
+            //$_stmt->execute();
+            }catch (PDOException  $e) {
+                exit("SQL statement: ".$_sql."\r\nError Info: ".$e->getMessage());
+            }
+        }
+
+        try {
+            $_stmt->execute();
+        } catch (PDOException  $e) {
+            exit("SQL statement: ".$_sql."\r\nError Info: ".$e->getMessage());
+        }
+        return $_stmt;
+    }
 
     /*
     *新增

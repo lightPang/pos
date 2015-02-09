@@ -168,7 +168,7 @@ function loadData(){
           activeSign = '';
         }
         row.push( "<span id='" + item["bo_id"] + "'>" + item['bo_id'] + "</span>");
-        row.push( item["b_id"] );
+        row.push( item["bankName"] );
         row.push( item["name"] );
         row.push( item["contact_num"] );
         row.push( activeSign );

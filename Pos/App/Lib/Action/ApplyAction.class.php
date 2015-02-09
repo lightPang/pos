@@ -193,8 +193,8 @@ class ApplyAction extends CommonAction {
         }
         $data['so_number'] = $this->produceSoNum( $data['ac_time'], $data['si_list'],$data['bill_b_id']);
         $data['ac_time'] = date('Y-m-d H:i:s',strtotime($data['ac_time']));
-        $data['register_date'] = date('Y-m-d H:i:s',strtotime($data['register_date']));
-        $data['active_date'] = date('Y-m-d H:i:s',strtotime($data['active_date']));
+        //$data['register_date'] = date('Y-m-d H:i:s',strtotime($data['register_date']));
+        //$data['active_date'] = date('Y-m-d H:i:s',strtotime($data['active_date']));
         $data['c_id'] = $_SESSION['c_id'];
         $data['u_id'] = $_SESSION['u_id'];
         $siDao = M('setup_item');

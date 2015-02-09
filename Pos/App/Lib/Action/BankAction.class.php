@@ -148,11 +148,25 @@
       else if( $_SESSION['u_id'] ){
         $sqlModel = M('bank_operator');
         $data = $sqlModel->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "query", 0 );
+        $this->ajaxReturn( $this->updateBankInfo($this->updateUserInfo($data)), "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );
       }
+    }
+
+    protected function updateBankInfo($data){
+      $bankModel = M('bank');
+      $bankData = $bankModel->select();
+      foreach ($data as $key => $value) {
+        foreach ($bankData as $bItem) {
+          if( $bItem['b_id'] == $value['b_id'] ){
+            $data[$key]['bankName'] = $bItem['name'];
+            break;
+          }
+        }
+      }
+      return $data;
     }
     
     
