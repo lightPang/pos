@@ -271,7 +271,11 @@
       if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
         $cr = M('client_rate');
         $data['code'] = $_POST['code'] ;
-        $data['rate'] = $_POST['rate'];
+        $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['value']  = $_POST['value'];
+        $data['value_top']  = $_POST['value_top'];
+        $data['value_bot'] = $_POST['value_bot'];
         $data['remark'] = $_POST['remark'];
         $data['is_inner'] = $_POST['is_inner'];
         $data['create_user'] = $_SESSION['u_id'];
@@ -287,7 +291,11 @@
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
         $map['cr_id'] = $_POST['cr_id'];
         $data['code'] = $_POST['code'] ;
-        $data['rate'] = $_POST['rate'];
+        $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['value']  = $_POST['value'];
+        $data['value_top']  = $_POST['value_top'];
+        $data['value_bot'] = $_POST['value_bot'];
         $data['is_inner'] = $_POST['is_inner'];
         $data['remark'] = $_POST['remark'];
         $cr = M('client_rate');
@@ -309,7 +317,7 @@
     
     public function getClientRateData(){
       if( isset($_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
-        $map['cr_id'] = $$_POST['cr_id'] ;
+        $map['cr_id'] = $_POST['cr_id'] ;
         $cr = M('client_rate');
         $data = $cr->where($map)->select();
         $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);

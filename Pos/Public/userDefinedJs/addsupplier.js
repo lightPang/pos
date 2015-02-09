@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 function createDialog(){
   $("#dialog-modal").dialog({
-                height: 450,
+                height: 280,
                 width: 400,
                 dialogClass: "no-close",
                 modal: true,
@@ -202,9 +202,9 @@ function loadSData(){
                   }
         });
       }
-      //oTable1.fnClearTable();
-      //if(rows.length > 0)
-      //  oTable1.fnAddData( rows );
+      oTable1.fnClearTable();
+      if(rows.length > 0)
+        oTable1.fnAddData( rows );
     }
   }
   );

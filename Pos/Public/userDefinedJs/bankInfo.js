@@ -14,8 +14,8 @@ $(document).ready(function(){
 
 function createDialog(){
   $("#dialog-modal").dialog({
-                height: 350,
-                width: 480,
+                height: 400,
+                width: 600,
                 dialogClass: "no-close",
                 modal: true,
                 autoOpen: false
@@ -23,28 +23,30 @@ function createDialog(){
             });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var b_id = $tdlist.get(0);
-  var code = $tdlist.get(1);
-  var name = $tdlist.get(2);
-  var remark = $tdlist.get(3);
-  $("#b_id").val( $(b_id).html() );
-  $("#updateCode").val( $(code).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+function updateRow( b_id ){
+  $.ajax({
+    type:'post',
+    url : dataUrl,
+    data : {'b_id' :b_id},
+    success:function(data){
+      console.log(data);
+      var item = data['data'][0];
+      for(var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#dialog-modal").dialog('open');
+    }
+  });
 }
 
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
+function deleteRow( b_id ){
+  var id = "#" + b_id;
+  var $tr = $(id).parents('tr');
   console.log( $tr.find('td').html() );
-  var b_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
+    $tr.addClass('remove');
     $.ajax({
       type:'POST',
       url:delUrl,
@@ -133,33 +135,34 @@ function clearInput(){
 
 function loadData(){
   $.ajax({
-    type:'GET',
+    type:'post',
     dataType:"json", 
     url: dataUrl,
     success: function( data){
       console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">\
+																<a class="green" href="#" onclick="updateRow(';
+      var editHtmlEnd = ')"><i class="icon-pencil bigger-130"></i></a><a class="red" href="#" onclick="deleteRow('
+      var delHtml = ')"><i class="icon-trash bigger-130"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["b_id"] );
+        var activeSign = '<i class="icon-ok"></i>';
+        if( item['is_active'] == 0 ){
+          activeSign = '';
+        }
+        row.push( "<span id='" + item["b_id"] + "'>" + item['b_id'] + "</span>" );
         row.push( item["code"] );
         row.push( item["name"] );
+        row.push( activeSign );
         row.push( item["remark"]);
         row.push( item["create_user"] );
         row.push( item["create_time"] );
         row.push( item["edit_user"] );
         row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['b_id'] + editHtmlEnd + item['b_id'] + delHtml  );
         rows.push(row);
       }
       var oTable1;
@@ -177,6 +180,7 @@ function loadData(){
                         null,
                         null,  
                         null, 
+                        null,
                         null,
                         null, 
                         null, 

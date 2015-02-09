@@ -33,22 +33,53 @@
                 <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/createMccSub" id="contentForm">
                   
                   <div class="form-group">
-                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行编号 </label>
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 行号 </label>
                     <div class="col-sm-2">
-                        <input type="text" name="code" placeholder="银行编号"/>
+                        <input type="text" name="code" placeholder="行号"/>
                     </div>
-                    <div class="col-sm-1"></div> 
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 编号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="num" placeholder="编号"/>
+                    </div>
                   </div>
                   
                   <div class="form-group">
-                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行名称 </label>
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行全称 </label>
                     <div class="col-sm-2">
-                        <input type="text" name="name" placeholder="名称"/>
+                        <input type="text" name="name" placeholder="全称"/>
                     </div>
-                    <div class="col-sm-1"></div> 
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行简称 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="short_name" placeholder="简称"/>
+                    </div>
                   </div>
                   
                   <div class="space-4"></div>
+
+                  <div class="form-group">
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行缩写 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="short_en_name" placeholder="缩写"/>
+                    </div>
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 银行简号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="short_num" placeholder="简号"/>
+                    </div>
+                  </div>
+                  
+                  <div class="space-4"></div>
+
+                  <div class="form-group " >
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 是否启用 </label>
+                    <div class="col-sm-2">
+                      <select type="text" name="is_active" >
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+
                   <div class="form-group " >
                     <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 备注</label>
                     <div class="col-sm-4 ">
@@ -81,6 +112,7 @@
                       <th class="center">序号</th>
                       <th>银行编号</th>
                       <th>名称</th>
+                      <th>是否启用</th>
                       <th>备注</th>
                       <th>创建人</th>
                       <th>创建时间</th>
@@ -108,30 +140,62 @@
         <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="updateForm">
                   
                   <div class="form-group">
-                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 银行编号 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="updateCode" name="code" placeholder="银行编号"/>
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 行号 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="update_code" name="code" placeholder="行号"/>
                     </div>
-                    <div class="col-sm-1"></div> 
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 编号 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="update_num" name="num" placeholder="编号"/>
+                    </div>
                   </div>
                   
                   <div class="form-group">
-                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 名称 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="updateName" name="name" placeholder="名称"/>
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 银行全称 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="update_name" name="name" placeholder="全称"/>
+                    </div>
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 银行简称 </label>
+                    <div class="col-sm-4">
+                        <input type="text" id="update_short_name" name="short_name" placeholder="简称"/>
                     </div>
                   </div>
                   
                   <div class="space-4"></div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 银行缩写 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="update_short_en_name" name="short_en_name" placeholder="缩写"/>
+                    </div>
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 银行简号 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="update_short_num" name="short_num" placeholder="简号"/>
+                    </div>
+                  </div>
+                  
+                  <div class="space-4"></div>
+                  
+                  <div class="form-group " >
+                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 是否启用 </label>
+                    <div class="col-sm-2">
+                      <select type="text" id="update_is_active" name="is_active" >
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="space-4"></div>
+
                   <div class="form-group " >
                     <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 备注</label>
                     <div class="col-sm-4 ">
-                        <textarea class="autosize-transition form-control"  id="updateRemark" name="remark" placeholder="备注"></textarea>
+                        <textarea class="autosize-transition form-control" id="update_remark" name="remark" placeholder="备注"></textarea>
                     </div>
 
-                  </div>
+                  </div> 
                   
-          <input id="b_id" type="hidden" name="b_id" />
+          <input id="update_b_id" type="hidden" name="b_id" />
           
           <div class="space-4"></div>
           <div class="form-group">

@@ -160,8 +160,7 @@ class ApplyAction extends CommonAction {
         $data = array();
         foreach($_POST as $key => $value ){
            $data[$key] = $value;
-        }
-        
+        } 
         $fileSqlModel = M('file');
         $fileDir="Upload/".date("Y")."/".date("m")."/";
         if(!file_exists($fileDir))//照片目录

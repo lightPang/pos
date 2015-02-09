@@ -6,3 +6,8 @@
 /Pos/Upload
 #ignore tmp file
 ~*
+#ingore Test file
+/Pos/App/Tpl/Test
+/Pos/App/Lib/Action/TestAction.class.php
+#ignore mdb file
+/Pos/MDB

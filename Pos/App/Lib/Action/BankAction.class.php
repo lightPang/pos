@@ -18,6 +18,10 @@
         $data['edit_user'] = $_SESSION['u_id'];
         $data['create_time'] = date('Y-m-d H:i:s');
         $data['remark'] = $_POST['remark'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['short_num'] = $_POST['short_num'];
+        $data['num'] = $_POST['num'];
+        $data['short_en_name'] = $_POST['short_en_name'];
         $sqlModel = M('bank');
         $res = $sqlModel->add($data);
         $this->ajaxReturn( $res, "insertion", 1);
@@ -45,6 +49,10 @@
         $data['code'] = $_POST['code'];
         $data['name'] = $_POST['name'];
         $data['remark'] = $_POST['remark'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['short_num'] = $_POST['short_num'];
+        $data['num'] = $_POST['num'];
+        $data['short_en_name'] = $_POST['short_en_name'];
         $data['edit_user'] = $_SESSION['u_id'];
         $sqlModel = M('bank');
         $res = $sqlModel->where($map)->save($data);
@@ -85,6 +93,7 @@
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['name'] ) ){
         $data['name'] = $_POST['name'];
         $data['b_id'] = $_POST['b_id'];
+        $data['is_active'] = $_POST['is_active'];
         $data['create_user'] = $_SESSION['u_id'];
         $data['contact_num'] = $_POST['contact_num'];
         $data['edit_user'] = $_SESSION['u_id'];
@@ -117,6 +126,7 @@
         $data['contact_num'] = $_POST['contact_num'];
         $data['b_id'] = $_POST['b_id'];
         $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $sqlModel = M('bank_operator');

@@ -14,22 +14,22 @@ $(document).ready(function(){
   createDialog();
 });
 //传的是函数指针！！！！！不能再调用函数了！！！！！！
-$("#selectProvince").change( function(){
+$("#select_ap_id").change( function(){
   refreshCityData("#select");
 });
 
-$("#updateProvince").change( function(){
+$("#update_ap_id").change( function(){
   refreshCityData("#update");
 });
 
 
 function refreshCityData(type){
-  var eleId = type + "Province";
-  var citySelect = type + "City";
+  var eleId = type + "_ap_id";
+  var citySelect = type + "_ac_id";
   var value = $(eleId).val();
   console.log( eleId );
   var selectOption = "option[class='" + value + "']";
-  console.log(  $(selectOption).val() );
+  //console.log(  $(selectOption).val() );
   $(citySelect).find("option").css('display', 'none');
   $(citySelect).val( $(selectOption).val() );
   $(selectOption).css('display', 'inherit');
@@ -37,17 +37,17 @@ function refreshCityData(type){
 
 function loadCityData(){
   $.ajax({
-    type:'GET',
+    type:'POST',
     url: cityDataUrl,
     success:function(data){
       console.log(data);
       var dataArr = data['data'];
       var options = "";
       for( var i = 0 ; i < dataArr.length; ++ i ){
-        options += "<option value = '" + dataArr[i].ac_id + "' class = '" + dataArr[i].ap_id + "' style='display:none;'>" + dataArr[i].name + "</option>";
+        options += "<option value = '" + dataArr[i].ac_id + "' class = '" + dataArr[i].ap_id + "'>" + dataArr[i].name + "</option>";
       } 
-      $("#selectCity").append( options);
-      $("#updateCity").append( options);
+      $("#select_ac_id").append( options);
+      $("#update_ac_id").append( options);
     }
   });
 }
@@ -62,8 +62,8 @@ function loadProvinceData(){
       for( var i = 0; i < dataArr.length; ++ i){
         options += "<option value='" + dataArr[i].ap_id +"'>" + dataArr[i].name + "</option>";
       }
-      $("#selectProvince").append( options);
-      $("#updateProvince").append( options);
+      $("#select_ap_id").append( options);
+      $("#update_ap_id").append( options);
     }
   });
 }
@@ -79,31 +79,29 @@ function createDialog(){
             });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var ad_id = $tdlist.get(0);
-  var ap_id = $tdlist.get(1);
-  var ac_id = $tdlist.get(2);
-  var name = $tdlist.get(3);
-  var remark = $tdlist.get(4);
-  console.log(ad_id);
-  $("#updateProvince").val( $(ap_id).html() );
-  $("#updateCity").val( $(ac_id).html() );
-  $("#ad_id").val( $(ad_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+function updateRow(ad_id){
+  $.ajax({
+    type:'post',
+    url : dataUrl,
+    data : {'ad_id' :ad_id},
+    success:function(data){
+      console.log(data);
+      var item = data['data'][0];
+      for(var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#dialog-modal").dialog('open');
+    }
+  });
 }
 
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var ad_id = $tr.find('td').html();
+function deleteRow(ad_id){
+  var id = "#"+ad_id;
+  var $tr = $(id).parents('tr');
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
+    $tr.addClass('remove');
     $.ajax({
       type:'POST',
       url:delUrl,
@@ -191,34 +189,35 @@ function clearInput(){
 
 function loadData(){
   $.ajax({
-    type:'GET',
+    type:'POST',
     dataType:"json", 
     url: dataUrl,
     success: function( data){
       //console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">\
+																<a class="green" href="#" onclick="updateRow(';
+      var editHtmlEnd = ')"><i class="icon-pencil bigger-130"></i></a><a class="red" href="#" onclick="deleteRow(';
+      var delHtml =     ')"><i class="icon-trash bigger-130"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["ad_id"] );
-        row.push( item["ap_id"] );
-        row.push( item["ac_id"] );
+        var activeSign =  '<i class="icon-ok"></i>';
+        if( item['is_active'] == 0 ){
+          activeSign = '';
+        }
+        row.push( "<span id='" + item["ad_id"] + "'>" + item['ad_id'] + "<span>" );
+        row.push( item["province"] );
+        row.push( item["city"] );
         row.push( item["name"] );
+        row.push( activeSign );
         row.push( item["remark"]);
         row.push( item["create_user"] );
         row.push( item["create_time"] );
         row.push( item["edit_user"] );
         row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['ad_id'] + editHtmlEnd + item['ad_id'] + delHtml  );
         rows.push(row);
       }
       var oTable1;
@@ -234,6 +233,7 @@ function loadData(){
         "aoColumns" : [
                         null,
                         null,  
+                        null,
                         null,
                         null,
                         null, 

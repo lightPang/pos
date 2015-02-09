@@ -82,7 +82,9 @@
     public function createCity(){
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['name'] ) ){
         $data['name'] = $_POST['name'];
+        $data['code'] = $_POST['code'];
         $data['ap_id'] = $_POST['ap_id'];
+        $data['is_active'] = $_POST['is_active'];
         $data['create_user'] = $_SESSION['u_id'];
         $data['edit_user'] = $_SESSION['u_id'];
         $data['create_time'] = date('Y-m-d H:i:s');
@@ -112,7 +114,9 @@
       if( isset( $_SESSION['u_id']) && isset( $_POST['ac_id'] )){
         $map['ac_id'] = $_POST['ac_id'];
         $data['ap_id'] = $_POST['ap_id'];
+        $data['code'] = $_POST['code'];
         $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $ac = M('area_city');
@@ -134,11 +138,24 @@
       else if( $_SESSION['u_id'] ){
         $ac = M('area_city');
         $data = $ac->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "query", 0 );
+        $this->ajaxReturn( $this->updateApInfo($this->updateUserInfo($data)), "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );
       }
+    }
+
+    protected function updateApInfo( $data ){
+      $provinceModel = M('area_province');
+      $apData = $provinceModel->select();
+      foreach ($data as $key => $value) {
+        foreach ($apData as $apItem) {
+          if( $value['ap_id'] == $apItem['ap_id'] ){
+            $data[$key]['province'] = $apItem['name'];
+          }
+        }
+      }
+      return $data;
     }
     
     /********
@@ -156,6 +173,7 @@
         $data['name'] = $_POST['name'];
         $data['ap_id'] = $_POST['ap_id'];
         $data['ac_id'] = $_POST['ac_id'];
+        $data['is_active'] = $_POST['is_active'];
         $data['create_user'] = $_SESSION['u_id'];
         $data['edit_user'] = $_SESSION['u_id'];
         $data['create_time'] = date('Y-m-d H:i:s');
@@ -186,6 +204,7 @@
         $map['ad_id'] = $_POST['ad_id'];
         $data['ac_id'] = $_POST['ac_id'];
         $data['ap_id'] = $_POST['ap_id'];
+        $data['is_active'] = $_POST['is_active'];
         $data['name'] = $_POST['name'];
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
@@ -208,11 +227,34 @@
       else if( $_SESSION['u_id'] ){
         $ac = M('area_district');
         $data = $ac->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "query", 0 );
+        $this->ajaxReturn( $this->updateAPACData($this->updateUserInfo($data)), "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );
       }
+    }
+
+    protected function updateAPACData($data){
+      $apModel = M('area_province');
+      $apData = $apModel->select();
+      $acModel = M('area_city');
+      $acData = $acModel->select();
+      foreach ($data as $key => $value) {
+        foreach ($apData as $apItem) {
+          if( $apItem['ap_id'] == $value['ap_id'] ){
+            $data[$key]['province'] = $apItem['name'];
+            break;
+          }
+        }
+
+        foreach ($acData as $acItem) {
+          if( $acItem['ac_id'] == $value['ac_id'] ){
+            $data[$key]['city'] = $acItem['name'];
+            break;
+          }
+        }
+      }
+      return $data;
     }
     
   }

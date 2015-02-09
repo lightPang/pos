@@ -22,7 +22,7 @@ function loadBankData(){
         options += "<option value='" + dataArr[i].b_id +"'>" + dataArr[i].name + "</option>";
       }
       $("#selectBank").append( options);
-      $("#updateBank").append( options);
+      $("#update_b_id").append( options);
     }
   });
 }
@@ -38,30 +38,31 @@ function createDialog(){
             });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var bo_id = $tdlist.get(0);
-  var b_id = $tdlist.get(1);
-  var name = $tdlist.get(2);
-  var contact_num = $tdlist.get(3);
-  var remark = $tdlist.get(4);
-  $("#updateBank").val( $(b_id).html() );
-  $("#bo_id").val( $(bo_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateContact_num").val( $(contact_num).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+function updateRow(bo_id){
+  $.ajax({
+    type:'post',
+    url : dataUrl,
+    data : {'bo_id' :bo_id},
+    success:function(data){
+      console.log(data);
+      var item = data['data'][0];
+      for(var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#dialog-modal").dialog('open');
+    }
+  });
 }
 
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
+function deleteRow( bo_id ){
+  var id = "#"+bo_id;
+  var $tr = $(id).parents('tr');
+  
   console.log( $tr.find('td').html() );
-  var bo_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
+    $tr.addClass('remove');
     $.ajax({
       type:'POST',
       url:delUrl,
@@ -156,27 +157,27 @@ function loadData(){
       console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" href="#" onclick="updateRow(';
+      var editHtmlEnd =  ')"><i class="icon-pencil bigger-130"></i></a><a class="red" href="#" onclick="deleteRow('
+      var delHtml = ')"><i class="icon-trash bigger-130"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["bo_id"] );
+        var activeSign = '<i class="icon-ok"></i>';
+        if( item['is_active'] == 0 ){
+          activeSign = '';
+        }
+        row.push( "<span id='" + item["bo_id"] + "'>" + item['bo_id'] + "</span>");
         row.push( item["b_id"] );
         row.push( item["name"] );
         row.push( item["contact_num"] );
+        row.push( activeSign );
         row.push( item["remark"]);
         row.push( item["create_user"] );
         row.push( item["create_time"] );
         row.push( item["edit_user"] );
         row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['bo_id'] + editHtmlEnd + item['bo_id'] + delHtml );
         rows.push(row);
       }
       var oTable1;
@@ -194,6 +195,7 @@ function loadData(){
                         null,  
                         null,
                         null, 
+                        null,
                         null,
                         null, 
                         null, 

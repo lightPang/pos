@@ -6,13 +6,56 @@ var setupItemUrl = rootUrl + 'SetupItem/getSetupItem';
 
 $(document).ready(function(){
   loadOrderData();
-  loadEditSetupOrder( 1 );
+  //loadEditSetupOrder( 1 );
+  //$("#showOrder").css('display','none');
+  //$("EditOrder").css('display','none');
+  //$("#table-div").css('display','block');
 });
 
 $("#returnBtn").click(function(){
   $("#showOrder").css('display','none');
   $("#table-div").css('display','block');
+  $("#EditOrder").css('display','none');
   $("#showOrder").find('span').html('');
+});
+
+$("#update_returnBtn").click(function(){
+  $("#EditOrder").css('display','none');
+  $("#showOrder").css('display','none');
+  $("#table-div").css('display','block');
+  $("#updateForm").find('input').val('');
+});
+
+$("#update_submitBtn").click( function(){
+  var inputs = $('#updateForm').find('input');
+  var flag = 1;
+  for( var i = 0; i < inputs.length; ++i ){
+    if( $(inputs[i]).hasClass('required') && $(inputs[i]).val() === "" ){
+      alert( "请完整填写表单内容！" );
+      $(inputs[i]).focus();
+      flag = 0;
+      break;
+    }
+  }
+  if($("#update_si_list").val()=="" ){
+    alert("请填写装机信息！");
+    flag = 0;
+  }
+  if( flag === 1 ){
+    $("update_submitBtn").attr('disabled',true);
+    $("#updateForm").ajaxSubmit({
+    type:'post',
+    url: createUrl,
+    success: function (data){
+      console.log(data);
+       if( data['status'] !== 0 ){
+          alert("修改成功!");
+      }
+      //$("update_submitBtn").attr('disabled',false);
+    }
+    });
+
+  }
 });
 
 function loadEditSetupOrder( soId ){
@@ -35,10 +78,22 @@ function loadEditSetupOrder( soId ){
         soItem['active_date'] = soItem['active_date'].split(' ')[0];
       if( soItem['register_date'] != null )
         soItem['register_date'] = soItem['register_date'].split(' ')[0];
+
+      //$("#update_client_name").val("123");
       for( var key in soItem ){
         var id = "#update_" + key;
         if( $(id).length != 0 ){
           $(id).val( soItem[key] );
+        }
+        else if( id.indexOf('file') > 0 || id.indexOf('img') > 0 ){
+          console.log(id.replace('_id','_download'));
+          id = id.replace('_id','_download');
+          if( soItem[key] != null ){
+            $(id).attr('onclick',"downloadFile("+soItem[key]+")");
+          }
+          else{
+            $(id).css('display','none');
+          }
         }
       }
       loadUpdateSiTableData();
@@ -49,6 +104,7 @@ function loadEditSetupOrder( soId ){
 function loadSetupOrder(soId){
   $("#table-div").css('display','none');
   $("#showOrder").css('display','block');
+  console.log($("#showOrder").css('display') );
   $.ajax({
     type:'post',
     dataType:'json',
@@ -136,7 +192,7 @@ function loadOrderData(){
       var rows = [];
       var showBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
       var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
-      var editBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
+      var editBtnTxt = '<a class="green" href="#" onclick="loadEditSetupOrder(';
       var editBtnTxtEnd = ')"><i class="icon-print  align-top bigger-110 icon-info-sign"></i></a>';
       for( var i = 0; i < soArr.length; ++i ){
         var item = soArr[i];

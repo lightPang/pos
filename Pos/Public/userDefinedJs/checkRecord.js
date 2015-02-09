@@ -65,7 +65,7 @@ function loadCheckList( si_id ){
         tr += "<td>" + recordItem['time'] + "</td>";
         var addSign = '';
         if( recordItem['is_add'] == 1 ){
-          addSign = '<i class="icon-ok"</i>';
+          addSign = '<i class="icon-ok"></i>';
         }
         tr += "<td>" + addSign + "</td>"
             + "<td>" + recordItem['userName'] + "</td>"

@@ -57,39 +57,31 @@ function createDialog(){
             });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var mi_id = $tdlist.get(0);
-  var mccBig = $tdlist.get(1);
-  var mccSub = $tdlist.get(2);
-  var code = $tdlist.get(3);
-  var a_rate = $tdlist.get(4);
-  var b_rate = $tdlist.get(5);
-  var c_rate = $tdlist.get(6);
-  var d_rate = $tdlist.get(7);
-  var remark = $tdlist.get(8);
-  console.log(mi_id);
-  $("#mi_id").val( $(mi_id).html() );
-  $("#updateMccBig").val( $(mccBig).html() );
-  $("updateMccSub").val( $(mccSub).html() );
-  $("#updateCode").val( $(code).html() );
-  $("#updateA_rate").val( $(a_rate).html() );
-  $("#updateB_rate").val( $(b_rate).html());
-  $("#updateC_rate").val( $(c_rate).html() );
-  $("#updateD_rate").val( $(d_rate).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
+function updateRow(mi_id){
+  $.ajax({
+    type:'post',
+    url : dataUrl,
+    data : {'mi_id' :mi_id},
+    success:function(data){
+      console.log(data);
+      var item = data['data'][0];
+      for(var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#dialog-modal").dialog('open');
+    }
+  });
 }
 
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
+function deleteRow(mi_id){
+  var id = "#" + mi_id;
+  var $tr = $(id).parents('tr');
+  
   console.log( $tr.find('td').html() );
-  var mi_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
+    $tr.addClass('remove');
     $.ajax({
       type:'POST',
       url:delUrl,
@@ -178,36 +170,31 @@ function clearInput(){
 
 function loadData(){
   $.ajax({
-    type:'GET',
+    type:'POST',
     dataType:"json", 
     url: dataUrl,
     success: function( data){
       console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons"><a class="green" href="#" onclick="updateRow('
+      var editHtmlEnd = ')"><i class="icon-pencil bigger-130"></i></a><a class="red" href="#" onclick="deleteRow('
+      var delHtml = ')"><i class="icon-trash bigger-130"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["mi_id"] );
-        row.push( item["mb_id"] );
-        row.push( item["ms_id"] );
-        row.push( item["code"] );
-        row.push( item["a_rate"]);
-        row.push( item["b_rate"] );
-        row.push( item["c_rate"] );
-        row.push( item["d_rate"] );
+        var activeSign =  '<i class="icon-ok"></i>';
+        if( item['is_active'] == 0 ){
+          activeSign = '';
+        }
+        row.push( "<span id='" + item['mi_id'] + "'>" + item["code"] + "</span>");
+        row.push( item["name"] );
+        row.push( item["return_rate"] );
+        row.push( activeSign );
         row.push( item["remark"]);
         row.push( item["create_time"] );
         row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['mi_id'] + editHtmlEnd + item['mi_id'] + delHtml );
         rows.push(row);
       }
       var oTable1;
@@ -228,10 +215,6 @@ function loadData(){
                         null,
                         null, 
                         null, 
-                        null,
-                        null,
-                        null,
-                        null,
                         { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
