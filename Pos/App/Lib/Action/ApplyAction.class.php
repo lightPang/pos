@@ -68,20 +68,37 @@ class ApplyAction extends CommonAction {
         $data['crOuter'] = $crModel->where($crMap)->field('rate')->select()[0]['rate'];
         $bankModel = M('bank');
         $bankMap['b_id'] = $data['bill_b_id'];
-        $data['billBank'] = $bankModel->where($bankMap)->field('name')->select()[0]['name'];
-        $bankMap['b_id'] = $data['account_b_id'] ;
+        $billBank = $bankModel->where($bankMap)->field('name,code')->select()[0];
+        $data['billBank'] = $billBank['name'];
+        $data['billBankCode'] = $billBank['code']; 
+        //$bankMap['b_id'] = $data['account_b_id'] ;
         $data['acBank'] = $data['account_b_id'] ;
         $cpModel = M('client_platform');
         $cpMap['cp_id'] = $data['cp_id'];
         $data['clientPlatform'] = $cpModel->where($cpMap)->field('name')->select()[0]['name'];
         $bankOpModel = M('bank_operator');
         $bankOpMap['bo_id'] = $data['bo_id'];
-        $data['bankOp'] = $bankOpModel->where($bankOpMap)->field('name')->select()[0]['name'];
-
+        $bankOp = $bankOpModel->where($bankOpMap)->field('name,contact_num')->select()[0];
+        $data['bankOp'] = $bankOp['name'];
+        $data['bankOpPhone'] = $bankOp['contact_num'];
         $map['si_id'] = array('in', $data['si_list']);
         $siModel = M('setup_item');
         $siList = $siModel->where($map)->select();
         $data['siList'] = $this->getFullSiList($siList);
+        $data['siListCount'] = count($data['siList']);
+        if( $data['type'] == 0 ){
+          $data['typeName'] = '间联';
+        }
+        else{
+          $data['typeName'] = '直联';
+        }
+
+        if( $data['is_urgent'] == 1 ){
+          $data['isUrgent'] = '是';
+        }
+        else{
+          $data['isUrgent'] = '否';
+        }
         $this->ajaxReturn($data,'ok','123');
       }
     }
@@ -107,8 +124,13 @@ class ApplyAction extends CommonAction {
             $siList[$key]['maintainUser'] = $userData[$i]['name'];
         }
         for( $i = 0 ; $i < count($mTypeData); ++$i ){
-          if( $mTypeData[$i]['mt_id'] == $mt_id )
+          if( $mTypeData[$i]['mt_id'] == $mt_id ){
             $siList[$key]['machineType'] = $mTypeData[$i]['mt_name'];
+            if( $mTypeData[$i]['is_wired'] == 1 )
+              $siList[$key]['isWired'] = '有线';
+            else
+              $siList[$key]['isWired'] = '无线';
+          }
           else if ( $mTypeData[$i]['mt_id'] == $kb_id )
             $siList[$key]['keyboardType'] = $mTypeData[$i]['mt_name'];
           else if( $mTypeData[$i]['mt_id'] == $sm_id )

@@ -35,20 +35,15 @@ class Access {
             $_addValues = implode("','", $_addValues);
 
             $_sql = "INSERT INTO $_table ($_addFields) VALUES ('$_addValues')";
-            $_sql = iconv('utf-8', 'gbk//IGNORE', $_sql);echo $_sql;
+            $_sql = iconv('utf-8', 'gbk//IGNORE', $_sql);//echo $_sql;
             try {
             $_stmt = $this->_pdo->prepare($_sql);
-            //$_stmt->execute();
+            $_stmt->execute();
             }catch (PDOException  $e) {
                 exit("SQL statement: ".$_sql."\r\nError Info: ".$e->getMessage());
             }
         }
 
-        try {
-            $_stmt->execute();
-        } catch (PDOException  $e) {
-            exit("SQL statement: ".$_sql."\r\nError Info: ".$e->getMessage());
-        }
         return $_stmt;
     }
 
@@ -175,7 +170,7 @@ class Access {
     *@return  PDOStatement object or false
     */
     function execute($_sql) {
-        $_sql = iconv('utf-8', 'gbk//IGNORE', $_sql);echo $_sql;
+        $_sql = iconv('utf-8', 'gbk//IGNORE', $_sql);//echo $_sql."<br>";
         try {
             $_stmt = $this->_pdo->prepare($_sql);
             $_stmt->execute();
