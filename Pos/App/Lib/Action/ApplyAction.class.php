@@ -41,6 +41,7 @@ class ApplyAction extends CommonAction {
 
     public function getSoItem(){
       if( $this->doAuth() ){
+        $postFlag = $_POST['flag'];
         $soMap['so_id'] = $_POST['soId'];
         $soModel = M('setup_order');
         $data = $soModel->where($soMap)->select();
@@ -62,10 +63,10 @@ class ApplyAction extends CommonAction {
         $disMap['ad_id'] = $data['ad_id'];
         $data['district'] = $distModel->where($disMap)->field('name')->select()[0]['name'];
         $crModel = M('client_rate');
-        $crMap['is_inner'] = 1;
-        $data['crInner'] = $crModel->where($crMap)->field('rate')->select()[0]['rate'];
-        $crMap['is_inner'] = 0;
-        $data['crOuter'] = $crModel->where($crMap)->field('rate')->select()[0]['rate'];
+        $crMap['cr_id'] = $data['cr_inner_id'];
+        $data['crInner'] = $crModel->where($crMap)->field('name')->select()[0]['name'];
+        $crMap['cr_id'] = $data['cr_outer_id'];
+        $data['crOuter'] = $crModel->where($crMap)->field('name')->select()[0]['name'];
         $bankModel = M('bank');
         $bankMap['b_id'] = $data['bill_b_id'];
         $billBank = $bankModel->where($bankMap)->field('name,code')->select()[0];
@@ -99,7 +100,17 @@ class ApplyAction extends CommonAction {
         else{
           $data['isUrgent'] = '否';
         }
-        $this->ajaxReturn($data,'ok','123');
+        if( $postFlag == '1' ){
+          $userMap = $data['c_id'];
+          $userList = M('user')->where( $userMap )->select();
+          $res['user'] = $userList;
+          $res['soItem'] = $data;
+          $this->ajaxReturn($res,'ok','123');
+        }
+        else{
+          $this->ajaxReturn($data,'ok','123');
+        }
+        
       }
     }
 

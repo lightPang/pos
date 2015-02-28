@@ -51,3 +51,16 @@ id is the file id .
 function downloadFile(id){
   window.open('/pos/Pos/index.php/File/downloadFileById/id/'+id);
 }
+
+function loadTable(id,data){
+  var html = '';
+  for( var i = 0 ; i < data.length; ++i ){
+    var row = '<tr>';
+    for( var j = 0 ; j < data[i].length; ++j ){
+      row += '<td>' + data[i][j] + '</td>';
+    }
+    row += '</tr>';
+    html += row;
+  }
+  $(id).find('tbody').html(html);
+}

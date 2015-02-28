@@ -22,7 +22,19 @@
   }
 
 .apr-checkbox{
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   margin-top: 0px;
+}
+
+.space-8{
+  clear: both;
+}
+
+.margin-top-15{
+  margin-top: 15px;
+}
+
+.file-input-height{
+  font-size: 13px;
 }

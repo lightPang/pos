@@ -1,503 +1,359 @@
 var rootUrl = "/pos/Pos/index.php/";
-var createUrl =  rootUrl + "Area/createCity";
-var UaDataUrl = rootUrl + "Approve/getUADataByPage";
-var aprDataUrl = rootUrl + "Approve/getAprDataByPage";
-var mdbDataUrl = rootUrl + "Approve/getMDBDataByPage";
-var loadedDataUrl = rootUrl + "Approve/getloadedDataByPage";
 var siDataUrl = rootUrl + "SetupItem/getSiData";
-var machineUrl = rootUrl + "Storage/validateSerial";
-var updateMachineUrl = rootUrl + "Storage/updateMachine";
+var soDataUrl = rootUrl + 'Apply/getSoData';
+var soItemUrl = rootUrl + 'Apply/getSoItem';
+var passUrl = rootUrl + "Approve/passApply";
+var dispatchUrl = rootUrl + 'Approve/dispatch';
 $(document).ready(function(){
-  loadUADataByPage(0);
-  loadAprDataByPage(0);
-  loadedDataByPage(0);
-  loadMdbDataByPage(0);
   createDialog();
+  loadOrderData(0);
+
 });
 
-/****
-function used to show setup_order item on the page
-
-type = 0 means 
-
-data is the array of setup_order, when the length of data is 0
-
-it means that there is no setup_order
-
-inHtml is the html text to be added into div.
-****/
-function loadData(data,type){
-  var inHtml = "";
-  var headHtml = '<div class="panel panel-default"> \
-                  <div class="panel-heading"> \
-                    <h4 class="panel-title" style="display:inline">  \
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#';
-  var midHtml = '"><i class="icon-angle-down bigger-110" data-icon-hide="icon-angle-down" data-icon-show="icon-angle-right"></i>';
-  var downHtml = '</a></h4></div><div class="panel-collapse collapse in" id="';
-  var lowHtml = '"> \
-                  <div class="panel-body">';
-
-  var botHtml = '</div></div></div>';
-
-  if( data==null || data.length === 0 ){
-    inHtml = "<p>暂无订单</p>"; 
-
-  }
-  else{
-    
-    for( var i = 0; i<data.length; ++i ){
-      if( type == 1 || type == 2)
-        var downHtml = '</a></h4><input type="checkbox" class="apr-checkbox" name="mdb" /><input type="hidden" class="apr-soId" value = "' +data[i]['so_id'] +'"/></div><div class="panel-collapse collapse in" id="';
-      var contentHtml = "";
-      var titleHtml = "&nbsp;" + data[i]['so_number'] + "&nbsp;" + data[i]['client_name'] + "&nbsp;";
-      var idHtml = data[i]['so_number'];
-      contentHtml = '<div class="row"> \
-                        <div class="line"> \
-                          <div class="col-sm-3  no-padding-right" > 商户名称：'+data[i]['client_name']+ '</div> \
-                          <div class="col-sm-3 no-padding-right" > 正式名称：' + data[i]['formal_name'] +'</div> \
-                          <div class="col-sm-4 no-padding-right" > 商户地址：' + data[i]['client_addr'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right"> 商户属性：' + data[i]['ca_id'] + '个体户</div> \
-                          <div class="col-sm-3 no-padding-right"> 商户类别：' + data[i]['mi_id'] + '</div> \
-                          <div class="col-sm-3 no-padding-right"> 收单日期：' + data[i]['ac_time'] + '</div> \
-                          <div class="col-sm-3 no-padding-right"> 是否加急：' + data[i]['is_urgent'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 所属省份：'+ data[i]['ap_id'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 所属城市：'+ data[i]['ac_id'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 所在区域：'+ data[i]['ad_id'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 费率【内】：'+ data[i]['cr_inner_id'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 收单银行：'+ data[i]['bill_b_id'] +'</div> \
-                          <div class="col-sm-3 no-padding-right" > 开户银行：'+ data[i]['account_b_id'] +'</div> \
-                          <div class="col-sm-3 no-padding-right" > 所属平台：'+ data[i]['cp_id'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 费率【外】：'+ data[i]['cr_outer_id'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-6 no-padding-right" > 入账账号：'+ data[i]['account_num'] + '</div> \
-                          <div class="col-sm-6 no-padding-right" > 入账名称：'+ data[i]['account_name'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="border-bottom"></div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 法人姓名：'+ data[i]['legal_name'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 身份证号码：' +data[i]['passport_num'] +'</div> \
-                          <div class="col-sm-3 no-padding-right" > 法人固话：' + data[i]['legal_tel'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 装机联系人：'+ data[i]['contact_name'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 联系人手机：'+ data[i]['contact_phone'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 联系人传真：'+ data[i]['contact_fax'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="border-bottom"></div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 银行经办人：'+ data[i]['bo_id'] + '</div> \
-                          <div class="col-sm-5 no-padding-right" > 被授权人：' + data[i]['auth_person'] +'</div> \
-                          <div class="col-sm-3 no-padding-right" > 登记日期：' + data[i]['register_date'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 经办人手机：'+ data[i]['bo_phone'] +'</div> \
-                          <div class="col-sm-5 no-padding-right" > 身份证号：' + data[i]['auth_person_passport'] +'</div> \
-                          <div class="col-sm-3 no-padding-right" > 启用日期：' + data[i]['active_date'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 所属机构：' + data[i]['belonged_org'] + '</div> \
-                          <div class="col-sm-5 no-padding-right" > 入网风险承诺书：'+ data[i]['promise'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 行员名：' + data[i]['banker_name'] +'</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 机构号：' + data[i]['org_num'] + '</div> \
-                          <div class="col-sm-5 no-padding-right" > 入网风险承诺书（地址）：' + data[i]['promise_addr'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 行员号：' + data[i]['banker_num'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 营业执照编号：'+ data[i]['license_num'] + '</div> \
-                          <div class="col-sm-5 no-padding-right" >入网风险承诺书（结算）：' + data[i]['promise_close'] + '</div> \
-                          <div class="col-sm-3 no-padding-right" > 申请人卡号：' + data[i]['applier_card_num'] + '</div>   \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                          <div class="col-sm-3 no-padding-right" > 归档编号：' + data[i]['file_num'] + '</div> \
-                          <div class="bottom"></div> \
-                        </div> \
-                        <div class="border-bottom"></div> \
-                        <div class="line"> \
-                            <div class="col-sm-1 no-padding-right" >协议：</div> \
-                            <div class="col-sm-2 "> \
-                              <Button onclick="downloadFile('+data[i]['contract_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 no-padding-right" >税务登记：</div> \
-                            <div class="col-sm-2 file-box"> \
-                              <Button onclick="downloadFile('+data[i]['tax_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 control-div no-padding-right" >营业执照：</div> \
-                            <div class="col-sm-2 file-box"> \
-                              <Button onclick="downloadFile('+data[i]['license_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                            <div class="col-sm-1 no-padding-right" >卡复印件：</div> \
-                            <div class="col-sm-2 file-box"> \
-                              <Button onclick="downloadFile('+data[i]['card_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 no-padding-right" >身份证复印</div> \
-                            <div class="col-sm-2 file-box">  \
-                              <Button onclick="downloadFile('+data[i]['passport_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 control-div no-padding-right" >授权委托书</div> \
-                            <div class="col-sm-2 file-box"> \
-                              <Button onclick="downloadFile('+data[i]['auth_file_id']+')">下载</Button> \
-                            </div> \
-                            <div class="bottom"></div> \
-                        </div> \
-                        <div class="line"> \
-                            <div class="col-sm-1 no-padding-right" >商户图片1</div> \
-                            <div class="col-sm-2 file-box"> \
-                             <Button onclick="downloadFile('+data[i]['client_img_1_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 no-padding-right" >商户图片2</div> \
-                            <div class="col-sm-2 file-box"> \
-                              <Button onclick="downloadFile('+data[i]['client_img_2_id']+')">下载</Button> \
-                            </div> \
-                            <div class="col-sm-1 no-padding-right" >商户图片3</div> \
-                            <div class="col-sm-2 file-box"> \
-                             <Button onclick="downloadFile('+data[i]['client_img_3_id']+')">下载</Button> \
-                            </div> \
-                            <div class="bottom"></div> \
-                        </div> \
-                        <div class="border-bottom"></div>';
-        if( type == 0 )
-          contentHtml +='<input type="hidden" value="'+ data[i]['so_id'] +'" class="siList'+ i.toString() + '"/>\
-                        <input type="hidden" value="' + data[i]['si_list'] +'" id="siList' + i.toString() +'"/>';
-        contentHtml += '<div  class="dataTables_wrapper" role="grid"> \
-                          <table class="table table-striped table-bordered table-hover"> \
-                            <thead> \
-                              <tr> \
-                                <th>编号</th> \
-                                <th>安装地址</th> \
-                                <th>拓展人</th> \
-                                <th>机型型号</th> \
-                                <th>键盘型号</th> \
-                                <th>SIM卡型号</th> \
-                                <th>年费</th> \
-                                <th>押金</th>';
-      if( type == 0 )
-        contentHtml +=        '<th>备注</th></tr> \
-                            </thead> \
-                            <tbody>';
-      else if( type != 3){
-        contentHtml +=      '<th>机身编码</th> \
-                              <th>备注</th></tr> \
-                            </thead> \
-                            <tbody>';
+function loadOrderData(type){
+  $.ajax({
+    type:'post',
+    dataType:'json',
+    data:{'type':type},
+    url:soDataUrl,
+    success:function(data){
+      //console.log( data['data'] );
+      var soArr = data['data'];
+      var rows = [];
+      var confirmTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
+      var confirmTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var dispatchBtnTxt = '<a class="green" href="#" onclick="loadDispatchOrder(';
+      var dispatchBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var showBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
+      var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var idArr = ['ua_table','apr_table','mdb_table','back_table','loaded_table','ok_table'];
+      var rowsArr = new Array();
+      for( var i = 0; i < idArr.length; ++ i ){
+        rowsArr[i] = new Array();
       }
-      else{
-        contentHtml +=      '<th>机身编码</th> \
-                             <th>终端编码</th>\
-                              <th>备注</th></tr> \
-                            </thead> \
-                            <tbody>';
+
+      for( var i = 0; i < soArr.length; ++i ){
+        var item = soArr[i];
+        var row = [];
+        var checkboxClass = '';
+        var checkBoxTxt = "<input type='checkbox' class='apr-checkbox ";
+        var checkBoxMid = "' value='";
+        var checkboxEnd = "'/>";
+        var stateTxt = '';
+        var opTxt = '';
+        var arrIndex = -1;
+        switch(item['state']){
+          case '1':
+            stateTxt = '已提交';
+            opTxt = confirmTxt + item['so_id'] + ",1" + confirmTxtEnd;
+            arrIndex = 0;
+            break;
+          case '2':
+            stateTxt = '已审批';
+            opTxt = showBtnTxt + item['so_id'] + ",2" + showBtnTxtEnd;
+            checkboxClass = 'apr';
+            arrIndex = 1;
+            break;
+          case '3':
+            stateTxt = '已导出MDB';
+            opTxt = showBtnTxt + item['so_id'] + ",3" + showBtnTxtEnd;
+            arrIndex = 2;
+            break;
+          case '4':
+            stateTxt = '已导入MDB';
+            opTxt = dispatchBtnTxt + item['so_id']  + dispatchBtnTxtEnd;
+            arrIndex = 3;
+            break;
+          case '5':
+            stateTxt = '装机完成';
+            opTxt = showBtnTxt + item['so_id'] + ",5" + showBtnTxtEnd;
+            checkboxClass = 'loaded';
+            arrIndex = 4;
+            break;
+          default:
+            stateTxt = '装机完成';
+            opTxt = showBtnTxt + item['so_id'] + ",6" + showBtnTxtEnd;
+            arrIndex = 5;
+            break;
+        }
+        if( checkboxClass != ''  ){
+          row.push( checkBoxTxt + checkboxClass + checkBoxMid + item['so_id'] + checkboxEnd );
+        }
+        row.push( item['so_number']);
+        row.push( item['client_name'] );
+        row.push( item['client_number'] );
+        row.push( item['billBank']);
+        row.push( item['ac_time'] );
+        row.push( stateTxt);
+        row.push( opTxt );
+        if( arrIndex != -1 )
+          rowsArr[arrIndex].push( row );
       }
-      var tableHtml = '';
-      for( var j = 0; j<data[i]['siList'].length; ++j ){
-        tableHtml += '<tr>'
-                      +  '<td>' + data[i]['siList'][j]['si_id'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['addr'] +'</td>'
-                      +  '<td>' + data[i]['siList'][j]['expand_user'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['m_type'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['keyboard_type'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['sim_type'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['annual_fee'] + '</td>'
-                      +  '<td>' + data[i]['siList'][j]['deposit_fee'] + '</td>';
-        if( type==0)
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
-        else if(type != 3){
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
-                      +   '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
+      for( var i = 0 ; i < idArr.length; ++ i ){
+        var oTable;
+        var tableId = "#" + idArr[i];
+        rows = rowsArr[i];
+        if( $.fn.dataTable.isDataTable( tableId ) ){
+          oTable = $(tableId).dataTable();
         }
         else{
-          tableHtml   +=  '<td>' + data[i]['siList'][j]['m_code'] + '</td>'
-                      +   '<td>' + data[i]['siList'][j]['m_tcode'] + '</td>'
-                      +   '<td>' + data[i]['siList'][j]['remark'] + '</td></tr>';
+          if( i == 1 || i == 4 ){
+            oTable = $(tableId).dataTable({
+              "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
+            "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
+            "bPaginate" : true, //是否显示（应用）分页器  
+            "aoColumns" : [
+                           { "bSortable": false }, null,null,  null, null, null, null, { "bSortable": false }
+                          ],
+            "oLanguage": { //国际化配置  
+                    "sProcessing" : "正在获取数据，请稍后...",    
+                    "sLengthMenu" : "显示 _MENU_ 条",    
+                    "sZeroRecords" : "没有您要搜索的内容",    
+                    "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",    
+                    "sInfoEmpty" : "记录数为0",    
+                    "sInfoFiltered" : "(全部记录数 _MAX_ 条)",    
+                    "sInfoPostFix" : "",    
+                    "sSearch" : "搜索",    
+                    "sUrl" : "",    
+                    }
+            }); 
+          }
+          else{
+            oTable = $(tableId).dataTable({
+              "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
+            "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
+            "bPaginate" : true, //是否显示（应用）分页器  
+            "aoColumns" : [
+                            null,null,  null, null, null, null, { "bSortable": false }
+                          ],
+            "oLanguage": { //国际化配置  
+                    "sProcessing" : "正在获取数据，请稍后...",    
+                    "sLengthMenu" : "显示 _MENU_ 条",    
+                    "sZeroRecords" : "没有您要搜索的内容",    
+                    "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",    
+                    "sInfoEmpty" : "记录数为0",    
+                    "sInfoFiltered" : "(全部记录数 _MAX_ 条)",    
+                    "sInfoPostFix" : "",    
+                    "sSearch" : "搜索",    
+                    "sUrl" : "",    
+                    }
+            }); 
+          }  
+        }
+        oTable.fnClearTable();
+        if( rows.length>0 )
+          oTable.fnAddData( rows );
+      }
+
+      
+    }
+  });
+}
+
+function loadDispatchOrder(soId){
+  var prefix = 'back_';
+  var tableId = "#" + prefix + "table-div";
+  var orderId = "#" + prefix + "showOrder";
+  $(tableId).css('display','none');
+  $(orderId).css('display','block');
+  $.ajax({
+    type:'post',
+    dataType:'json',
+    data:{
+      'soId' : soId,
+      'flag' : '1'
+    },
+    url:soItemUrl,
+    success:function(data){
+      //console.log(data);
+      var soItem  = data['data']['soItem'];
+      var userList = data['data']['user'];
+      var options = '';
+      for( var i = 0 ; i < userList.length; ++ i ){
+        options += "<option value = '" + userList[i]['u_id']  + ">" + userList[i]['name']  + "</option>";
+      } 
+      $("#u_id").append( options );
+      $("#dispatch_so_id").val( soItem['so_id'] );
+      for(var key in soItem){
+        var id = "#" + prefix + key;
+        if( $(id).find('span') != null ){
+          $(id).find('span').html( soItem[key] );
         }
       }
-      var tableEndHtml = ' </tbody> \
-                          </table> \
-                        </div> \
-                        <div class="space-8"></div> ';
-      var confirmBtn =  '\
-                        <div class="form-group"> \
-                          <div class="col-md-10 "> </div> \
-                          <div class="col-sm-2 "> \
-                            <button class="btn btn-info" onclick="passApply(siList'+ i.toString() +')" type="button"> \
-                              <i class="icon-ok bigger-110"></i> \
-                                通过 \
-                            </button> \
-                            <button class="btn btn-danger" id="rejectBtn" type="button"> \
-                              <i class="icon-trash bigger-110"></i> \
-                                拒绝 \
-                            </button> \
-                          </div> \
-                        </div>  ';
-      var endHtml =  '</div>';
-      if(type != 0 )
-        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml +tableEndHtml +endHtml;
-      else
-        contentHtml = headHtml + idHtml + midHtml + titleHtml + downHtml + idHtml + lowHtml + contentHtml + botHtml +tableHtml+ tableEndHtml + confirmBtn + endHtml;
-      inHtml += contentHtml;
-    }
-  }
-  if( type == 0 ){
-    $("#submitContent").html('');
-    $("#submitContent").html(inHtml);
-  }
-  else if( type == 1 ){
-    $('#approvedContent').html('');
-    $('#approvedContent').html( inHtml);
-  }
-  else if ( type == 2 ){
-    $('#mdbContent').html('');
-    $('#mdbContent').html( inHtml);
-  }
-  else{
-    $('#loadedContent').html('');
-    $('#loadedContent').html( inHtml);
-  }
-}
+      $stateSpan = $("#state").find('span');
+      switch ($stateSpan.html()){
+        case '1':
+          $stateSpan.html('已提交');
+      }
+      $urgentSpan = $("#is_urgent").find('span');
+      switch ($urgentSpan.html()){
+        case '0':
+          $urgentSpan.html("否");
+        case '1' :
+          $urgentSpan.html("是");
+      }
+      var idList = ["contractDownload","taxDownload","licenseDownload","cardDownload","passportDownload","authDownload","clientImgDownload1","clientImgDownload2","clientImgDownload3"];
+      var keyList = ['contract_file_id','tax_file_id','license_file_id','card_file_id','passport_file_id','auth_file_id','client_img_1_id','client_img_2_id','client_img_3_id'];
+      for( var j = 0; j<idList.length; ++j ){
+        var id = "#" + prefix + idList[j];
+        if( soItem[ keyList[j] ] == null )
+          $(id).css('display','none');
+        else
+          $(id).attr( 'onclick', "downloadFile("+soItem[ keyList[j] ]+")");
 
-/****
-function used to load unapproved setup_order item from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadUADataByPage(pageNum,isJump){
-  var submitPageCount = $("#submitPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url: UaDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      loadData(data['data'],0);
+      }
+      $("#ua_so_id").val( soItem['so_id'] );
+      $("#ua_c_id").val( soItem['c_id'] );  
+      var rows = [];
+      var soList = soItem['siList'];
+      var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
+      var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
+      var siIdInput = "<input type='hidden' name='si_id[]' value='";
+      var mTypeInput = "<input type='hidden' name='m_type[]' value='";
+      var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
+      var inputEnd = "'/>";
+      for( var i = 0 ; i < soList.length; ++ i ){
+        var item = soList[i];
+        var row = [];
+        var mCodeTxt = '';
+        var keyboardCodeTxt = '';
+        var mTypeTxt = '';
+        var keyboardTypeTxt = '';
+        mCodeTxt = item['m_code'];
+        keyboardCodeTxt = item['keyboard_code'];
+        mTypeTxt = item['machineType'];
+        keyboardTypeTxt = item['keyboardType'];
+        row.push(item['addr']);
+        row.push(item['expandUser']);
+        row.push(item['maintainUser']);
+        row.push( mTypeTxt );
+        row.push( mCodeTxt );
+        row.push(keyboardTypeTxt );
+        row.push( keyboardCodeTxt );
+        row.push(item['simType']);
+        row.push(item['m_tcode']);
+        row.push(item['annual_fee']);
+        row.push( item['deposit_fee'] );
+        row.push(item['remark']);
+        rows.push(row);
+      }
+      var siTableId = "#" + prefix + "si-table";
+      loadTable( siTableId, rows) ;
     }
   });
-  paging(pageNum,0);
-  $liList = $("#submitPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
 }
 
-/****
-function used to load approved setup_order item from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadAprDataByPage(pageNum,isJump){
-  var pageCount = $("#aprPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
+function loadSetupOrder(soId,prefixId){
+  var prefix = '';
+  prefixId = prefixId.toString();
+  switch (prefixId){
+    case '1':
+      prefix = 'ua_';
+      break;
+    case '2':
+      prefix = 'apr_';
+      break;
+    case '3':
+      prefix = 'mdb_';
+      break;
+    case '4':
+      prefix = 'loaded_';
+      break;
+    case '5':
+      prefix = 'back_';
+      break;
   }
+  var tableId = "#" + prefix + "table-div";
+  var orderId = "#" + prefix + "showOrder";
+  $(tableId).css('display','none');
+  $(orderId).css('display','block');
   $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url: aprDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],1);
+    type:'post',
+    dataType:'json',
+    data:{
+      'soId' : soId
+    },
+    url:soItemUrl,
+    success:function(data){
+      //console.log(data);
+      var soItem  = data['data'];
+      for(var key in soItem){
+        var id = "#" + prefix + key;
+        if( $(id).find('span') != null ){
+          $(id).find('span').html( soItem[key] );
+        }
+      }
+      $stateSpan = $("#state").find('span');
+      switch ($stateSpan.html()){
+        case '1':
+          $stateSpan.html('已提交');
+      }
+      $urgentSpan = $("#is_urgent").find('span');
+      switch ($urgentSpan.html()){
+        case '0':
+          $urgentSpan.html("否");
+        case '1' :
+          $urgentSpan.html("是");
+      }
+      var idList = ["contractDownload","taxDownload","licenseDownload","cardDownload","passportDownload","authDownload","clientImgDownload1","clientImgDownload2","clientImgDownload3"];
+      var keyList = ['contract_file_id','tax_file_id','license_file_id','card_file_id','passport_file_id','auth_file_id','client_img_1_id','client_img_2_id','client_img_3_id'];
+      for( var j = 0; j<idList.length; ++j ){
+        var id = "#" + prefix + idList[j];
+        if( soItem[ keyList[j] ] == null )
+          $(id).css('display','none');
+        else
+          $(id).attr( 'onclick', "downloadFile("+soItem[ keyList[j] ]+")");
+
+      }
+      $("#ua_so_id").val( soItem['so_id'] );
+      $("#ua_c_id").val( soItem['c_id'] );  
+      var rows = [];
+      var soList = soItem['siList'];
+      var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
+      var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
+      var siIdInput = "<input type='hidden' name='si_id[]' value='";
+      var mTypeInput = "<input type='hidden' name='m_type[]' value='";
+      var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
+      var inputEnd = "'/>";
+      for( var i = 0 ; i < soList.length; ++ i ){
+        var item = soList[i];
+        var row = [];
+        var mCodeTxt = '';
+        var keyboardCodeTxt = '';
+        var mTypeTxt = '';
+        var keyboardTypeTxt = '';
+        if( prefixId != 1 ){
+          mCodeTxt = item['m_code'];
+          keyboardCodeTxt = item['keyboard_code'];
+          mTypeTxt = item['machineType'];
+          keyboardTypeTxt = item['keyboardType'];
+        }
+        else{
+          mCodeTxt = siIdInput + item['si_id'] + inputEnd + mCodeInput;
+          keyboardCodeTxt = keyboardCodeInput;
+          keyboardTypeTxt = keyboardInput + item['keyboard_type'] + inputEnd + item['keyboardType'];
+          mTypeTxt = mTypeInput + item['m_type'] + inputEnd + item['machineType'];
+        }
+        row.push(item['addr']);
+        row.push(item['expandUser']);
+        row.push(item['maintainUser']);
+        row.push( mTypeTxt );
+        row.push( mCodeTxt );
+        row.push(keyboardTypeTxt );
+        row.push( keyboardCodeTxt );
+        row.push(item['simType']);
+        row.push(item['m_tcode']);
+        row.push(item['annual_fee']);
+        row.push( item['deposit_fee'] );
+        row.push(item['remark']);
+        rows.push(row);
+      }
+      var siTableId = "#" + prefix + "si-table";
+      loadTable( siTableId, rows) ;
     }
   });
-  paging(pageNum,1);
-  $liList = $("#aprPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-/****
-function used to load the setup_order items which has been transferred into mdb from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadMdbDataByPage(pageNum, isJump){
-  var pageCount = $("#mdbPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= submitPageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url:mdbDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],2);
-    }
-  });
-  paging(pageNum,2);
-  $liList = $("#mdbPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
 }
 
-/****
-function used to load the setup_order items which has been reloaded by mdb from sever
-
-pageNum is the pageNum of the setup_order, when it is initialized to 0,
-
-it means that the first page of data will be loaded
-
-****/
-function loadedDataByPage(pageNum, isJump){
-  var pageCount = $("#loadedPageCount").val();
-  var reg = /^\d+$/;
-  if( isJump == 1 && ( !reg.test(pageNum) || pageNum < 0 || pageNum >= pageCount) ){
-    alert("抱歉，输入的页码数不合法！");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    dataType:"json", 
-    url:loadedDataUrl,
-    data: {'pageNum':pageNum},
-    success: function(data){
-      console.log(data);
-      loadData(data['data'],3);
-    }
-  });
-  paging(pageNum,3);
-  $liList = $("#loadedPage").find('li');
-  for( var i = 0; i < $liList.length; ++i ){
-    $a = $liList.eq(i);
-    var tabValue = $a.find('a').html();
-    if( tabValue -1== pageNum ){
-      $a.addClass('disabled');
-    }
-  }
-}
-
-/****
-function used to initialize the paging button
-
-only five paging button will be shown and the origin is the starting page num
-****/
-function paging(origin,type){
-  if( type == 0 ){
-    var countId = "#submitPageCount";
-    var columnId = "#submitPage";
-  }
-  else if( type==1){
-    var countId = "#aprPageCount";
-    var columnId = "#aprPage";
-  }
-  else if( type == 2){
-    var countId = "#mdbPageCount";
-    var columnId = "#mdbPage";
-  }
-  else{
-    var countId = "#loadedPageCount";
-    var columnId = "#loadedPage";
-  }
-  var pageCount = $(countId).val();
-  if( pageCount % 5 != 0 )
-    pageCount = parseInt(pageCount /5) + 1;
-  else
-    pageCount = parseInt(pageCount /5);
-  var leftLiClass = '';
-  var rightLiClass = '';
-  if( origin == 0 )
-    leftLiClass = 'class="disabled"';
-  if( origin == pageCount - 1 )
-    rightLiClass = 'class="disabled"';
-  var pageHtml = '<ul class="pagination"><li '+ leftLiClass +'><a href="javascript:alterPage('+ (origin-1).toString() + ','+type.toString()+')"><<</a></li>';
-  if( pageCount == 0 ) return;
-  for( var i = origin-4; i < origin+5; ++i ){
-    if( i <0 || i >= pageCount ) continue;
-    else{
-      var liHtml = '<li><a href="javascript:alterPage('+ i.toString() + ','+type.toString()+')" >'+(i +1 ).toString()+'</a></li>';
-      pageHtml += liHtml;
-    }
-  }
-  pageHtml += '<li '+ rightLiClass +' ><a href="javascript:alterPage('+ (origin+1).toString() + ','+type.toString()+')">>></a></li></ul>';
-  $(columnId).html(pageHtml);
-}
-
-/****
-function used to jump to a page of the whole data,two parameter will be used
-
-*jumpType 0 means jumpToUaData 1 means jumpToApData
-
-*jumpToPage the page will jump to .
-
-****/
-function alterPage(page,type,isJump){
-  if( type == 0 ){
-    loadUADataByPage( page,isJump );
-  }
-  else if( type == 1 ){
-    loadAprDataByPage( page,isJump);
-  }
-  else if( type == 2){
-    loadMdbDataByPage( page, isJump );
-  }
-  else{
-    loadedDataByPage( page, isJump );
-  }
-}
-
-/***
-*function used to jump page
-*
-***/
-function jumpPage(id,type){
-  id = "#"+id;
-  var page = $(id).val() - 1;
-  alterPage( page, type,1);
-}
 
 /****
 function used to create a dialog
@@ -514,77 +370,39 @@ function createDialog(){
 }
 
 /****
-function used to validate the serial number of the machines 
-
-the validation process includes two parts
-
-first, it will match the number with the machine type
-
-second, it will see whether there are same numbers
-
-****/
-function validateSerial(){
-  $typeObj = $("#setup_item .type");
-  var typeList = "";
-  for( var i = 0; i < $typeObj.length; ++i ){
-    typeList += $typeObj.eq(i).val() + ',';
-  }
-  var numberList = "";
-  $machineObj = $("#setup_item .number");
-  for( var i = 0 ; i < $machineObj.length; ++i){
-    numberList += $machineObj.eq(i).val() + ',';
-  }
-  var isVlidated = true;
-  $.ajax({
-    type:'post',
-    url :machineUrl,
-    data:{
-      'typeList':typeList,
-      'numberList':numberList
-    },
-    async:false,
-    success:function(data){
-      console.log(data);
-      if( data['status'] == false )
-        isVlidated = false;
-    }
-    });
-  return isVlidated;
-}
-
-/****
 function used to initial the dialog to fill in data about machines
 
 ****/
-function passApply(siObj){
-  var siList = $(siObj).val();
-  var soId = "." + $(siObj).attr('id');
-  console.log(soId);
-  $("#confirmSoId").val( $(soId).val() );
+function passApply(){
+  $("#ua_passBtn").attr('disabled','true');
+  var inputs = $("#ua_si_form").find('input');
+  var flag = 1;
+  for( var i = 0 ; i < inputs.length; ++i ){
+    if(  $(inputs[i]).hasClass('required') && $(inputs[i]).val() === "" ){
+      alert( "请完整填写表单内容！" );
+      $(inputs[i]).focus();
+      flag = 0;
+      break;
+    }
+  }
+  if( flag == 0 ) {
+    $("#ua_passBtn").attr('disabled', false);
+    return;
+  }
   $.ajax({
-    type:'post',
-    url:siDataUrl,
-    data:{
-      'si_list':siList
-    },
+    type:'POST',
+    url: passUrl,
+    data:$('#ua_si_form').serialize(),
     success:function(data){
-      var tbodyHtml = "";
-      var siArr = data['data'];
-      for( var i = 0 ; i<siArr.length; ++i ){
-        tbodyHtml += '<tr>' + '<td>' + siArr[i]['si_id'] + '<input type="hidden" name="si_id[]" value="' + siArr[i]['si_id'] + '" /></td>'
-                  +  '<td>' + siArr[i]['addr'] + '</td>'
-                  +  '<td>' + siArr[i]['expand_user'] + '</td>'
-                   +  '<td>' + siArr[i]['m_type'] + '<input type="hidden" name="m_type" class="type" value="' + siArr[i]['m_type'] + '" /></td>'
-                  +  '<td>' + siArr[i]['keyboard_type'] + '</td>'
-                  +  '<td>' + siArr[i]['sim_type'] + '</td>'
-                  +  '<td>  <input type="text" class="col-bg-5 number" name="m_code[]" /></td>'
-                  +  '<td>' + siArr[i]['annual_fee'] + '</td>'
-                  +  '<td>' + siArr[i]['deposit_fee'] + '</td>'
-                  +  '<td>' + siArr[i]['remark'] + '</td></tr>';
+      console.log( data['data'] );
+      if( data['status'] == 1 ){
+        alert('修改成功!');
+        loadOrderData(0);
       }
-      $("#setup_item").find('tbody').html(tbodyHtml);
-      $("#updateBtn").attr('disabled',false);
-      $("#setup_item").dialog('open');
+      else{
+        alert( data['info'] );
+      }
+      $("#ua_passBtn").attr('disabled', false);
     }
     });
 }
@@ -595,40 +413,69 @@ function used to cancel the dialog
 $("#cancelBtn").click(function(){
   $("#updateBtn").attr('disabled',false);
   $("#setup_item").dialog('close');
-  });
+});
 
-/****
-function used to update machine info
-****/
-$("#updateBtn").click(function(){
-  $("#updateBtn").attr('disabled',true);
-  var inputs = $('#confirmSiForm').find('input');
-  var flag = 1;
-  for( var i = 0; i < inputs.length; ++i ){
-    if( $(inputs[i]).val() === "" ){
-      alert( "请完整填写表单内容！" );
-      $(inputs[i]).focus();
-      flag = 0;
-      break;
-    }
-  }
-  if( flag === 1 ){
-    if(validateSerial() == true ){
-      $.ajax({
-        type:'POST',
-        url: updateMachineUrl,
-        data:$('#confirmSiForm').serialize(),
-        success: function(data){
-          if( data['status'] !== 0 ){
-            alert("保存成功!");
-            loadUADataByPage(0);
-            loadAprDataByPage(0);
-          }
+$("#dispatch_confimBtn").click( function(){
+  var flag = confirm("确定要分派给此人吗？");
+  if( flag == true){
+    $.ajax({
+      type:'post',
+      url : dispacthUrl,
+      data:$('#dispatch_form').serialize(),
+      success:function(data){
+        var res = data['status'];
+        if( res == '1' ){
+          alert( '分配成功！' );
+          loadOrderData();
+          $('#dispatch_content').html('装机人：' + data['data']);
         }
-      });
+        else{
+          alert('分配失败！');
+        }
+      }
+    });
+  }
+  else{
+
     }
-    else{
-      alert("机器编码填写有误，请重新确认！");
-    }
-  } 
-  });
+});
+
+/*
+all the click functions of the return button
+*/
+$("#ua_returnBtn").click(function(){
+  $("#ua_table-div").css('display','block');
+  $("#ua_showOrder").css('display','none');
+  $("#ua_showOrder").find('span').html('');
+  $("#ua_si-table").find('tbody').html('');
+  $("#ua_passBtn").attr('disabled', false);
+});
+
+$("#apr_returnBtn").click( function(){
+  $("#apr_table-div").css('display', 'block');
+  $("#apr_showOrder").css("display",'none');
+  $("#apr_showOrder").find('span').html('');
+  $("#apr_si-table").find('tbody').html('');
+});
+
+$("#mdb_returnBtn").click( function(){
+  $("#mdb_table-div").css('display', 'block');
+  $("#mdb_showOrder").css("display",'none');
+  $("#mdb_showOrder").find('span').html('');
+  $("#mdb_si-table").find('tbody').html('');
+});
+
+$("#loaded_returnBtn").click( function(){
+  $("#loaded_table-div").css('display', 'block');
+  $("#loaded_showOrder").css("display",'none');
+  $("#loaded_showOrder").find('span').html('');
+  $("#loaded_si-table").find('tbody').html('');
+});
+
+$("#back_returnBtn").click( function(){
+  $("#back_table-div").css('display', 'block');
+  $("#back_showOrder").css("display",'none');
+  $("#back_showOrder").find('span').html('');
+  $("#back_si-table").find('tbody').html('');
+});
+

@@ -45,8 +45,9 @@ function loadPrintData(){
         $("#clientName").html( soItem['client_name'] );
         $("#client_num").html( soItem['client_number'] );
         $("#date").html( today );
+        $("#rate").html( '（内）' + soItem['crInner'] + '（外）' + soItem['crOuter'] );
         $("#barcodeImg").attr('src' , '/barcode/produce_code.php?text='+ soItem['so_number'] );
-        console.log( soItem['clientAttr']);
+        console.log( soItem['cr_inner_id']);
       }
     });
   }
