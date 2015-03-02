@@ -888,18 +888,20 @@
                   </div> 
 
                   <div class="line">
-                    <form id="dispatch_form">
+                    <form id="dispatch_form" method="post">
                       <div id="user_content">
                         <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 选择装机人</label>
                         <div class="col-sm-2">
                           <select id="u_id" name="u_id" class="form-control">
                           </select>
                         </div>
-                        <input type="hidden" id="dispatch_so_id" />
-                        <div class="col-sm-3  no-padding-right"> <button id="dispatch_confimBtn">确定分配</button></div>
+                        <input type="hidden" name="so_id" id="dispatch_so_id" />
                       </div>
-                      <div class="bottom"></div> 
                     </form>
+                    <div class="col-sm-3  no-padding-right"> <button id="dispatch_confirmBtn">确定分配</button></div>
+                      
+                      <div class="bottom"></div> 
+                    
                   </div> 
 
                   <div class="line"> 

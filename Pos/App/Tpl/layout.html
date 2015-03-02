@@ -207,23 +207,6 @@
 								<b class="arrow icon-angle-down"></b>
 							</a>
             	<ul class="submenu" style="display:none;" id="operate_menu">
-                <if condition="$manageMccBig egt 1">
-								<li>
-									<a href="__APP__/Operation/index/activeTab/">
-										<i class="icon-double-angle-right"></i>
-										MCC大类管理
-									</a>
-								</li>
-                </if>
-                <if condition="$manageMccSmall egt 1">
-								<li>
-                
-									<a href="__APP__/Operation/mccSub/activeTab/">
-										<i class="icon-double-angle-right"></i>
-										MCC小类管理
-									</a>
-								</li>
-                </if>
                 <if condition="$manageMccItem egt 1">
 								<li>
 									<a href="__APP__/Operation/mccItem/activeTab/">
@@ -344,10 +327,28 @@
             </if>
             <if condition="$setupRegister egt 1">
             <li>
-							<a href="__APP__/ReturnRecord/index/activeTab/">
+							<a class="dropdown-toggle" href="#/activeTab/">
 								<i class="icon-list-alt"></i>
-								<span class="menu-text"> 装机记录 </span>
+								<span class="menu-text"> 工单查看 </span>
+								<b class="arrow icon-angle-down"></b>
 							</a>
+							<ul class="submenu" style="display:none;" id="work_menu">
+								<li>
+									<a href="__APP__/Task/index/activeTab/">
+										<span class="menu-text"> 装机工单 </span>
+									</a>
+								</li>
+								<li>
+									<a href="__APP__/Task/maintain/activeTab/">
+										<span class="menu-text"> 维修工单 </span>
+									</a>
+								</li>
+								<li>
+									<a href="__APP__/Task/back/activeTab/">
+										<span class="menu-text"> 退机工单 </span>
+									</a>
+								</li>
+							</ul>
 						</li>
             </if>
             <if condition="$checkRegister egt 1">

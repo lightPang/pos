@@ -30,7 +30,7 @@ function loadPrintData(){
           var html = '';
           html += '<tr ><td class="td-list-title" >' + siItem['m_tcode'] + '</td>'
                 + '<td class="td-content-sm">'+ siItem['phone'] + '</td>'
-                + '<td class="td-content-sm">' +  '密钥</td>'
+                + '<td class="td-content-sm">' + siItem['key'] + '</td>'
                 + '<td class="td-list-title">' + siItem['machineType'] +'</td>'
                 + '<td class="td-content-sm">' + siItem['m_code'] + '</td>'
                 + '<td class="td-content-sm">' + siItem['keyboard_code'] + '</td>'

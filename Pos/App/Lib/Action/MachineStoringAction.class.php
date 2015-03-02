@@ -133,9 +133,9 @@
 	    }
 
 		public function searchOrder(){
-			if($this->doAuth("manageMachineStoring")){
+			if($this->doAuth('addMachine')){
 
-				$oModel = M('Order');
+				$oModel = M('order');
 				if(isset($_POST['o_id'])){
 					$map['o_id'] = $_POST['o_id'];
 					$data = $sModel->where($map)->select();

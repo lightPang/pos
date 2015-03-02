@@ -4,19 +4,14 @@ class ApplyAction extends CommonAction {
     public function index(){
       if( $this->doAuth() ){
         $map['state'] = 0;
-        $map['u_id'] = $_SESSION['u_id'];
-        $soModel = M("setup_order");
-        $submitPage = $soModel->where($map)->count() ;
-        $map['state'] = array('gt',0);
-        $aprPage = $soModel->where($map)->count() ;
-        $this->assign( 'submitPage', $submitPage);
-        $this->assign( 'aprPage', $aprPage);
+        $this->assign('type' , $_GET['type']);
         $this->display();
       }
     }
 
     public function idIndex(){
       if( $this->doAuth() ){
+        $this->assign('type' , $_GET['type']);
         $this->display('index2');
       }
 
@@ -25,6 +20,7 @@ class ApplyAction extends CommonAction {
     public function getSoData(){
       if( $this->doAuth() ){
         $map['c_id'] = $_SESSION['c_id'];
+        $map['type'] = $_POST['type'];
         $soModel = M('setup_order');
         $data = $soModel->where($map)->select();
         $bankModel = M('bank');
@@ -256,6 +252,10 @@ class ApplyAction extends CommonAction {
     protected function produceSoNum($ac_time, $si_list, $b_id){
       $serialNum = "";
       $c_id = $_SESSION['c_id'] ;
+      $cMap['c_id'] = $c_id;
+      $cItem = M('company')->where( $cMap )->select()[0];
+      $serialNum .= $cItem['short_name'];
+      /*
       switch ($c_id) {
         case '1':
           $serialNum .= 'G';
@@ -263,7 +263,7 @@ class ApplyAction extends CommonAction {
         
         default:
           break;
-      }
+      }*/
       $time = str_replace('-', '',$ac_time );
       $serialNum .= $time;
       $si_id = explode(',', $si_list)[0];

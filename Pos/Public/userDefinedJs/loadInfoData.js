@@ -32,11 +32,12 @@ function loadInfoData(){
 }
 
 function loadMccData(name,data){
+  if( data==null ) return;
   var dataArr = data;
   var options = "";
   var displayStr = "'>"; 
   for( var i = 0 ; i < dataArr.length; ++ i ){
-    options += "<option value = '" + dataArr[i]['mi_id'] + displayStr + dataArr[i].code + ' ' +dataArr[i].remark + "</option>";
+    options += "<option value = '" + dataArr[i]['mi_id'] + displayStr + dataArr[i].code + ' ' +dataArr[i].name + "</option>";
   } 
   var selectName = "#" + name;
   var updateName = "#update_" + name;
@@ -45,11 +46,12 @@ function loadMccData(name,data){
 }
 
 function loadRateData(name,data,type){
+  if( data==null ) return;
   var dataArr = data;
   var options = "";
   var displayStr = "'>"; 
   for( var i = 0 ; i < dataArr.length; ++ i ){
-    options += "<option value = '" + dataArr[i]['cr_id'] + displayStr + dataArr[i].rate  + "</option>";
+    options += "<option value = '" + dataArr[i]['cr_id'] + displayStr + dataArr[i].name  + "</option>";
   } 
   var selectName = "#" + name;
   var updateName = "#update_" + name;

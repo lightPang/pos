@@ -1,10 +1,9 @@
 var rootUrl = '/pos/Pos/index.php/';
-
-
 var delSetupItemUrl = rootUrl + 'SetupItem/del';
 var setupItemUrl = rootUrl + 'SetupItem/getSetupItem';
 
 $(document).ready(function(){
-  loadOrderData(0);
+  console.log( $("#type").val() );
+  loadOrderData($("#type").val());
 });
 

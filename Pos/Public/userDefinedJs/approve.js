@@ -170,7 +170,7 @@ function loadDispatchOrder(soId){
       var userList = data['data']['user'];
       var options = '';
       for( var i = 0 ; i < userList.length; ++ i ){
-        options += "<option value = '" + userList[i]['u_id']  + ">" + userList[i]['name']  + "</option>";
+        options += "<option value = '" + userList[i]['u_id']  + "'>" + userList[i]['name']  + "</option>";
       } 
       $("#u_id").append( options );
       $("#dispatch_so_id").val( soItem['so_id'] );
@@ -256,11 +256,11 @@ function loadSetupOrder(soId,prefixId){
     case '3':
       prefix = 'mdb_';
       break;
-    case '4':
+    case '5':
       prefix = 'loaded_';
       break;
-    case '5':
-      prefix = 'back_';
+    case '6':
+      prefix = 'ok_';
       break;
   }
   var tableId = "#" + prefix + "table-div";
@@ -415,14 +415,17 @@ $("#cancelBtn").click(function(){
   $("#setup_item").dialog('close');
 });
 
-$("#dispatch_confimBtn").click( function(){
-  var flag = confirm("确定要分派给此人吗？");
-  if( flag == true){
+$("#dispatch_confirmBtn").click( function(){
+  console.log(123);
+  var flag = confirm("确定分派给此人？");
+  if( flag == true ){
+    console.log( $('#dispatch_form').serialize() );
     $.ajax({
-      type:'post',
-      url : dispacthUrl,
+      type:'POST',
+      url : dispatchUrl,
       data:$('#dispatch_form').serialize(),
       success:function(data){
+        console.log( data );
         var res = data['status'];
         if( res == '1' ){
           alert( '分配成功！' );
@@ -435,9 +438,7 @@ $("#dispatch_confimBtn").click( function(){
       }
     });
   }
-  else{
-
-    }
+    
 });
 
 /*

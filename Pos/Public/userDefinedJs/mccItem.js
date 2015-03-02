@@ -7,44 +7,10 @@ var mccBigDataUrl = rootUrl + "Operation/getMCCBigData";
 var mccSubDataUrl = rootUrl + "Operation/getMccSubData";
 
 $(document).ready(function(){
-  loadMccBigData();
-  loadMccSubData();
+
   loadData();
   createDialog();
 });
-
-function loadMccBigData(){
-  $.ajax({
-    type:'POST',
-    url: mccBigDataUrl,
-    success: function(data){
-      var dataArr = data['data'];
-      var options = "";
-      for ( var i = 0; i < dataArr.length; ++i ){
-        options += "<option value=\"" + dataArr[i].mb_id + "\" >" + dataArr[i].name + " </option>";
-      }
-      $('#selectMccBig').append( options );
-      $('#updateMccBig').append( options );
-    }
-  });
-}
-
-function loadMccSubData(){
-  $.ajax({
-    type:'POST',
-    url: mccSubDataUrl,
-    success: function(data){
-      var dataArr = data['data'];
-      var options = "";
-      for ( var i = 0; i < dataArr.length; ++i ){
-        options += "<option value=\"" + dataArr[i].ms_id + "\" >" + dataArr[i].name + " </option>";
-      }
-      $('#selectMccSub').append( options );
-      $('#updateMccSub').append( options );
-    }
-  });
-}
-
 
 function createDialog(){
   $("#dialog-modal").dialog({
@@ -192,8 +158,6 @@ function loadData(){
         row.push( item["return_rate"] );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_time"] );
-        row.push( item["edit_time"] );
         row.push( editHtml + item['mi_id'] + editHtmlEnd + item['mi_id'] + delHtml );
         rows.push(row);
       }
@@ -213,8 +177,6 @@ function loadData(){
                         null,  
                         null, 
                         null,
-                        null, 
-                        null, 
                         { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  

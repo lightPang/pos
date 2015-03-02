@@ -230,6 +230,7 @@ function loadOrderData(){
     dataType:"json", 
     url:"/pos/Pos/index.php/MachineStoring/searchOrder",
     success: function( data){
+      console.log( data );
       var Arr = data['data'];
       var rows = [];
       var editHtml = '<tr>'+ 
@@ -241,6 +242,7 @@ function loadOrderData(){
 																	<i class=\"icon-trash bigger-130\"></i>\
 																</a>\
 															</div></tr>';
+      var pay_states = ['未付款','已付款'];
       for( var i=0; i<Arr.length; ++i ){
         var item = Arr[i];
         var row = [];
@@ -250,7 +252,7 @@ function loadOrderData(){
         row.push( item["quantity"] );
         row.push( item["price"] );
         row.push( item["sum_price"]);
-        row.push( pay_states[ item["pay_state"] - 1]);
+        row.push( pay_states[ item["pay_state"] ]);
         row.push( item["pay_remark"] );
         row.push( item["create_user"] );
         row.push( item["create_time"] );

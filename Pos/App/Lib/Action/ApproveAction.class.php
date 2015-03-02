@@ -125,8 +125,28 @@
     }
 
     public function dispatch(){
-      if( $this->doAuth() && $_POST['so_id'] ){
-        
+      if( $this->doAuth() && isset($_POST['so_id']) ){
+        $so_id = $_POST['so_id'];
+        $u_id = $_POST['u_id'];
+        $soMap['so_id'] = $so_id;
+        $soData = M('setup_order')->where( $soMap )->select()[0];
+        if( $soData != null ){
+          $siMap['si_id'] = array( 'in', $soData['si_list'] );
+          $siData = M('setup_item')->where( $siMap )->select();
+          foreach ($siData as $siItem) {
+            $siMap['si_id'] = $siItem['si_id'];
+            $saveMap['setup_user'] = $u_id;
+            M('setup_item')->where( $siMap )->save( $saveMap );
+          }
+          $soData['state'] = 5;
+          $soData['setup_user'] = $u_id;
+          $soData['dispatch_time'] = date('Y-m-d H:i:s');
+          M('setup_order')->where( $soMap )->save( $soData );
+          $this->ajaxReturn('ok', 'ok','1' );
+        }
+        else{
+          $this->ajaxReturn( 'no exist setup order', 'no exist setup order', '0' );
+        }
       }
     }
 
@@ -206,7 +226,7 @@
             $newSiItem['备注'] = $siItem['addr'];
 
             /*以下赋值就是不清楚的*/
-            $newSiItem['型号ID'] = 100;
+            $newSiItem['型号ID'] = $siItem['mType'];#与机器中的mt_number挂钩
             $newSiItem['状态'] = -1;
             $newSiItem['出单日期'] = date("Y/m/d"); #填写回填银联MDB的日期。
             //$newSiItem['安装日期'] = $soItem['active_date'];
@@ -286,7 +306,8 @@
             $newSiItem['备注'] = $siItem['addr'];
 
             /*以下赋值就是不清楚的*/
-            $newSiItem['型号ID'] = 100;
+            $newSiItem['型号ID'] = $siItem['mType'];
+            $newSiItem['密钥'] = $siItem['key'];
             $newSiItem['完成'] = 1;
             $newSiItem['出单日期'] = date("Y/m/d"); #填写回填银联MDB的日期。
             //$newSiItem['安装日期'] = $soItem['active_date'];
@@ -396,6 +417,15 @@
       $siMap['si_id'] = array('in', $si_list );
       $siData = M('setup_item')->where( $siMap)->select();
       $m_list = '';
+      $mtData = M('machinetype')->select();
+      foreach ($siData as $key => $value) {
+        foreach ($mtData as $mtItem) {
+          if( $value['m_type'] == $mtItem['mt_id'] ){
+            $siData[$key]['mType'] = $mtItem['mt_number'];
+          }
+        }
+        
+      }
       return $siData;
     }
 

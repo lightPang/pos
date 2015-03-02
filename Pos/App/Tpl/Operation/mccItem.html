@@ -14,14 +14,14 @@
             <li class="active">
               <a data-toggle="tab" href="#home">
                 <i class="green icon-home bigger-110"></i>
-                  增加MCC小类
+                  增加MCC项目
                 </a>
             </li>
 
             <li>
               <a data-toggle="tab" href="#profile">
                 <i class="icon-rocket bigger-110"></i>
-                MCC小类信息
+                MCC项目信息
               </a>
             </li>
 
@@ -33,25 +33,9 @@
                 <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/createMccSub" id="contentForm">
                   
                   <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC大类 </label>
-                    <div class="col-sm-2">
-                        <select id="selectMccBig" name="mb_id" ></select>
-                    </div>
-                    <div class="col-sm-1"></div> 
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC小类 </label>
-                    <div class="col-sm-2">
-                        <select id="selectMccSub" name="ms_id" ></select>
-                    </div>
-                    <div class="col-sm-1"></div> 
-                  </div>
-                  
-                  <div class="form-group">
                     <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="code" placeholder="名称"  />
+                        <input type="text" id="form-field-1" name="code" placeholder="代码"  />
                     </div> 
                    
                   </div>
@@ -106,8 +90,6 @@
                       <th>回扣率</th>
                       <th>是否启用</th>
                       <th>备注</th>
-                      <th>创建时间</th>
-                      <th>修改时间</th>
                       <th>操作</th>
                     </tr>
                   </thead>
@@ -129,34 +111,19 @@
         <div class="dialog-content">
         <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="updateForm">
 
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC大类 </label>
-                    <div class="col-sm-2">
-                        <select id="updateMccBig" name="mb_id" ></select>
-                    </div>
-                    <div class="col-sm-1"></div> 
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC小类 </label>
-                    <div class="col-sm-2">
-                        <select id="updateMccSub" name="ms_id" ></select>
-                    </div>
-                    <div class="col-sm-1"></div> 
-                  </div>
                   
                   <div class="form-group">
                     <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="update_code" name="code" placeholder="名称"  />
+                        <input type="text" id="update_code" name="code" placeholder="代码"  />
                     </div> 
                    
                   </div>
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 发卡（0.9）+转换（0.13）：</label>
+                    <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 名称：</label>
                     <div class="col-sm-2" >
-                        <input type="text" id="updateA_rate" name="a_rate" placeholder="发卡（0.9）+转换（0.13）"  />
+                        <input type="text" id="updateName" name="name" placeholder="名称"  />
                     </div> 
                   </div>
                   
