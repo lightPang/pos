@@ -1,6 +1,8 @@
 var rootUrl = "/pos/Pos/index.php/";
 var soDataUrl = rootUrl + 'Task/getSoData';
-var soItemUrl = rootUrl + '/Apply/getSoItem';
+var soItemUrl = rootUrl + 'Apply/getSoItem';
+var comfirmUrl = rootUrl + 'Task/confirm';
+var printUrl = rootUrl + 'Print/index';
 $(document).ready(function(){
   loadOrderData();
 });
@@ -48,11 +50,11 @@ function loadSetupOrder(soId,prefixId){
           $urgentSpan.html("是");
       }
       if( soItem['state'] == 5 ){
-        $("#confirm_div").css('display','block');
+        $("#confirmDiv").css('display','block');
         $("#resForm").css('display','none');
       }
       else{
-        $("#confirm_div").css('display','none');
+        $("#confirmDiv").css('display','none');
         $("#resForm").css('display','block');
       }
       var idList = ["contractDownload","taxDownload","licenseDownload","cardDownload","passportDownload","authDownload","clientImgDownload1","clientImgDownload2","clientImgDownload3"];
@@ -65,7 +67,7 @@ function loadSetupOrder(soId,prefixId){
           $(id).attr( 'onclick', "downloadFile("+soItem[ keyList[j] ]+")");
 
       }
-      $("#ua_so_id").val( soItem['so_id'] );
+      $("#so_id").val( soItem['so_id'] );
       $("#ua_c_id").val( soItem['c_id'] );  
       var rows = [];
       var soList = soItem['siList'];
@@ -75,7 +77,9 @@ function loadSetupOrder(soId,prefixId){
       var mTypeInput = "<input type='hidden' name='m_type[]' value='";
       var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
       var inputEnd = "'/>";
+      var version = '';
       for( var i = 0 ; i < soList.length; ++ i ){
+        version = soList[i]['version'];
         var item = soList[i];
         var row = [];
         var mCodeTxt = '';
@@ -109,6 +113,7 @@ function loadSetupOrder(soId,prefixId){
         rows.push(row);
       }
       var siTableId = "#" + prefix + "si-table";
+      $("#versionTxt").val( version );
       loadTable( siTableId, rows) ;
     }
   });
@@ -212,10 +217,75 @@ function loadOrderData(){
   });
 }
 
+$("#comfirm_btn").click( function(){
+  $.ajax({
+    type:'post',
+    data:{
+      'so_id':$("#so_id").val()
+    },
+    url: comfirmUrl,
+    success : function( data ){
+      console.log( data );
+      if( data['status'] == '1' ){
+        alert( "确认成功！");
+        $("#confirmDiv").css('display','none');
+        $("#resForm").css('display','block');
+        loadOrderData();
+      }
+      else{
+        alert( '确认失败！');
+      }
+    }
+  });
+});
+
+function submit(){
+  if( checkInput() == true ){
+    $("#submitForm").ajaxSubmit({
+      type:'post',
+      url : addRecordUrl,
+      success:function(data){ 
+        var reg = new RegExp("<[^>]+>","g" );
+        data = data.replace( reg,"" );
+        data = JSON.parse(data);
+        console.log( data );
+        alert("保存成功！");
+      }
+    });
+  }
+}
+
+function checkInput(){
+  $inputEles = $("input.required");
+  for( var i = 0 ; i < $inputEles.length; ++i ){
+    if( $inputEles.eq(i).val() == '' ) {
+      $inputEles.eq(i).focus();
+      alert("请完整填写表单内容！");
+      return false;
+    }
+  }
+  return true;
+}
+
+$("#printBtn").click( function(){
+  var version = $("#versionTxt").val();
+  if( version == '' ){
+    alert("请填写机器版本号！");
+    $("#versionTxt").focus();
+  }
+  else{
+    var soId = $("#so_id").val();
+    var printWindowUrl = printUrl + '/so_id/' + soId + '/version/' + version; 
+    window.open( printWindowUrl );
+  }
+});
+
 $("#ua_returnBtn").click(function(){
   $("#ua_table-div").css('display','block');
   $("#ua_showOrder").css('display','none');
   $("#ua_showOrder").find('span').html('');
   $("#ua_si-table").find('tbody').html('');
+  $("#confirmDiv").css('display','none');
+  $("#resForm").css('display','none');
   $("#ua_passBtn").attr('disabled', false);
 });

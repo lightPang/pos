@@ -21,7 +21,22 @@ class TaskAction extends CommonAction {
         $this->display('back');
       }
     }
-
+    public function confirm(){
+      if( $this->doAuth() && isset($_POST['so_id']) ){
+        $so_id = $_POST['so_id'];
+        $soMap['so_id'] = $so_id;
+        $soData = M('setup_order')->where( $soMap )->select()[0];
+        if( $soData != null ){
+          $soData['confirm_time'] = date('Y-m-d H:i:s');
+          $soData['state'] = 6;
+          M('setup_order')->where( $soMap )->save( $soData );
+          $this->ajaxReturn(null,null,1);
+        }
+        else{
+          $this->ajaxReturn( null,null, 0 );
+        }
+      }
+    }
     public function getSoData(){
       if( $this->doAuth() ){
         $map['c_id'] = $_SESSION['c_id'];

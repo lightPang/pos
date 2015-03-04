@@ -31,27 +31,40 @@
     }
     
     public function getUserData(){
-      if( isset( $_SESSION['u_id'] ) && isset( $_POST['u_id'] ) ){
+      if( $this->doAuth('staffManage')  && isset( $_POST['u_id'] ) ){
         $map['u_id'] = $_POST['u_id'] ;
         $user = M('user');
-        $data = $user->where( $map )->select();
-        $this->ajaxReturn( $this->removeMsg( $data ), "get", 1 );
+        $data = $user->where( $map )->field('u_id,auth,account,name,c_id,email,phone,last_login_time,last_login_ip')->select();
+        $this->ajaxReturn( $this->updateCompanyInfo( $data ), "get", 1 );
       }
-      else if( isset( $_SESSION['u_id'] ) ){
+      else if( $this->doAuth('staffManage') ){
         $user = M('user');
-        $data = $user->select();
-        $this->ajaxReturn( $this->removeMsg( $data ), "get", 1 );
+        $data = $user->field('u_id,name,c_id,email,phone,last_login_time,last_login_ip')->select();
+        $this->ajaxReturn( $this->updateCompanyInfo( $data ), "get", 1 );
       }
       else{
         $this->ajaxReturn( null, "get Failed!", 0 );
       }
     }
     public function delUser(){
-      if( isset( $_SESSION['u_id'] ) && isset( $_POST['u_id'] ) ){
+      if( $this->doAuth('staffManage') && isset( $_POST['u_id'] ) ){
         $user = M('user');
         $map['u_id'] = $_POST['u_id'] ;
         $res = $user->where($map)->delete();
         $this->ajaxReturn( null, "delete ok", 1 );
+      }
+      else{
+        $this->ajaxReturn( $_POST['u_id'], null, 1 );
+      }
+    }
+
+    public function get_login_record(){
+      if( isset( $_SESSION['u_id'] ) ){
+        $map['u_id'] = $_SESSION['u_id'];
+        $res = M('log_record')->where( $map )->select();
+        $user = M('user')->where( $map )->field('u_id,c_id,name')->select();
+        $user = $this->updateCompanyInfo( $user );
+        $this->ajaxReturn( $res , $user[0], 1);
       }
     }
     

@@ -4,10 +4,10 @@ var updateUrl = rootUrl + "User/updateUser";
 var delUrl = rootUrl + "User/delUser";
 var dataUrl = rootUrl + "User/getUserData";
 var companyDataUrl = rootUrl + "Company/getCompanyData";
+var logRecordUrl = rootUrl + "User/get_login_record";
 
 $(document).ready(function(){
   loadCompanyData();
-  
   $("#storageCheck").click( function(){checkMainBox(".storage-checkbox" ,this)});
    $("#storageCheck-update").click( function(){checkMainBox(".storage-checkbox-update" ,this)});
   //如果不用function包裹则会直接执行，因为这个时候参数里面返回值是undefined，而不是函数。把this传进去是为了获取this的check属性。
@@ -18,7 +18,6 @@ $(document).ready(function(){
   $("#bankCheck").on('change', function(){checkMainBox(".bank-checkbox",this)});
   $("#bankCheck-update").on('change', function(){checkMainBox(".bank-checkbox-update",this)});
   loadData();
-  createDialog();
 });
 
 
@@ -48,35 +47,62 @@ function loadCompanyData(){
   });
 }
 
-
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 500,
-                width: 1000,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
+function load_log_record( u_id ){
+  $("#userListTableDiv").css('display', 'none');
+  $("#login").css( 'display', 'block' );
+  $.ajax({
+    type:'post',
+    data : { 'u_id' : u_id },
+    url : logRecordUrl,
+    success : function( data ){
+      console.log( data );
+      var logList = data['data'];
+      var userName = data['info']['name'];
+      var company = data['info']['c_name'];
+      if( logList != null ){
+        var rows = [];
+        for( var i = 0 ; i < logList.length; ++ i ){
+          var row = [];
+          var logItem = logList[i];
+          row.push( userName );
+          row.push( company);
+          row.push( logItem['time']);
+          row.push( logItem['ip']);
+          rows.push( row);
+        }
+        console.log( rows );
+        loadTable('#login_table', rows );
+      }
+    }
+  });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var u_id = $tdlist.get(0);
-  console.log(u_id);
+$("#login_returnBtn").click(function(){
+  $("#login_table").find('tbody').html('');
+  $("#userListTableDiv").css('display', 'block');
+  $("#login").css( 'display', 'none' );
+});
+
+$("#updateRtnBtn").click( function(){
+  $("#userListTableDiv").css('display', 'block');
+  $("#updateDiv").css('display','none');
+});
+
+function updateRow(u_id){
+  $("#userListTableDiv").css('display', 'none');
+  $("#updateDiv").css('display','block');
+  $('#updateForm').find('input[type="checkbox"]').prop("checked",false);
   $.ajax({
     type:'POST',
     url:dataUrl,
-    data: { 'u_id' : $(u_id).html() },
+    data: { 'u_id' : u_id },
     success:function(data){
       console.log(data);
       var userItem = data['data'][0];
       $('#updateCompany').val( userItem['c_id'] );
       $('#updateName').val( userItem['name'] );
       $('#updateUid').val( userItem['u_id'] );
-      $('#updateForm').find('input[type="checkbox"]').attr("checked",false);
+      $("#updateAccount").val( userItem['account'] );
       var strs = userItem['auth'].split(',');
       for( var i = 0 ; i<strs.length; ++i ){
         if( strs[i] !== '' )
@@ -89,16 +115,13 @@ function updateRow(ele){
           
         }
       }
-      $("#dialog-modal").dialog( "open");
     }
   });
 }
 
-function deleteRow(ele){
+function deleteRow(u_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var u_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -107,7 +130,7 @@ function deleteRow(ele){
       data: {'u_id' : u_id },
       success: function(data){
         console.log(data);
-        if( data['data'] != false ){
+        if( data['status'] != null ){
           var table = $('#sample-table-2').DataTable();
           table.row('.remove').remove().draw();
           alert("删除成功！");
@@ -121,13 +144,17 @@ function deleteRow(ele){
   }
 }
 
-$('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
-  $("#updateBtn").attr('disabled',false);
-});
-
 $('#updateBtn').click( function(){
   $("#updateBtn").attr('disabled',true);
+  var inputs = $('#updateForm').find('input');
+  for( var i = 0 ; i <inputs.length; ++i ){
+    if( inputs.eq(i).val() == '' ){
+      alert( '请完整填写表单内容！' );
+      inputs.eq(i).focus();
+      $("#updateBtn").attr('disabled',false);
+      return;
+    }
+  }
   $.ajax({
     type:'POST',
     url: updateUrl,
@@ -136,6 +163,7 @@ $('#updateBtn').click( function(){
         name : $("#updateName").val(),
         c_id : $("#updateCompany").val(),
         pwd : stripPwd( $("#updatePwd").val() ),
+        account : $("#updateAccount").val(),
         auth : serializeAuth("#updateForm"),
       },
     success: function(data){
@@ -143,7 +171,6 @@ $('#updateBtn').click( function(){
       if( data['status'] == 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
         $("#updateBtn").attr('disabled',false);
       }
     }
@@ -177,12 +204,11 @@ $('#submitBtn').click( function(){
       data:{
         name : $("input[name='name']").val(),
         c_id : $("#selectCompany").val(),
-        account : $.md5( $("input[name='newAccount']").val() ),
+        account : $("input[name='newAccount']").val() ,
         pwd : $.md5( $("input[name='newPwd']").val() ),
         auth : serializeAuth("#contentForm"),
       },
       success: function(data,textStatus, jqXHR){
-        console.log(data);
         if( data['status'] !== 0 ){
           alert("添加成功!");
           console.log(data);
@@ -224,28 +250,25 @@ function loadData(){
     dataType:"json", 
     url: dataUrl,
     success: function( data){
-      //console.log(data);
       var MccBigArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-120\"></i></a>';
+      var delBtn = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delBtnEnd = ',this)\"><i class=\"icon-trash bigger-120\"></i></a>';
+      var logBtn = "<a class=\"red\" href=\"#\" onclick=\"load_log_record(";
+      var logBtnEnd = ")\"><i class=\"icon-bookmark bigger-120\"></i></a></div>";
       for( var i=0; i<MccBigArr.length; ++i ){
         var item = MccBigArr[i];
         var row = [];
-        row.push( item["u_id"] );
         row.push( item["name"] );
-        row.push( item["c_id"] );
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( item["c_name"] );
+        row.push( item["email"] );
+        row.push( item["phone"] );
+        row.push( item["last_login_time"] );
+        row.push( item["last_login_ip"] );
+        row.push( editHtml + item['u_id'] + editHtmlEnd + delBtn + item['u_id'] + delBtnEnd + logBtn + item['u_id'] + logBtnEnd );
         rows.push(row);
       }
       var oTable1;
@@ -258,13 +281,12 @@ function loadData(){
         "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
-        "aoColumns" : [
-                        null,  
+        "aoColumns" : [ 
                         null, 
                         null,
-                        null, 
-                        null, 
                         null,
+                        null,
+                        null, 
                         null,
                         { "bSortable": false }
                       ],

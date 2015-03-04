@@ -54,48 +54,59 @@
                     </div>
                     <div class="bottom"></div> 
                   </div> 
-                  <div class="line" id="confirmDiv">
-                    <input type="hidden" id="so_id" /> 
+                  <div class="line" id="confirmDiv" style="display:none;">
+                    
                       <div class="col-sm-3  no-padding-right"> 
                         <button id="comfirm_btn" >确认</button>
                         <button id="reject_btn">拒绝</button>
                       </div>
                       <div class="bottom"></div> 
                   </div>
-                  <form class="form-horizontal" id="resForm" role="form">
-
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 确认序号 </label>
+                  <div id="resForm" style="display:none;">
+                    <div class="line" >
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 版本号 </label>
                       <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="序列号"  />
+                        <input type="text" id="versionTxt" name="applicant" placeholder="版本号"  />
                       </div>
-                      <div class="col-sm-1"></div>
+                      <button id='printBtn' type="button">打印装机单
+                      </button>
+                    </div>
+                    <div class="border-bottom"></div> 
+                    <form class="form-horizontal" id="submitForm" role="form" >
+
+                      <div class="space-4"></div>
+                      <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 确认序号 </label>
+                        <div class="col-sm-2">
+                          <input type="text" id="form-field-1" class="required" name="applicant" placeholder="序列号"  />
+                        </div>
+                        <div class="col-sm-1"></div>
+                        
+                      </div>
+
+                      <div class="space-4"></div>
+                      <div class="form-group">
+                        <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证上传 </label>
+                        <div class="col-sm-3">
+                            <div class="ace-file-input ace-file-multiple">
+                                <input id="id-input-file-3" type="file" class="required" multiple="">
+                            </div>
+                        </div>
+                      </div>
+                      <input type="hidden" id="so_id" /> 
+                      <div class="space-4"></div>
+                      <div class="form-group">
+                        <div class="col-md-9 "> </div>
+                        <div class="col-sm-3 ">
+                          <button class="btn btn-info" type="button">
+                            <i class="icon-ok bigger-110"></i>
+                              提交
+                          </button>
+                        </div>
+                      </div>
                       
-                    </div>
-
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证上传 </label>
-                      <div class="col-sm-3">
-                          <div class="ace-file-input ace-file-multiple">
-                              <input id="id-input-file-3" type="file" multiple="">
-                          </div>
-                      </div>
-                    </div>
-
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                      <div class="col-md-9 "> </div>
-                      <div class="col-sm-3 ">
-                        <button class="btn btn-info" type="button">
-                          <i class="icon-ok bigger-110"></i>
-                            提交
-                        </button>
-                      </div>
-                    </div>
-                    
-                  </form>
+                    </form>
+                  </div>
                   <div class="border-bottom"></div> 
                   <div class="line"> 
                     <div class="col-sm-3  no-padding-right" id="ua_so_number"> 订单编号：<span></span></div>

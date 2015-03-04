@@ -10,7 +10,7 @@ $(document).ready(function(){
 
         if(account != '' && pwd != ''){
           $('#sbtn').attr("disabled", true);
-          $.post(url, {account:$.md5(account), pwd:$.md5(pwd)}, function(data){
+          $.post(url, {account:account, pwd:$.md5(pwd)}, function(data){
             if(data=='true'){
               location.href="/pos/Pos/index.php/Index/home";
             }
