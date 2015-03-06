@@ -55,6 +55,7 @@
         $data['short_en_name'] = $_POST['short_en_name'];
         $data['edit_user'] = $_SESSION['u_id'];
         $sqlModel = M('bank');
+        $this->addModifyRecord( $data, $map, 'bank', 'b_id');
         $res = $sqlModel->where($map)->save($data);
         $this->ajaxReturn( $res, "update", 1 );
       }
@@ -130,6 +131,7 @@
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $sqlModel = M('bank_operator');
+        $this->addModifyRecord( $data, $map, 'bank_operator', 'bo_id');   
         $res = $sqlModel->where($map)->save($data);
         $this->ajaxReturn( $res, "update", 1 );
       }
@@ -142,13 +144,13 @@
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['bo_id'] ) ){
         $map['bo_id'] = $_POST['bo_id'];
         $sqlModel = M('bank_operator');
-        $data = $sqlModel->where($map)->select();
+        $data = $sqlModel->where($map)->select()[0];
         $this->ajaxReturn( $data, "query", 1);
       }
       else if( $_SESSION['u_id'] ){
-        $sqlModel = M('bank_operator');
+        $sqlModel = M('bo_view');
         $data = $sqlModel->select();
-        $this->ajaxReturn( $this->updateBankInfo($this->updateUserInfo($data)), "query", 0 );
+        $this->ajaxReturn( $data, "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );

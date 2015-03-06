@@ -7,23 +7,11 @@ var dataUrl = rootUrl + "Bank/getBankData";
 
 $(document).ready(function(){
   loadData();
-  createDialog();
 });
 
-
-
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 600,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
 function updateRow( b_id ){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css( 'display','none');
   $.ajax({
     type:'post',
     url : dataUrl,
@@ -35,7 +23,8 @@ function updateRow( b_id ){
         var id = "#update_" + k;
         $(id).val( item[k] );
       }
-      $("#dialog-modal").dialog('open');
+      $("#item_id").val( item['b_id'] );
+      loadModifyRecord();
     }
   });
 }
@@ -68,8 +57,10 @@ function deleteRow( b_id ){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
   $("#updateBtn").attr('disabled',false);
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css( 'display','block');
+  $("#record_table").find('tbody').html('');
 });
 
 $('#updateBtn').click( function(){
@@ -83,8 +74,8 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
         $("#updateBtn").attr('disabled',false);
+        loadModifyRecord();
       }
     }
   }
@@ -153,15 +144,13 @@ function loadData(){
         if( item['is_active'] == 0 ){
           activeSign = '';
         }
-        row.push( "<span id='" + item["b_id"] + "'>" + item['b_id'] + "</span>" );
-        row.push( item["code"] );
         row.push( item["name"] );
+        row.push( item['short_name']);
+        row.push( item['num'] );
+        row.push( "<span id='" + item["b_id"] + "'>" + item["code"]+ "</span>" );
+        row.push( item['short_num'] );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
         row.push( editHtml + item['b_id'] + editHtmlEnd + item['b_id'] + delHtml  );
         rows.push(row);
       }
@@ -182,10 +171,8 @@ function loadData(){
                         null, 
                         null,
                         null,
-                        null, 
-                        null, 
                         null,
-                        { "bSortable": false }
+                        { "bSearchable" :false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
@@ -202,7 +189,7 @@ function loadData(){
       }
       oTable1.fnClearTable();
       if( rows.length > 0 )
-      oTable1.fnAddData( rows );
+        oTable1.fnAddData( rows );
     }
   }
   );

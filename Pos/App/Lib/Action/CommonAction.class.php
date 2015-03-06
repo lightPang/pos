@@ -29,6 +29,26 @@
       return $flag;
     }
 
+    protected function addModifyRecord($data,$map,$table_name,$id_name){
+      $model = M($table_name);
+      $origin_Item = $model->where( $map )->select()[0];
+      $modifyItem = array();
+      foreach ($data as $key => $value) {
+        if( $value != $origin_Item[$key] ){
+          $modifyItem[$key] =  $origin_Item[$key]. ' => ' .$value;
+        }
+      }
+        
+      if( count( $modifyItem ) != 0 ){
+        $modify_record['table_name'] = $table_name;
+        $modify_record['item_id'] = $map[$id_name];
+        $modify_record['u_id'] = $_SESSION['u_id'];
+        $modify_record['time'] = Date( 'Y-m-d H:m:s');
+        $modify_record['content'] = json_encode( $modifyItem, JSON_UNESCAPED_UNICODE );
+        M('modify_record')->add( $modify_record );
+      }
+    }
+
     public function getInfoData(){
       if( $this->doAuth() ){
         $data = array();
@@ -64,6 +84,21 @@
         $crMap['is_inner'] = 0;
         $data['ro'] = $crModel->where($crMap)->select();
         $this->ajaxReturn($data, 'ok','123');
+      }
+    }
+
+    public function get_record_list(){
+      if( $this->doAuth() ){
+        $map['table_name'] = $_POST['table_name'];
+        $map['item_id'] = $_POST['item_id'];
+        $Model = new Model();  
+          
+        $data = $Model->query($sql);
+        $data = M('mr_view')->where( $map) ->select();
+        for ( $i = 0 ; $i < count($data); ++$i ) {
+          $data[$i]['content'] = json_decode( $data[$i]['content'] , JSON_UNESCAPED_UNICODE );
+        }
+        $this->ajaxReturn( $data, 'ok', 1 );
       }
     }
     protected function updateUserInfo($arr){

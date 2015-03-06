@@ -8,7 +8,6 @@ var provinceDataUrl = rootUrl + "Area/getProvinceData";
 $(document).ready(function(){
   loadData();
   loadProvinceData();
-  createDialog();
 });
 
 function loadProvinceData(){
@@ -27,18 +26,9 @@ function loadProvinceData(){
   });
 }
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
 function updateRow( ac_id ){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css('display','none');
   $.ajax({
     type:'post',
     url : dataUrl,
@@ -50,7 +40,8 @@ function updateRow( ac_id ){
         var id = "#update_" + k;
         $(id).val( item[k] );
       }
-      $("#dialog-modal").dialog('open');
+      $("#item_id").val( item['ac_id'] );
+      loadModifyRecord();
     }
   });
 }
@@ -83,7 +74,9 @@ function deleteRow(ac_id){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css('display','block');
+  $("#record_table").find('tbody').html('');
   $("#updateBtn").attr('disabled',false);
 });
 
@@ -98,7 +91,7 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        loadModifyRecord();
         $("#updateBtn").attr('disabled',false);
       }
     }
@@ -172,10 +165,6 @@ function loadData(){
         row.push( item["province"] );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
         row.push( editHtml + item['ac_id'] + editHtmlEnd + item['ac_id'] + delHtml  );
         rows.push(row);
       }
@@ -195,11 +184,7 @@ function loadData(){
                         null,
                         null, 
                         null,
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

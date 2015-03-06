@@ -11,7 +11,6 @@ $(document).ready(function(){
   loadProvinceData();
   loadCityData();
   //refreshCityData('#select');
-  createDialog();
 });
 //传的是函数指针！！！！！不能再调用函数了！！！！！！
 $("#select_ap_id").change( function(){
@@ -68,18 +67,9 @@ function loadProvinceData(){
   });
 }
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
 function updateRow(ad_id){
+  $("#tableContent").css('display','none');
+  $("#updateDiv").css('display','block');
   $.ajax({
     type:'post',
     url : dataUrl,
@@ -91,7 +81,8 @@ function updateRow(ad_id){
         var id = "#update_" + k;
         $(id).val( item[k] );
       }
-      $("#dialog-modal").dialog('open');
+      $("#item_id").val( item['ad_id'] );
+      loadModifyRecord();
     }
   });
 }
@@ -123,7 +114,9 @@ function deleteRow(ad_id){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#tableContent").css('display','block');
+  $("#updateDiv").css('display','none');
+  $("#record_table").find('tbody').html('');
   $("#updateBtn").attr('disabled',false);
 });
 
@@ -138,7 +131,7 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        loadModifyRecord();
         $("#updateBtn").attr('disabled',false);
       }
     }
@@ -207,16 +200,11 @@ function loadData(){
         if( item['is_active'] == 0 ){
           activeSign = '';
         }
-        row.push( "<span id='" + item["ad_id"] + "'>" + item['ad_id'] + "<span>" );
-        row.push( item["province"] );
+        row.push( "<span id='" + item["ad_id"] + "'>" + item["province"] + "<span>" );
         row.push( item["city"] );
         row.push( item["name"] );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
         row.push( editHtml + item['ad_id'] + editHtmlEnd + item['ad_id'] + delHtml  );
         rows.push(row);
       }
@@ -235,13 +223,8 @@ function loadData(){
                         null,  
                         null,
                         null,
-                        null,
                         null, 
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable" : false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

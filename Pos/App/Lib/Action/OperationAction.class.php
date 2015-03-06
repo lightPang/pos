@@ -137,17 +137,15 @@
     public function createMccItem(){
       if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
         $MccItem = M('mcc_item');
-        $data['code'] = $_POST['code'] ;
-        $data['mb_id'] = $_POST['mb_id'];
-        $data['ms_id'] = $_POST['ms_id'];
-        $data['remark'] = $_POST['remark'];
         $data['create_user'] = $_SESSION['u_id'];
         $data['create_time'] =  date('Y-m-d H:i:s',time());
         $data['edit_user'] = $_SESSION['u_id'] ;
-        $data['a_rate'] = $_POST['a_rate'];
-        $data['b_rate'] = $_POST['b_rate'];
-        $data['c_rate'] = $_POST['c_rate'];
-        $data['d_rate'] = $_POST['d_rate'];
+        $data['remark'] = $_POST['remark'];
+        $data['edit_user'] = $_SESSION['u_id'];
+        $data['code'] = $_POST['code'];
+        $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['return_rate'] = $_POST['return_rate'];
         $res = $MccItem->add( $data );
         $this->ajaxReturn( $res, "insertion", $res);
       }
@@ -157,18 +155,31 @@
     public function updateMccItem(){
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['mi_id'] ) ){
         $map['mi_id'] = $_POST['mi_id'];
-        $data['ms_id'] = $_POST['ms_id'];
-        $data['mb_id'] = $_POST['mb_id'];
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
-        $data['a_rate'] = $_POST['a_rate'];
-        $data['b_rate'] = $_POST['b_rate'];
-        $data['c_rate'] = $_POST['c_rate'];
-        $data['d_rate'] = $_POST['d_rate'];
         $data['code'] = $_POST['code'];
+        $data['name'] = $_POST['name'];
+        $data['is_active'] = $_POST['is_active'];
+        $data['return_rate'] = $_POST['return_rate'];
         $MccItem = M('mcc_item');
+        $origin_Item = $MccItem->where( $map )->select()[0];
+        $modifyItem = array();
+        foreach ($data as $key => $value) {
+          if( $value != $origin_Item[$key] ){
+            $modifyItem[$key] =  $origin_Item[$key]. ' => ' .$value;
+          }
+        }
+        
+        if( count( $modifyItem ) != 0 ){
+          $modify_record['table_name'] = 'mcc_item';
+          $modify_record['item_id'] = $map['mi_id'];
+          $modify_record['u_id'] = $_SESSION['u_id'];
+          $modify_record['time'] = Date( 'Y-m-d H:m:s');
+          $modify_record['content'] = json_encode( $modifyItem, JSON_UNESCAPED_UNICODE );
+          M('modify_record')->add( $modify_record );
+        }
         $res = $MccItem->where( $map)->save( $data);
-        $this->ajaxReturn( $map, "ok", 1);
+        $this->ajaxReturn( $data, "ok", 1);
       }
       $this->ajaxReturn( null, "ok", 0);
     }
@@ -185,10 +196,10 @@
     
     public function getMccItemData(){
       if( isset($_SESSION['u_id'] ) && isset( $_POST['mi_id'] ) ){
-        $map['mi_id'] = $$_POST['mi_id'] ;
+        $map['mi_id'] = $_POST['mi_id'] ;
         $MccItem = M('mcc_item');
         $data = $MccItem->where($map)->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        $this->ajaxReturn( $data, "ok", 1);
       }
       else if( isset( $_SESSION['u_id' ]) ){
         $MccItem = M('mcc_item');
@@ -228,8 +239,9 @@
         $data['name'] = $_POST['name'];
         $data['remark'] = $_POST['remark'];
         $cp = M('client_platform');
+        $this->addModifyRecord( $data,$map, 'client_platform', 'cp_id');
         $res = $cp->where( $map)->save( $data);
-        $this->ajaxReturn( $map, "ok", 1);
+        $this->ajaxReturn( $modify_record, "ok", 1);
       }
       $this->ajaxReturn( null, "ok", 0);
     }
@@ -246,15 +258,15 @@
     
     public function getClientPlatformData(){
       if( isset($_SESSION['u_id'] ) && isset( $_POST['cp_id'] ) ){
-        $map['cp_id'] = $$_POST['cp_id'] ;
+        $map['cp_id'] = $_POST['cp_id'] ;
         $cp = M('client_platform');
-        $data = $cp->where($map)->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        $data = $cp->where($map)->select()[0];
+        $this->ajaxReturn( $data, "ok", 1);
       }
       else if( isset( $_SESSION['u_id' ]) ){
         $cp = M('client_platform');
         $data = $cp->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+        $this->ajaxReturn( $data , "ok", 0);
       }
     }
     
@@ -299,6 +311,7 @@
         $data['is_inner'] = $_POST['is_inner'];
         $data['remark'] = $_POST['remark'];
         $cr = M('client_rate');
+        $this->addModifyRecord( $data,$map, 'client_rate', 'cr_id');
         $res = $cr->where( $map)->save( $data);
         $this->ajaxReturn( $map, "ok", 1);
       }
@@ -319,15 +332,15 @@
       if( isset($_SESSION['u_id'] ) && isset( $_POST['cr_id'] ) ){
         $map['cr_id'] = $_POST['cr_id'] ;
         $cr = M('client_rate');
-        $data = $cr->where($map)->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        $data = $cr->where($map)->select()[0];
+        $this->ajaxReturn( $data, "ok", 1);
       }
       else if( isset( $_SESSION['u_id' ]) ){
         if( isset($_GET['type'] ) ){
           $cr = M('client_rate');
           $map['is_inner'] = $_GET['type'];
           $data = $cr->where($map)->select();
-          $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+          $this->ajaxReturn( $data, "ok", 1);
         }
         else{
           $cr = M('client_rate');
@@ -368,6 +381,7 @@
         $data['name'] = $_POST['name'];
         $data['remark'] = $_POST['remark'];
         $ca = M('client_attr');
+        $this->addModifyRecord( $data,$map, 'client_attr', 'ca_id');
         $res = $ca->where( $map)->save( $data);
         $this->ajaxReturn( $map, "ok", 1);
       }
@@ -386,15 +400,15 @@
     
     public function getClientAttrData(){
       if( isset($_SESSION['u_id'] ) && isset( $_POST['ca_id'] ) ){
-        $map['ca_id'] = $$_POST['ca_id'] ;
+        $map['ca_id'] = $_POST['ca_id'] ;
         $ca = M('client_attr');
-        $data = $ca->where($map)->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 1);
+        $data = $ca->where($map)->select()[0];
+        $this->ajaxReturn( $data, "ok", 1);
       }
       else if( isset( $_SESSION['u_id' ]) ){
         $ca = M('client_attr');
         $data = $ca->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "ok", 0);
+        $this->ajaxReturn( $data, "ok", 0);
       }
     }
   }

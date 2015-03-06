@@ -8,7 +8,6 @@ var bankDataUrl = rootUrl + "Bank/getBankData";
 $(document).ready(function(){
   loadData();
   loadBankData();
-  createDialog();
 });
 
 function loadBankData(){
@@ -27,30 +26,22 @@ function loadBankData(){
   });
 }
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
 function updateRow(bo_id){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css('display','none');
   $.ajax({
     type:'post',
     url : dataUrl,
     data : {'bo_id' :bo_id},
     success:function(data){
       console.log(data);
-      var item = data['data'][0];
+      var item = data['data'];
       for(var k in item ){
         var id = "#update_" + k;
         $(id).val( item[k] );
       }
-      $("#dialog-modal").dialog('open');
+      $("#item_id").val( item['bo_id']);
+      loadModifyRecord();
     }
   });
 }
@@ -84,7 +75,9 @@ function deleteRow( bo_id ){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css('display','block');
+  $("#record_table").find('tbody').html('');
   $("#updateBtn").attr('disabled',false);
 });
 
@@ -99,7 +92,7 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        loadModifyRecord();
         $("#updateBtn").attr('disabled',false);
       }
     }
@@ -167,16 +160,11 @@ function loadData(){
         if( item['is_active'] == 0 ){
           activeSign = '';
         }
-        row.push( "<span id='" + item["bo_id"] + "'>" + item['bo_id'] + "</span>");
-        row.push( item["bankName"] );
+        row.push( "<span id='" + item["bo_id"] + "'>" + item["b_name"] + "</span>" );
         row.push( item["name"] );
         row.push( item["contact_num"] );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
         row.push( editHtml + item['bo_id'] + editHtmlEnd + item['bo_id'] + delHtml );
         rows.push(row);
       }
@@ -191,17 +179,12 @@ function loadData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,
                         null,  
                         null,
                         null, 
                         null,
                         null,
-                        null, 
-                        null, 
-                        null,
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

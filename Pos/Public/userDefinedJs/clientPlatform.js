@@ -7,43 +7,30 @@ var dataUrl = rootUrl + "Operation/getClientPlatformData";
 
 $(document).ready(function(){
   loadData();
-  createDialog();
 });
 
-
-
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
+function updateRow(cp_id){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css( 'display','none');
+  $.ajax({
+    type:'post',
+    data:{ 'cp_id':cp_id},
+    url : dataUrl,
+    success :function(data){
+      var item = data['data'];
+      for( k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['cp_id'] );
+      loadModifyRecord();
+    }
+  });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var cp_id = $tdlist.get(0);
-  var code = $tdlist.get(1);
-  var name = $tdlist.get(2);
-  var remark = $tdlist.get(3);
-  console.log(cp_id);
-  $("#cp_id").val( $(cp_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateCode").val( $(code).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
-}
-
-function deleteRow(ele){
+function deleteRow(cp_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var cp_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -66,24 +53,34 @@ function deleteRow(ele){
   }
 }
 
-$('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
-  $("#updateBtn").attr('disabled',false);
+$("#updateRtnBtn").click( function(){
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css( 'display','block');
+  $("#record_div").find('tbody').html('');
 });
 
 $('#updateBtn').click( function(){
   $("#updateBtn").attr('disabled',true);
+  var inputs = $('#updateForm').find('input');
+  var flag = 1;
+  for( var i = 0; i < inputs.length; ++i ){
+    if( $(inputs[i]).val() === "" ){
+      alert( "请完整填写表单内容！" );
+      $(inputs[i]).focus();
+      $("#updateBtn").attr('disabled',false);
+      return;
+    }
+  }
   $.ajax({
     type:'POST',
     url: updateUrl,
     data:$('#updateForm').serialize(),
     success: function(data){
-      console.log(data);
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
         $("#updateBtn").attr('disabled',false);
+        loadModifyRecord();
       }
     }
   }
@@ -138,29 +135,20 @@ function loadData(){
     dataType:"json", 
     url: dataUrl,
     success: function( data){
-      console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+      var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["cp_id"] );
         row.push( item["code"] );
         row.push( item["name"] );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['cp_id'] + editHtmlEnd + delHtml + item['cp_id'] + delHtmlEnd );
         rows.push(row);
       }
       var oTable1;
@@ -177,12 +165,7 @@ function loadData(){
                         null,
                         null,
                         null,  
-                        null, 
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable":false,"bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

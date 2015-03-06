@@ -1,0 +1,23 @@
+.record_div{
+  margin-top: 20px;
+  border-top: 1px dashed #bebebe;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.record_div td{
+  text-align: center;
+}
+
+.record_div th{
+  text-align: center;
+}
+
+.user_td{
+  width: 10%;
+}
+
+.time_td{
+  width: 20%;
+}

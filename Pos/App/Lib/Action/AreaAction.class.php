@@ -45,6 +45,7 @@
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $ap = M('area_province');
+        $this->addModifyRecord( $data,$map, 'area_province','ap_id');
         $res = $ap->where($map)->save($data);
         $this->ajaxReturn( $res, "update", 1 );
       }
@@ -57,13 +58,13 @@
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['ap_id'] ) ){
         $map['ap_id'] = $_POST['ap_id'];
         $ap = M('area_province');
-        $data = $ap->where($map)->select();
+        $data = $ap->where($map)->select()[0];
         $this->ajaxReturn( $data, "query", 1);
       }
       else if( $_SESSION['u_id'] ){
         $ap = M('area_province');
         $data = $ap->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "query", 0 );
+        $this->ajaxReturn( $data, "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );
@@ -120,6 +121,7 @@
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $ac = M('area_city');
+        $this->addModifyRecord( $data,$map, 'area_city','ac_id');
         $res = $ac->where($map)->save($data);
         $this->ajaxReturn( $res, "update", 1 );
       }
@@ -136,9 +138,9 @@
         $this->ajaxReturn( $data, "query", 1);
       }
       else if( $_SESSION['u_id'] ){
-        $ac = M('area_city');
+        $ac = M('ac_view');
         $data = $ac->select();
-        $this->ajaxReturn( $this->updateApInfo($this->updateUserInfo($data)), "query", 0 );
+        $this->ajaxReturn( $data, "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );
@@ -209,6 +211,7 @@
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'];
         $ad = M('area_district');
+        $this->addModifyRecord( $data,$map, 'area_district','ad_id');
         $res = $ad->where($map)->save($data);
         $this->ajaxReturn( $res, "update", 1 );
       }
@@ -225,9 +228,9 @@
         $this->ajaxReturn( $data, "query", 1);
       }
       else if( $_SESSION['u_id'] ){
-        $ac = M('area_district');
+        $ac = M('ad_view');
         $data = $ac->select();
-        $this->ajaxReturn( $this->updateAPACData($this->updateUserInfo($data)), "query", 0 );
+        $this->ajaxReturn( $data , "query", 0 );
       }
       else{
         $this->ajaxReturn(0, "query failed!", 0 );

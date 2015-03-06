@@ -7,41 +7,32 @@ var dataUrl = rootUrl + "Area/getProvinceData";
 
 $(document).ready(function(){
   loadData();
-  createDialog();
 });
 
-
-
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
+function updateRow(ap_id){
+  $("#tableContent").css('display','none');
+  $("#updateDiv").css('display','block');
+  $.ajax({
+    type:'post',
+    url : dataUrl,
+    data :{
+      'ap_id': ap_id
+    },
+    success : function( data ){
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['ap_id'] );
+      loadModifyRecord();
+    }
+  });
 }
 
-function updateRow(ele){
+function deleteRow(ap_id,ele){
   var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var ap_id = $tdlist.get(0);
-  var name = $tdlist.get(1);
-  var remark = $tdlist.get(2);
-  console.log(ap_id);
-  $("#ap_id").val( $(ap_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html() );
-  $("#dialog-modal").dialog( "open");
-}
-
-function deleteRow(ele){
-  var $tr = $(ele).parents('tr');
-  $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var ap_id = $tr.find('td').html();
+  $tr.addClass('remove'); 
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -65,7 +56,9 @@ function deleteRow(ele){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#tableContent").css('display','block');
+  $("#updateDiv").css('display','none');
+  $("#record_table").find('tbody').html('');
   $("#updateBtn").attr('disabled',false);
 });
 
@@ -80,7 +73,7 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        loadModifyRecord();
         $("#updateBtn").attr('disabled',false);
       }
     }
@@ -139,25 +132,17 @@ function loadData(){
       console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+      var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
-        row.push( item["ap_id"] );
         row.push( item["name"] );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['ap_id'] + editHtmlEnd + delHtml + item['ap_id'] + delHtmlEnd  );
         rows.push(row);
       }
       var oTable1;
@@ -173,12 +158,7 @@ function loadData(){
         "aoColumns" : [
                         null,
                         null,  
-                        null, 
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable" : false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

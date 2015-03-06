@@ -8,35 +8,24 @@ var dataUrl = rootUrl + "Operation/getClientRateData";
 
 $(document).ready(function(){
   loadData();
-  createDialog();
 });
 
 
-
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 650,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
 function updateRow( cr_id ){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css( 'display','none');
   $.ajax({
     type:'post',
     url : dataUrl,
     data : {'cr_id' :cr_id},
     success:function(data){
-      console.log(data);
-      var item = data['data'][0];
+      var item = data['data'];
       for(var k in item ){
         var id = "#update_" + k;
         $(id).val( item[k] );
       }
-      $("#dialog-modal").dialog('open');
+      $("#item_id").val( item['cr_id'] );
+      loadModifyRecord();
     }
   });
 }
@@ -69,8 +58,9 @@ function deleteRow(cr_id){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
-  $("#updateBtn").attr('disabled',false);
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css( 'display','block');
+  $("#record_table").find('tbody').html('');
 });
 
 $('#updateBtn').click( function(){
@@ -84,8 +74,9 @@ $('#updateBtn').click( function(){
       if( data['status'] >= 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
         $("#updateBtn").attr('disabled',false);
+        loadData();
+        loadModifyRecord();
       }
     }
   }
@@ -157,16 +148,11 @@ function loadData(){
         if( item['is_active'] == 0 ){
           activeSign = '';
         }
-        row.push( "<span id='"+ item["cr_id"]+ "'>" + item["cr_id"]+ "</span>" );
-        row.push( item["code"] );
+        row.push( "<span id='"+ item["cr_id"]+ "'>" + item["code"] + "</span>");
         row.push( item["name"] );
         row.push( innerSign );
         row.push( activeSign );
         row.push( item["remark"]);
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
 
         row.push( editHtml + item['cr_id'] + editHtmlEnd + item['cr_id'] + delHtml);
         rows.push(row);
@@ -187,12 +173,7 @@ function loadData(){
                         null,  
                         null, 
                         null,
-                        null, 
-                        null,
-                        null, 
-                        null,
-                        null,
-                        { "bSortable": false }
+                        { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
@@ -208,7 +189,8 @@ function loadData(){
       });
       }
       oTable1.fnClearTable();
-      oTable1.fnAddData( rows );
+      if( rows.length > 0 )
+        oTable1.fnAddData( rows );
     }
   }
   );

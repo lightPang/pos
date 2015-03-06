@@ -54,7 +54,18 @@
                         <input type="text" id="form-field-1" name="return_rate" placeholder="回扣率"  />
                     </div>
                   </div>
-                  
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-3" style="text-align:center;" > 是否启用 </label>
+                    <div class="col-sm-2">
+                        <select type="text" name="is_active" >
+                          <option value="1">是</option>
+                          <option value="0">否</option>
+                        </select>
+                    </div>
+                  </div>
+
                   <div class="space-4"></div>
                   <div class="form-group " >
                     <label class="col-sm-3" style="text-align:center;" for="form-field-1"> 备注</label>
@@ -80,9 +91,9 @@
             </div>
 
             <div id="profile" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+              <div id="contentTableDiv" class="dataTables_wrapper" role="grid">
                 
-                <table id="sample-table-2" id="contentTable" class="table table-striped table-bordered table-hover">
+                <table id="sample-table-2"  class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
                       <th class="center">代码</th>
@@ -101,87 +112,94 @@
 
                 
               </div>
+              <div class="row" id="updateDiv" style="display:none;">
+                <div >
+                  <form class="form-horizontal" role="form" method="post"  id="updateForm">
+                    
+                    <div class="form-group">
+                      <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="update_code" name="code" placeholder="代码"  />
+                      </div> 
+                     
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                      <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 名称：</label>
+                      <div class="col-sm-2" >
+                          <input type="text" id="update_name" name="name" placeholder="名称"  />
+                      </div> 
+                    </div>
+                    
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                      <label class="col-sm-3" style="text-align:center;" for="form-field-1">回扣率 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="update_return_rate" name="return_rate" placeholder="回扣率"  />
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                      <label class="col-sm-3" style="text-align:center;" > 是否启用 </label>
+                      <div class="col-sm-2">
+                          <select type="text" name="is_active" id="update_is_active" >
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+
+                    <div class="form-group " >
+                      <label class="col-sm-3" style="text-align:center;" for="form-field-1"> 备注</label>
+                      <div class="col-sm-4 ">
+                          <textarea class="autosize-transition form-control" id="update_remark" name="remark" placeholder="备注"></textarea>
+                      </div>
+
+                    </div> 
+
+                    <div class="space-4"></div>
+                    <input type="hidden" id="update_mi_id" name="mi_id"/>
+                    <div class="form-group">
+                      <div class="col-md-5 "> </div>
+                      <div class="col-sm-3 ">
+                        <button id="updateBtn" class="btn btn-info" type="button">
+                          <i class="icon-ok bigger-110"></i>
+                            提交
+                        </button>
+                        <button id="updateRtnBtn" class="btn btn-info" type="button">
+                          <i class="icon-reply bigger-110"></i>
+                            返回
+                        </button>
+                      </div>
+                    </div>
+                    
+                  </form>
+                </div> <!-- form div end -->
+
+                <div class="record_div">
+                  <input type="hidden" id="table_name" value="mcc_item" />
+                  <input type="hidden" id="item_id" />
+                  <table id="record_table"  class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="user_td">修改用户</th>
+                      <th class="time_td">修改时间</th>
+                      <th class="center">修改内容</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+                </div><!-- record div end -->
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-   <div id="dialog-modal" title="修改MCC项目"  style="display: none">
-        <div class="dialog-content">
-        <form class="form-horizontal" role="form" method="post" action="__APP__/Operation/updateMCCBig" id="updateForm">
-
-                  
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> MCC编码 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="update_code" name="code" placeholder="代码"  />
-                    </div> 
-                   
-                  </div>
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <label class="col-sm-3"  style="text-align:center;" for="form-field-1"> 名称：</label>
-                    <div class="col-sm-2" >
-                        <input type="text" id="updateName" name="name" placeholder="名称"  />
-                    </div> 
-                  </div>
-                  
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">收单基准价 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="updateB_rate" name="b_rate" placeholder="收单基准价"  />
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">合计 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="updateC_rate" name="c_rate" placeholder="合计"  />
-                    </div>
-                  </div>
-                  <div class="space-4"></div>
-                  
-                  <div class="form-group">
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1">发卡+转接 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="updateD_rate" name="d_rate" placeholder="发卡+转接"  />
-                    </div>
-                  </div>
-                  <div class="space-4"></div>
-                  
-                  <div class="space-4"></div>
-                  <div class="form-group " >
-                    <label class="col-sm-3" style="text-align:center;" for="form-field-1"> 备注</label>
-                    <div class="col-sm-4 ">
-                        <textarea class="autosize-transition form-control" id="update_remark" name="remark" placeholder="备注"></textarea>
-                    </div>
-
-                  </div> 
-          <input id="update_mi_id" type="hidden" name="mi_id" />
-          
-          <div class="space-4"></div>
-          <div class="form-group">
-            <div class="col-md-3 "> </div>
-            <div class="col-sm-6 ">
-              <div style='float: left;'>
-              <button id="updateBtn" class="btn btn-info" type="button">
-              <i class="icon-ok bigger-110"></i>
-                提交
-              </button>
-              </div>
-              <div style='float: left;'>
-              <button id="cancelBtn" class="btn btn-danger" type="button">
-              <i class="icon-reply bigger-110"></i>
-                取消
-              </button>
-              </div>
-            </div>
-          </div>
-                  
-        </form>
-        </div>
     </div>
     
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
