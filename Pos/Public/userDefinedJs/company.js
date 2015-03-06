@@ -6,46 +6,37 @@ var dataUrl = rootUrl + "Company/getCompanyData";
 
 $(document).ready(function(){
   loadData();
-  createDialog();
 });
 
+function updateRow(c_id){
+  $("#tableContent").css('display','none');
+  $("#updateDiv").css('display','block');
+  $.ajax({
+    type:'post',
+    data : { 'c_id' : c_id },
+    url : dataUrl,
+    success : function(data ){
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['c_id'] );
+      loadModifyRecord();
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-
-                height: 450,
-                width: 400,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
+    }
+  });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var c_id = $tdlist.get(0);
-  var name = $tdlist.get(1);
-  var remark = $tdlist.get(2);
-  $("#c_id").val( $(c_id).html() );
-  $("#updateName").val( $(name).html() );
-  $("#updateRemark").val( $(remark).html());
-  $("#dialog-modal").dialog( "open");
-}
-
-function deleteRow(ele){
+function deleteRow(c_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var mb_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
       url:delUrl,
-      data: {'mb_id' : mb_id },
+      data: {'c_id' : c_id },
       success: function(data){
         console.log(data);
         if( data['data'] != false ){
@@ -63,7 +54,9 @@ function deleteRow(ele){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#tableContent").css('display','block');
+  $("#updateDiv").css('display','none');
+  $("#updateBtn").attr('disabled',false);
 });
 
 $('#updateBtn').click( function(){
@@ -77,7 +70,8 @@ $('#updateBtn').click( function(){
       if( data['status'] == 1 ){
         loadData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        $("#updateBtn").attr('disabled',false);
+        loadModifyRecord();
       }
     }
   }
@@ -131,26 +125,17 @@ function loadData(){
     success: function( data){
       var MccBigArr = data['data'];
       var rows = [];
-      var editHtml = ''+ 
-                '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></td>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+      var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
       for( var i=0; i<MccBigArr.length; ++i ){
         var item = MccBigArr[i];
         var row = [];
-        row.push( item["c_id"] );
         row.push( item["name"] );
         row.push( item["remark"] );
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['c_id'] + editHtmlEnd + delHtml + item['c_id'] + delHtmlEnd );
         rows.push(row);
       }
       var oTable1;
@@ -164,8 +149,8 @@ function loadData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,  null, null,null, null, null,null,
-                        { "bSortable": false }
+                        null,  null, 
+                        { "bSearchable" : false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

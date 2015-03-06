@@ -11,12 +11,12 @@
       $company = M('company');
       if( isset( $_SESSION['u_id'] ) && isset( $_POST['c_id'] ) ){
         $map['c_id'] = $_POST['c_id'] ;
-        $data = $company->where($map)->select();
+        $data = $company->where($map)->select()[0];
         $this->ajaxReturn( $data, "singleCompanyData", 1);
       }
       else if( isset( $_SESSION['u_id'] ) ){
         $data = $company->select();
-        $this->ajaxReturn( $this->updateUserInfo($data), "allCompanyData", 1);
+        $this->ajaxReturn( $data, "allCompanyData", 1);
       }
       else{
         $this->ajaxReturn( null, "no data", 0 );
@@ -57,6 +57,7 @@
         $data['remark'] = $_POST['remark'];
         $data['edit_user'] = $_SESSION['u_id'] ;
         $Company = M('company');
+        $this->addModifyRecord( $data, $map, 'company', 'c_id');
         $res = $Company->where($map)->save( $data );
         $this->ajaxReturn( $res, "update", 1 );
       } 

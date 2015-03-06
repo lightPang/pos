@@ -637,7 +637,7 @@ function loadUpdateSiTableData(){
                         null, 
                         null, 
                         null,
-                        { "bSortable": false }
+                        { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
