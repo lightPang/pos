@@ -21,3 +21,12 @@
 .time_td{
   width: 20%;
 }
+
+.line{
+  margin-bottom:5px;
+  font-size: 14px;
+}
+
+.bottom{
+  clear: both; 
+}

@@ -113,7 +113,7 @@ function loadSiTableData(){
       console.log(data);
       var dataArr = data['data'];
       var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
                                 <a class=\"green\" href=\"#\" onclick=\"updateRow(';
       var editHtmlEnd =         ')\">\
                                   <i class=\"icon-pencil bigger-130\"></i>\
@@ -122,7 +122,7 @@ function loadSiTableData(){
       var delHtml           =    ')\">\
                                   <i class=\"icon-trash bigger-130\"></i>\
                                 </a>\
-                              </div></td>';
+                              </div>';
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];

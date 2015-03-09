@@ -45,9 +45,9 @@
 
 				if(isset($_POST['mt_id'])){
 					$map['mt_id'] = $_POST['mt_id'];
-					$data = $mtModel->where($map)->select();
+					$data = $mtModel->where($map)->select()[0];
 				}
-				if( isset( $_GET['type'])){
+				else if( isset( $_GET['type'])){
 					$map['mt_type'] = $_GET['type'];
 					$data = $mtModel->where($map)->select();
 				}
@@ -55,7 +55,6 @@
 					$data = $mtModel->select();
 				}
 
-				$data = $this->updateUserInfo( $data );
 				$this->ajaxReturn( $data, "123", 1 );
 			}		
 		}
@@ -65,8 +64,8 @@
 			if( isset( $_POST['mt_id'] )){
 				$mtModel = M('Machinetype');
 				$data = $this->_post();
-				$data['edit_user'] = $_SESSION['u_id'] ;
-				$data['edit_time'] = date('Y-m-d H:i:s',time());
+				$map['mt_id'] = $_POST['mt_id'] ;
+				$this->addModifyRecord( $data, $map, 'machinetype','mt_id');
 				$mtModel->save($data);
 
 				$this->ajaxReturn( $data, "123", 1 );

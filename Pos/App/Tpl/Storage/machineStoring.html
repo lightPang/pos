@@ -33,7 +33,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" > 设备机型</label>
                     <div class="col-sm-3">
-                      <select id="m_type" class="form-control">
+                      <select id="m_type" name="m_type" class="form-control">
                         <volist name="machineTypes" id="machineType">
                           <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
                         </volist>
@@ -45,7 +45,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" > 机器编码 </label>
                     <div class="col-sm-3">
-                        <textarea id="m_list" class="form-control" placeholder="机器编码" style="width: 275px; height: 130px;"></textarea>
+                        <textarea id="m_list" name="m_list" class="form-control" placeholder="机器编码" style="width: 275px; height: 130px;"></textarea>
                         <button class="btn btn-sm btn-primary" id="clearMachineBtn" type="button">
                           清除
                         </button> 
@@ -75,11 +75,11 @@
                   <div class="space-4"></div>
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" > 付款状态</label>
-                    <div class="col-sm-1">
-                      <select id="pay_state" class="form-control">
-                        <option value="1">完成</option>
-                        <option value="2">未付</option>
-                        <option value="3">付款部分</option>
+                    <div class="col-sm-2">
+                      <select id="pay_state" name="pay_state" class="form-control">
+                        <option value="2">完成</option>
+                        <option value="0">未付</option>
+                        <option value="1">付款部分</option>
                       </select>
                     </div>
                   </div> 
@@ -107,11 +107,10 @@
             </div>
 
            <div id="all" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+              <div id="tableContent" class="dataTables_wrapper" role="grid">
                 <table id="sample-table-2" id="contentTable" class="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th>序号</th>
                     <th>订单号</th>
                     <th>机器编码</th>
                     <th>数量</th>
@@ -119,10 +118,6 @@
                     <th>总价</th>
                     <th>付款状态</th>
                     <th>备注</th>
-                    <th>创建者</th>
-                    <th>创建时间</th>
-                    <th>修改者</th>
-                    <th>修改时间</th>
                     <th>操作</th>
                   </tr>
                 </thead>
@@ -131,109 +126,119 @@
                 </tbody>
               </table>
             </div>
+            <div class="row" id="updateDiv" style="display:none;">
+              <form class="form-horizontal" role="form" method="post" action="__APP__/MachineStoring/updateOrder" id="updateForm">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 订单号 </label>
+                    <div class="col-sm-3">
+                        <input type="text" id="orderNumber" name="orderNumber" placeholder="订单号"  disabled="disabled"/>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                 <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 设备机型</label>
+                    <div class="col-sm-3">
+                      <select id="update_m_type" class="form-control">
+                        <volist name="machineTypes" id="machineType">
+                          <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
+                        </volist>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 机器编码 </label>
+                    <div class="col-sm-3">
+                        <textarea id="update_m_list" class="form-control" placeholder="机器编码" style="width: 275px; height: 130px;"></textarea>
+                        <button class="btn btn-sm btn-primary" id="update_clearMachineBtn" type="button">
+                          清除
+                        </button> 
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 数量 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="update_quantity" name="quantity" placeholder="数量"  disabled="disabled"/>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" > 单价 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="update_price" name="update_price" placeholder="单价"  />
+                        <div class="red" id="update_error_price"></div>
+                    </div>
+
+                    <label class="col-sm-1 control-label no-padding-right" > 总价 </label>
+                    <div class="col-sm-1">
+                        <input type="text" id="update_sum_price" name="update_sum_price" placeholder="总价"  />
+                        <div class="red" id="update_error_sum_price"></div>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 付款状态</label>
+                    <div class="col-sm-2">
+                      <select id="update_pay_state" class="form-control">
+                        <option value="2">完成</option>
+                        <option value="0">未付</option>
+                        <option value="1">付款部分</option>
+                      </select>
+                    </div>
+                  </div> 
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" > 备注 </label>
+                    <div class="col-sm-6">
+                        <textarea class="autosize-transition form-control" id="update_remark" name="update_remark" placeholder="备注"></textarea>
+                    </div>
+                  </div>
+
+
+                <input id="update_o_id" type="hidden" name="o_id" />
+                
+                <div class="space-4"></div>
+                <div class="form-group">
+                  <div class="col-md-7 "> </div>
+                  <div class="col-sm-3 ">
+                    <button id="updateBtn" class="btn btn-info" type="button">
+                    <i class="icon-ok bigger-110"></i>
+                      提交
+                    </button>
+                    <button id="cancelBtn" class="btn btn-danger" type="button">
+                    <i class="icon-reply bigger-110"></i>
+                      取消
+                    </button>
+                  </div>
+                </div>
+                        
+              </form>
+              <div class="record_div">
+                  <input type="hidden" id="table_name" value="order" />
+                  <input type="hidden" id="item_id" />
+                  <table id="record_table"  class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="user_td">修改用户</th>
+                      <th class="time_td" >修改时间</th>
+                      <th class="content_td">修改内容</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+                </div><!-- record div end -->
+              </div><!-- update div end-->
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div id="dialog-modal" title="修改设备型号"  style="display: none">
-        <div class="dialog-content">
-        <form class="form-horizontal" role="form" method="post" action="__APP__/MachineStoring/updateOrder" id="updateForm">
-          <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 订单号 </label>
-              <div class="col-sm-3">
-                  <input type="text" id="orderNumber" name="orderNumber" placeholder="订单号"  disabled="disabled"/>
-              </div>
-            </div> 
-
-            <div class="space-4"></div>
-           <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 设备机型</label>
-              <div class="col-sm-3">
-                <select id="update_m_type" class="form-control">
-                  <volist name="machineTypes" id="machineType">
-                    <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
-                  </volist>
-                </select>
-              </div>
-            </div>
-
-            <div class="space-4"></div>
-            <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 机器编码 </label>
-              <div class="col-sm-3">
-                  <textarea id="update_m_list" class="form-control" placeholder="机器编码" style="width: 275px; height: 130px;"></textarea>
-                  <button class="btn btn-sm btn-primary" id="update_clearMachineBtn" type="button">
-                    清除
-                  </button> 
-              </div>
-            </div> 
-
-            <div class="space-4"></div>
-            <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 数量 </label>
-              <div class="col-sm-2">
-                  <input type="text" id="update_quantity" name="quantity" placeholder="数量"  disabled="disabled"/>
-              </div>
-
-              <label class="col-sm-1 control-label no-padding-right" > 单价 </label>
-              <div class="col-sm-2">
-                  <input type="text" id="update_price" name="update_price" placeholder="单价"  />
-                  <div class="red" id="update_error_price"></div>
-              </div>
-
-              <label class="col-sm-1 control-label no-padding-right" > 总价 </label>
-              <div class="col-sm-1">
-                  <input type="text" id="update_sum_price" name="update_sum_price" placeholder="总价"  />
-                  <div class="red" id="update_error_sum_price"></div>
-              </div>
-            </div> 
-
-            <div class="space-4"></div>
-            <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 付款状态</label>
-              <div class="col-sm-1">
-                <select id="update_pay_state" class="form-control">
-                  <option value="1">完成</option>
-                  <option value="2">未付</option>
-                  <option value="3">付款部分</option>
-                </select>
-              </div>
-            </div> 
-
-            <div class="space-4"></div>
-            <div class="form-group">
-              <label class="col-sm-1 control-label no-padding-right" > 备注 </label>
-              <div class="col-sm-6">
-                  <textarea class="autosize-transition form-control" id="update_remark" name="update_remark" placeholder="备注"></textarea>
-              </div>
-            </div>
-
-
-          <input id="o_id" type="hidden" name="o_id" />
-          
-          <div class="space-4"></div>
-          <div class="form-group">
-            <div class="col-md-3 "> </div>
-            <div class="col-sm-6 ">
-              <div style='float: left;'>
-              <button id="updateBtn" class="btn btn-info" type="button">
-              <i class="icon-ok bigger-110"></i>
-                提交
-              </button>
-              </div>
-              <div style='float: left;'>
-              <button id="cancelBtn" class="btn btn-danger" type="button">
-              <i class="icon-reply bigger-110"></i>
-                取消
-              </button>
-              </div>
-            </div>
-          </div>
-                  
-        </form>
-        </div>
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>

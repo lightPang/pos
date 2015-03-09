@@ -54,10 +54,9 @@ class SupplierAction extends CommonAction{
 			if( isset( $_POST['mp_id'] )){
 				$sModel = M('Machineprovider');
 				$map['mp_id'] = $_POST['mp_id'] ;
-				$data['edit_user'] = $_SESSION['u_id'] ;
 				$data['name'] = $_POST['name'];
-				$data['edit_time'] = date('Y-m-d H:i:s',time());
-				$data['remark'] = $_POST['updateRemark'];
+				$data['remark'] = $_POST['remark'];
+				$this->addModifyRecord( $data, $map, 'Machineprovider','mp_id');
 				$sModel->where($map)->save($data);
 				$this->ajaxReturn( $data, "123", 1 );
 			}
@@ -72,13 +71,11 @@ class SupplierAction extends CommonAction{
 			$sModel = M('Machineprovider');
 			if(isset($_POST['mp_id'])){
 				$map['mp_id'] = $_POST['mp_id'];
-				$data = $sModel->where($map)->select();
+				$data = $sModel->where($map)->select()[0];
 			}
 			else{
 				$data = $sModel->select();
 			}
-
-			$data = $this->updateUserInfo( $data );
 			$this->ajaxReturn( $data, "123", 1 );
 		}		
 	}

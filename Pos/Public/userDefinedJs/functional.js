@@ -127,6 +127,12 @@ function alter_key_name( arr, tableName ){
     case 'area_district' :
       data = { "name":"名称", "code":'代码', 'ap_id' :'所属省份','ac_id' :'所属城市', 'is_active':'是否启用','remark':'备注' };
       break;
+    case 'machineprovider':
+      data = {"mt_name":"机型名称","mt_number":"机型号", "is_wired":'有无线',"is_simmed":'是否需要sim', 'is_keyboard':'是否需要键盘' ,'remark':'备注' };
+      break;
+    case 'order' :
+      data = {"m_list":"机器列表", "m_type":'机器型号', 'quantity': "机器数量", 'pay_state':'付款状态', 'price' :'单价', 'sum_price' : '总价' ,'pay_remark':'备注'};
+      break;
     default :
       data = {"name":"名称", "code":'编码','remark':'备注'};
       break;

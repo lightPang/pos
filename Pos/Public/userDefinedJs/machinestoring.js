@@ -1,6 +1,7 @@
+var rootUrl = '/pos/Pos/index.php/';
+var dataUrl = rootUrl +'MachineStoring/searchOrder';
 $(document).ready(function(){
 	loadOrderData();
-  createDialog();
 });
 
 $("#m_type").change(function(){
@@ -98,58 +99,52 @@ function validInput(){
 		$("#error_price").html("请输入合法单价");
 		flag = false;
 	}
+  else{
+    $("#error_price").html("");
+  }
 
 	if( $("#sum_price").val() == ""){
 		$("#error_sum_price").html("请输入合法总价");
 		flag = false;
 	}
+  else{
+    $("#error_sum_price").html("");
+  }
 
 	return flag;
 }
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 1000,
-                width: 1000,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-    });
-}
-
 var pay_states = ["完成", "未付", "付款部分"];
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var o_id = $tdlist.get(0);
-  var orderNumber = $tdlist.get(1);
-  var m_list = $tdlist.get(2);
-  var quantity = $tdlist.get(3);
-  var price = $tdlist.get(4);
-  var sum_price = $tdlist.get(5);
-  var pay_state = jQuery.inArray( $( $tdlist.get(6) ).html(), pay_states);
-  var remark = $tdlist.get(7);
-
-
-  $("#o_id").val( $(o_id).html() );
-  $("#orderNumber").val( $(orderNumber).html() );
-  $("#update_m_list").val( $(m_list).html());
-  $("#update_quantity").val( $(quantity).html());
-  $("#update_price").val( $(price).html());
-  $("#update_sum_price").val( $(sum_price).html());
-  $("#update_pay_state option").eq(pay_state).attr("selected", true);
-  $("#update_remark").val( $(remark).html());
-  $("#dialog-modal").dialog( "open");
+function updateRow(o_id ){
+  $("#tableContent").css('display','none');
+  $("#updateDiv").css('display','block');
+  $.ajax({
+    type : 'post',
+    data : { 'o_id' : o_id },
+    url : dataUrl,
+    success : function(data){
+      console.log( data );
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['o_id'] );
+      loadModifyRecord();
+    }
+  });
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#tableContent").css('display','block');
+  $("#updateDiv").css('display','none');
+  $("#record_table").find('tbody').html('');
+  $("#updateBtn").attr('disabled',false);
 });
 
 $('#updateBtn').click( function(){
   var url = $('#updateForm').attr('action'),
-      o_id=$('#o_id').val(),
+      o_id=$('#update_o_id').val(),
       m_list = $("#update_m_list").val(),
       m_type = $("#update_m_type").val(),
       quantity = $("input[name=update_quantity]").val(),
@@ -180,11 +175,11 @@ $('#updateBtn').click( function(){
               'pay_state' : pay_state,
               'pay_remark' : pay_remark},
       success: function(data){
-        console.log(data);alert(data.toSource());
+        console.log(data);
         if( data['status'] == 1 ){
           loadOrderData();
           alert( "修改成功！");
-          $("#dialog-modal").dialog("close");
+          loadModifyRecord();
         }
         else{
           alert( "修改失败！");
@@ -197,11 +192,9 @@ $('#updateBtn').click( function(){
   } 
 });
 
-function deleteRow(ele){
+function deleteRow(o_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var o_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -230,23 +223,16 @@ function loadOrderData(){
     dataType:"json", 
     url:"/pos/Pos/index.php/MachineStoring/searchOrder",
     success: function( data){
-      console.log( data );
       var Arr = data['data'];
       var rows = [];
-      var editHtml = '<tr>'+ 
-                '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></tr>';
-      var pay_states = ['未付款','已付款'];
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\"><a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+			var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
+      var pay_states = ['未付款','付款部分','已完成'];
       for( var i=0; i<Arr.length; ++i ){
         var item = Arr[i];
         var row = [];
-        row.push( item["o_id"] );
         row.push( item["o_code"] );
         row.push( item["m_list"]);
         row.push( item["quantity"] );
@@ -254,11 +240,7 @@ function loadOrderData(){
         row.push( item["sum_price"]);
         row.push( pay_states[ item["pay_state"] ]);
         row.push( item["pay_remark"] );
-        row.push( item["create_user"] );
-        row.push( item["create_time"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['o_id'] + editHtmlEnd + delHtml + item['o_id'] + delHtmlEnd  );
         rows.push(row);
       }
       var oTable1;
@@ -272,7 +254,7 @@ function loadOrderData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null, null, null,null, null, null, null, null, null,null, null, null, { "bSortable": false }
+                        null, null, null,null, null, null, null,  { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

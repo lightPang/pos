@@ -35,7 +35,7 @@
                     <div class="col-sm-3">
                       <select id="m_provider" class="form-control">
                         <!--options-->
-                        <volist name="providers" id="provider">
+                        <volist name="mp_id" id="provider">
                           <option value="{$provider.mp_id}">{$provider.name}</option>
                         </volist>
                       </select>
@@ -118,11 +118,10 @@
             </div>
 
             <div id="all" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
+              <div id="tableContent" class="dataTables_wrapper" role="grid">
                 <table id="sample-table-2" id="contentTable" class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>序号</th>
                       <th>机型名称</th>
                       <th>机型号</th>
                       <th>类型</th>
@@ -130,8 +129,6 @@
                       <th>是否需要键盘</th>
                       <th>是否需要SIM</th>
                       <th>备注</th>
-                      <th>创建时间</th>
-                      <th>修改时间</th>
                       <th>操作</th>
                     </tr>
                   </thead>
@@ -139,7 +136,129 @@
                   <tbody>
                   </tbody>
               </table>
-              <div>
+              </div>
+               <div class="row" id="updateDiv" style="display:none;">
+                <form class="form-horizontal" role="form" method="post" action="__APP__/MachineType/update" id="updateForm">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 设备供应商</label>
+                    <div class="col-sm-3">
+                      <select id="updateProvider" class="form-control">
+                        <!--options-->
+                        <volist name="mp_id" id="update_provider">
+                          <option value="{$update_provider.mp_id}">{$update_provider.name}</option>
+                        </volist>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机器名称 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="update_mt_name" name="mt_name"  />
+                        <div class="red" id="update_error_name"></div>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机型号 </label>
+                    <div class="col-sm-2">
+                        <input type="text" id="update_mt_number" name="mt_number"  />
+                        <div class="red" id="update_error_number"></div>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机具类型</label>
+                    <div class="col-sm-1">
+                      <select id="update_mt_type">
+                        <option value="0">POS机</option>
+                        <option value="1">键盘</option>
+                        <option value="2">SIM卡</option>
+                        <option value="3">其它</option>
+                      </select>
+                    </div>
+                
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 设备类型</label>
+                    <div class="col-sm-2">
+                        <label>
+                          <input class="ace" type="radio" name="update_is_wired" value="1">
+                          <span class="lbl"> 有线</span>
+                        </label>
+                        <label>
+                          <input class="ace" type="radio" name="update_is_wired" value="0">
+                          <span class="lbl"> 无线</span>
+                        </label>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否需要键盘</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="update_is_keyboard">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+
+                    <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否需要SIM</label>
+                    <div class="col-sm-1">
+                        <label>
+                          <input class="ace" type="checkbox" name="is_simed">
+                          <span class="lbl"> 是</span>
+                        </label>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
+                    <div class="col-sm-6">
+                        <textarea class="autosize-transition form-control" id="update_remark" name="remark" placeholder="备注"></textarea>
+                    </div>
+                  </div> 
+
+
+                  <input id="update_mt_id" type="hidden" name="mt_id" />
+                  
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-7 "> </div>
+                    <div class="col-sm-3 ">
+                      <button id="updateBtn" class="btn btn-info" type="button">
+                      <i class="icon-ok bigger-110"></i>
+                        提交
+                      </button>
+                      <button id="cancelBtn" class="btn btn-danger" type="button">
+                      <i class="icon-reply bigger-110"></i>
+                        取消
+                      </button>
+                    </div>
+                  </div>
+                          
+                </form>
+                <div class="record_div">
+                  <input type="hidden" id="table_name" value="machinetype" />
+                  <input type="hidden" id="item_id" />
+                  <table id="record_table"  class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="user_td">修改用户</th>
+                      <th class="time_td" >修改时间</th>
+                      <th class="content_td">修改内容</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+                </div><!-- record div end -->
+              </div>
+
             </div>
           </div>
         </div>
@@ -147,114 +266,7 @@
     </div>
 
     <div id="dialog-modal" title="修改设备型号"  style="display: none">
-        <div class="dialog-content">
-        <form class="form-horizontal" role="form" method="post" action="__APP__/MachineType/update" id="updateForm">
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 设备供应商</label>
-            <div class="col-sm-3">
-              <select id="updateProvider" class="form-control">
-                <!--options-->
-                <volist name="providers" id="provider">
-                  <option value="{$provider.mp_id}">{$provider.name}</option>
-                </volist>
-              </select>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机器名称 </label>
-            <div class="col-sm-2">
-                <input type="text" id="updateName" name="updateName"  />
-                <div class="red" id="update_error_name"></div>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机型号 </label>
-            <div class="col-sm-2">
-                <input type="text" id="updateNumber" name="updateNumber"  />
-                <div class="red" id="update_error_number"></div>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 机具类型</label>
-            <div class="col-sm-1">
-              <select id="updateType">
-                <option value="0">POS机</option>
-                <option value="1">键盘</option>
-                <option value="2">SIM卡</option>
-                <option value="3">其它</option>
-              </select>
-            </div>
-        
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 设备类型</label>
-            <div class="col-sm-2">
-                <label>
-                  <input class="ace" type="radio" name="update_is_wired" value="1">
-                  <span class="lbl"> 有线</span>
-                </label>
-                <label>
-                  <input class="ace" type="radio" name="update_is_wired" value="0">
-                  <span class="lbl"> 无线</span>
-                </label>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否需要键盘</label>
-            <div class="col-sm-1">
-                <label>
-                  <input class="ace" type="checkbox" name="update_is_keyboard">
-                  <span class="lbl"> 是</span>
-                </label>
-            </div>
-
-            <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否需要SIM</label>
-            <div class="col-sm-1">
-                <label>
-                  <input class="ace" type="checkbox" name="update_is_simed">
-                  <span class="lbl"> 是</span>
-                </label>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 备注 </label>
-            <div class="col-sm-6">
-                <textarea class="autosize-transition form-control" id="updateRemark" name="remark" placeholder="备注"></textarea>
-            </div>
-          </div> 
-
-
-          <input id="mt_id" type="hidden" name="mt_id" />
-          
-          <div class="space-4"></div>
-          <div class="form-group">
-            <div class="col-md-3 "> </div>
-            <div class="col-sm-6 ">
-              <div style='float: left;'>
-              <button id="updateBtn" class="btn btn-info" type="button">
-              <i class="icon-ok bigger-110"></i>
-                提交
-              </button>
-              </div>
-              <div style='float: left;'>
-              <button id="cancelBtn" class="btn btn-danger" type="button">
-              <i class="icon-reply bigger-110"></i>
-                取消
-              </button>
-              </div>
-            </div>
-          </div>
-                  
-        </form>
-        </div>
+       
     </div>
 
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>

@@ -1,50 +1,40 @@
+var rootUrl = '/pos/Pos/index.php/';
+var dataUrl = rootUrl +'MachineType/search';
+
 $(document).ready(function(){
 	loadMCTData();
-	createDialog();
 });
 
 var types = ["POS机", "键盘", "SIM卡", "其它"];
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 850,
-                width: 700,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
+function updateRow(mt_id){
+  $("#tableContent").css('display','none');
+  $("#updateDiv").css('display','block');
+  $.ajax({
+    type:'post',
+    data : { 'mt_id' : mt_id },
+    url : dataUrl,
+    success : function( data ){
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['mt_id'] );
+      var is_wired = item['is_wired'] == 1 ? true : false;
+      var is_simed = item['is_simed'] == 1 ? true : false;
+      var is_keyboard = item['is_keyboard'] == 1 ? true : false;
+      $("input[name=update_is_keyboard]").prop("checked", is_keyboard);
+      $("input[name=update_is_simed]").prop("checked", is_simed);
+      $("input[name=update_is_wired][value="+ item['is_wired'] +"]").prop( 'checked', true);
+      loadModifyRecord();
+    }
+  });
 }
 
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var mt_id = $tdlist.get(0);
-  var mt_name = $tdlist.get(1);
-  var mt_number = $tdlist.get(2);
-  var mt_type = jQuery.inArray( $( $tdlist.get(3) ).html(), types);
-  var is_wired = $( $tdlist.get(4) ).html() == "有" ? 0 : 1;
-  var is_keyboard = $( $tdlist.get(5) ).html() == "是" ? true : false;
-  var is_simed = $( $tdlist.get(6) ).html() =="是" ? true : false;
-  var mt_remark = $tdlist.get(7);
-  console.log( $(mt_name).html() );
-  $("#mt_id").val( $(mt_id).html() );
-  $("#updateName").val( $(mt_name).html() );
-  $("#updateNumber").val( $(mt_number).html() );
-  $("#updateType option").eq(mt_type).attr("selected", true);
-  $("input[name=update_is_wired]").eq(is_wired).attr("checked",'checked');
-  $("input[name=update_is_keyboard]").attr("checked", is_keyboard);
-  $("input[name=update_is_simed]").attr("checked", is_simed);
-  $("#updateRemark").val( $(mt_remark).html());
-  $("#dialog-modal").dialog( "open");
-}
-
-function deleteRow(ele){
+function deleteRow(mt_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
-  console.log( $tr.find('td').html() );
-  var mt_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -68,19 +58,22 @@ function deleteRow(ele){
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#tableContent").css('display','block');
+  $("#updateDiv").css('display','none');
+  $("#record_table").find('tbody').html('');
+  $("#updateBtn").attr('disabled',false);
 });
 
 $('#updateBtn').click( function(){
   var url = $('#updateForm').attr('action'),
-      mt_id=$('#mt_id').val(),
-      mt_name=$("input[name=updateName]").val(),
-      mt_number=$("input[name=updateNumber]").val(),
-      type=$("#updateType").val(),
+      mt_id=$('#update_mt_id').val(),
+      mt_name=$("#update_name").val(),
+      mt_number=$("#update_number").val(),
+      type=$("#update_mt_type").val(),
       is_wired=$("input[name=update_is_wired]:checked").val(),
       is_keyboard=$("input[name=update_is_keyboard]:checked").val() ? 1 : 0,
       is_simed=$("input[name=update_is_simed]:checked").val() ? 1 : 0,
-      remark=$("#updateRemark").val();
+      remark=$("#update_remark").val();
 
   if(mt_name == ""){
     $('#update_error_name').html("机器名称不能为空");
@@ -108,7 +101,8 @@ $('#updateBtn').click( function(){
         if( data['status'] == 1 ){
           loadMCTData();
           alert( "修改成功！");
-          $("#dialog-modal").dialog("close");
+          $("#updateBtn").attr('disabled',false);
+          loadModifyRecord();
         }
         else{
           alert( "修改失败！");
@@ -116,8 +110,7 @@ $('#updateBtn').click( function(){
 
         $("#updateBtn").attr('disabled',false);
       }
-      }
-    );
+    });
   } 
 });
 
@@ -219,19 +212,14 @@ function loadMCTData(){
     success: function( data){
       var MCTArr = data['data'];
       var rows = [];
-      var editHtml = '<tr>'+ 
-                '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></tr>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmlEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+      var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
       for( var i=0; i<MCTArr.length; ++i ){
         var item = MCTArr[i];
         var row = [];
-        row.push( item["mt_id"] );
         row.push( item["mt_name"] );
         row.push( item["mt_number"] );
         row.push( types[ item["mt_type"] ]);
@@ -239,9 +227,7 @@ function loadMCTData(){
         row.push( item["is_keyboard"] == 1 ? '是' : '否' );
         row.push( item["is_simed"] == 1 ? '是' : '否' );
         row.push( item["remark"]);
-        row.push( item["create_time"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['mt_id'] + editHtmlEnd + delHtml + item['mt_id'] + delHtmlEnd );
         rows.push(row);
       }
       var oTable1;
@@ -255,8 +241,8 @@ function loadMCTData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,  null, null,null, null, null,null,
-                        null,null, null, { "bSortable": false }
+                        null, null,null, null, null,null,
+                        null, { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

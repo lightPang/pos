@@ -7,6 +7,7 @@
 
     public function addSupplier(){
         $this->doAuth();
+        $this->assign("activeTab", $_GET["activeTab"]);
         $this->display();
     }
 
@@ -17,7 +18,8 @@
         $mpModel = M('Machineprovider');
         $providers = $mpModel->field('mp_id, name')->select();
         
-        $this->assign("providers", $providers);
+        $this->assign("mp_id", $providers);
+        $this->assign("activeTab", $_GET["activeTab"]);
         $this->display();
     }
 
@@ -26,11 +28,13 @@
         $mtModel = M('Machinetype');
         $machineTypes = $mtModel->field('mt_id, mt_name, mt_number')->select();
         $this->assign("machineTypes", $machineTypes);
+        $this->assign("activeTab", $_GET["activeTab"]);
         $this->display();
     }
 
     public function machineStorage(){
         $this->doAuth();
+        $this->assign("activeTab", $_GET["activeTab"]);
         $this->display();
     }
 
@@ -45,6 +49,7 @@
 
         $this->assign("companys", $companys);
         $this->assign("machineTypes", $machineTypes);
+        $this->assign("activeTab", $_GET["activeTab"]);
         $this->display();
     }
   }

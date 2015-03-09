@@ -1,34 +1,32 @@
+var rootUrl = '/pos/Pos/index.php/';
+var dataUrl = rootUrl + 'Supplier/search';
 $(document).ready(function(){
 	loadSData();
-	createDialog();
 });
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 280,
-                width: 400,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-    });
-}
-
-function updateRow(ele){
-  var $tr = $(ele).parents('tr');
-  var $tdlist = $tr.find( $('td') );
-  console.log( $tdlist.length);
-  var mp_id = $tdlist.get(0);
-  var mp_name = $tdlist.get(1);
-  var mp_remark = $tdlist.get(2);
-  console.log( $(mp_name).html() );
-  $("#mp_id").val( $(mp_id).html() );
-  $("#updateName").val( $(mp_name).html() );
-  $("#updateRemark").val( $(mp_remark).html());
-  $("#dialog-modal").dialog( "open");
+function updateRow(mp_id){
+  $("#updateDiv").css('display','block');
+  $("#tableContent").css('display','none');
+  $.ajax({
+    type:'post',
+    data: { 'mp_id':mp_id },
+    url : dataUrl ,
+    success:function(data){
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#update_" + k;
+        $(id).val( item[k] );
+      }
+      $("#item_id").val( item['mp_id'] );
+      loadModifyRecord();
+    }
+  });
 }
 
 $('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
+  $("#updateDiv").css('display','none');
+  $("#tableContent").css('display','block');
+  $("record_table").find('tbody').html('');
 });
 
 $('#updateBtn').click( function(){
@@ -44,7 +42,7 @@ $('#updateBtn').click( function(){
       if( data['status'] == 1 ){
         loadSData();
         alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
+        loadModifyRecord();
       }
       else{
         alert( "修改失败！");  
@@ -81,34 +79,6 @@ function deleteRow(ele){
     
   }
 }
-
-$('#cancelBtn').click( function(){
-  $("#dialog-modal").dialog('close');
-});
-
-$('#updateBtn').click( function(){
-  var url = $('#updateForm').attr('action');
-  $("#updateBtn").attr('disabled',true);
-  console.log(url);
-  $.ajax({
-    type:'POST',
-    url: url,
-    data: $('#updateForm').serialize(),
-    success: function(data){
-      console.log(data);
-      if( data['status'] == 1 ){
-        loadSData();
-        alert( "修改成功！");
-        $("#dialog-modal").dialog("close");
-      }
-      else{
-      	alert( "修改失败！");	
-      }
-      $("#updateBtn").attr('disabled',false);
-    }
-  }
-  );
-});
 
 $('#addbtn').click(function(event){
 	event.preventDefault();
@@ -154,26 +124,17 @@ function loadSData(){
     success: function( data){
       var SArr = data['data'];
       var rows = [];
-      var editHtml = '<tr>'+ 
-                '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-																<a class=\"green\" href=\"#\" onclick=\"updateRow(this)\">\
-																	<i class=\"icon-pencil bigger-130\"></i>\
-																</a>\
-																<a class=\"red\" href=\"#\" onclick=\"deleteRow(this)\">\
-																	<i class=\"icon-trash bigger-130\"></i>\
-																</a>\
-															</div></tr>';
+      var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
+																<a class=\"green\" href=\"#\" onclick=\"updateRow(';
+      var editHtmleEnd = ')\"><i class=\"icon-pencil bigger-130\"></i></a>';
+			var delHtml = '<a class=\"red\" href=\"#\" onclick=\"deleteRow(';
+      var delHtmlEnd = ',this)\"><i class=\"icon-trash bigger-130\"></i></a></div>';
       for( var i=0; i<SArr.length; ++i ){
         var item = SArr[i];
         var row = [];
-        row.push( item["mp_id"] );
         row.push( item["name"] );
         row.push( item["remark"]);
-        row.push( item["create_time"] );
-        row.push( item["create_user"] );
-        row.push( item["edit_user"] );
-        row.push( item["edit_time"] );
-        row.push( editHtml  );
+        row.push( editHtml + item['mp_id'] + editHtmleEnd + delHtml + item['mp_id'] + delHtmlEnd );
         rows.push(row);
       }
       var oTable1;
@@ -187,7 +148,7 @@ function loadSData(){
           "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
           "bPaginate" : true, //是否显示（应用）分页器  
           "aoColumns" : [
-                          null,  null, null,null, null, null, null, { "bSortable": false }
+                          null,  null,  { "bSearchable" : false,  "bSortable": false }
                         ],
           "oLanguage": { //国际化配置  
                   "sProcessing" : "正在获取数据，请稍后...",    

@@ -43,11 +43,11 @@
           <div class="tab-content">
             <div id="add" class="tab-pane in active">
               <div class="row">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="createForm" role="form">
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" >调出仓库</label>
                     <div class="col-sm-3">
-                      <select id="out_company" class="form-control">
+                      <select id="out_company" name="source_c" class="form-control">
                         <option>请选择</option>
                         <volist name="companys" id="company">
                           <option value="{$company.c_id}">{$company.name}</option>
@@ -57,7 +57,7 @@
 
                     <label class="col-sm-1 control-label no-padding-right" >调入仓库</label>
                     <div class="col-sm-3">
-                      <select id="in_company" class="form-control">
+                      <select id="in_company" name="target_c" class="form-control">
                         <option>请选择</option>
                         <volist name="companys" id="company">
                           <option value="{$company.c_id}">{$company.name}</option>
@@ -70,7 +70,7 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" >选择机型</label>
                     <div class="col-sm-3">
-                      <select id="m_type" class="form-control">
+                      <select id="m_type" name="m_type" class="form-control">
                         <option>请选择</option>
                         <volist name="machineTypes" id="machineType">
                           <option value="{$machineType.mt_id}">{$machineType.mt_name}—  {$machineType.mt_number}</option>
@@ -80,48 +80,30 @@
 
                     <label class="col-sm-1 control-label no-padding-right" > 可调数量 </label>
                     <div class="col-sm-1">
-                        <input type="text" id="valid_quantity" name="valid_quantity" disabled="disabled" style="width:60px;"/>
+                        <input type="text" id="valid_quantity" disabled="disabled" style="width:60px;"/>
                     </div>
 
                     <label class="col-sm-1 control-label no-padding-right" > 调出数量 </label>
                     <div class="col-sm-2">
                         <input type="text" id="quantity" name="quantity" style="width:60px;"/>
-                        <button id="addMachineType" class="btn btn-sm btn-primary" type="button">
-                         <i class="icon-plus bigger-110"></i>
-                        </button>
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" >已添加:</label>
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 备注</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control"  name="remark" placeholder="备注"></textarea>
+                    </div>
                   </div>
-
-                  <div>
-                    <label class="col-sm-1 control-label no-padding-right" ></label>
-                    <table id="addRecord" class="table table-striped table-bordered table-hover" style="width:80%;">
-                      <thead>
-                        <tr>
-                          <th style="width:0px;"></th>
-                          <th class="center">调出仓库</th>
-                          <th class="center">调入仓库</th>
-                          <th class="center">机型</th>
-                          <th class="center">数量</th>
-                          <th class="center">操作</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
-
+                  
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <div class="center">
+                    <div class="col-sm-7"></div>
+                    <div class="col-sm-2">
                       <button class="btn btn-info" type="button" id="addBtn">
                         <i class="icon-ok bigger-110"></i>
-                          Submit
+                          提交
                       </button>
                     </div>
                   </div>
@@ -130,19 +112,16 @@
             </div>
 
             <div id="confirm" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
-                <table id="sample-table-2" class="table table-striped table-bordered table-hover">
+              <div id="confirmTable" class="dataTables_wrapper" role="grid">
+                <table id="dispatch-table-1" class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th style="width:0%;"></th>
                       <th>调出仓库</th>
                       <th>调入仓库</th>
                       <th>机器类型</th>
                       <th>机器数量</th>
-                      <th>创建者</th>
-                      <th>创建时间</th>
-                      <th>修改者</th>
-                      <th>修改时间</th>
+                      <th>状态</th>
+                      <th>备注</th>
                       <th>操作</th>
                     </tr>
                   </thead>
@@ -151,46 +130,115 @@
                   </tbody>
                 </table>
               </div>
+              <div id="confirmContent" style="display:none;">
+                <div class="line " >
+                  <span>调出仓库：</span><span id="update_sourceC"></span>
+                  <span> 调入仓库：<span id="update_targetC"></span></span>
+                </div>
+                <div class="line ">
+                  <span> 调配机型：</span><span id="update_mType" ></span>
+                  <span> 调出数量：</span><span id="update_quantity"></span>
+                </div>
+
+                <form id="agreeForm" class="form-horizontal">
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 机身编码</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control" id="m_list" name="m_list" placeholder="机身编码"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <label class="col-sm-1" style="text-align:right;" for="form-field-1"> 备注</label>
+                    <div class="col-sm-4 ">
+                        <textarea class="autosize-transition form-control"  name="update_remark" placeholder="备注"></textarea>
+                    </div>
+                  </div>
+                  <input type="hidden" id="update_do_id" name="do_id" />
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-4">
+                      <button class="btn btn-info" type="button" id="agreeBtn">
+                        <i class="icon-ok bigger-110"></i>
+                          提交
+                      </button>
+                      <button class="btn btn-danger" type="button" id="rtnBtn">
+                        <i class="icon-reply bigger-110"></i>
+                          返回
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
 
             <div id="agreed" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
-                <table id="sample-table-3" class="table table-striped table-bordered table-hover">
+              <div id="dispatch-table-content-2" class="dataTables_wrapper" role="grid">
+                <table id="dispatch-table-2" class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
                       <th>调出仓库</th>
                       <th>调入仓库</th>
                       <th>机器类型</th>
                       <th>机器数量</th>
-                      <th>机器列表</th>
+                      <th>状态</th>
                       <th>备注</th>
-                      <th>创建者</th>
-                      <th>创建时间</th>
-                      <th>修改者</th>
-                      <th>修改时间</th>
+                      <th>操作</th>
                     </tr>
                   </thead>
 
                   <tbody>
                   </tbody>
                 </table>
+              </div>
+              <div id="dispatch_content_2" style="display:none;">
+                <div class="row">
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right"> <button id="d2_rtnBtn">返回</button></div>
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d2_sourceC"> 调出仓库：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d2_targetC"> 调入仓库：<span></span></div> 
+                    <div class="col-sm-4 no-padding-right" id="d2_state"> 订单状态：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d2_mType"> 调配机型：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d2_quantity"> 调配数量：<span></span></div> 
+                    <div class="col-sm-3 no-padding-right" id="d2_remark"> 备注：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" > 机身编码：</div>
+                    <div class="bottom"></div> 
+                    <div class="col-sm-3" id="d2_m_code_list"/></div>
+                    <div class="bottom"></div>
+                    
+                  </div>
+
+                </div><!-- content end -->
               </div>
             </div>
 
             <div id="disagreed" class="tab-pane">
-              <div id="sample-table-2_wrapper" class="dataTables_wrapper" role="grid">
-                <table id="sample-table-4" class="table table-striped table-bordered table-hover">
+              <div id="dispatch-table-content-3" class="dataTables_wrapper" role="grid">
+                <table id="dispatch-table-3" class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
                       <th>调出仓库</th>
                       <th>调入仓库</th>
                       <th>机器类型</th>
                       <th>机器数量</th>
+                      <th>状态</th>
                       <th>备注</th>
-                      <th>创建者</th>
-                      <th>创建时间</th>
-                      <th>修改者</th>
-                      <th>修改时间</th>
+                      <th>操作</th>
                     </tr>
                   </thead>
 
@@ -198,45 +246,33 @@
                   </tbody>
                 </table>
               </div>
-            </div>
 
+              <div id="dispatch_content_3" style="display:none;">
+                <div class="row">
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right"> <button id="d3_rtnBtn">返回</button></div>
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d3_sourceC"> 调出仓库：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d3_targetC"> 调入仓库：<span></span></div> 
+                    <div class="col-sm-4 no-padding-right" id="d3_state"> 订单状态：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d3_mType"> 调配机型：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d3_quantity"> 调配数量：<span></span></div> 
+                    <div class="col-sm-3 no-padding-right" id="d3_remark"> 备注：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+
+                </div><!-- content end -->
+
+            </div><!-- tab content end -->
           </div>
         </div>
-      </div>
-    </div>
-
-    <div id="dialog-modal-agree" title="同意设备调拨"  style="display: none">
-      <div class="dialog-content">
-        <form class="form-horizontal" role="form"  id="agreeForm">
-          <input id="agree_do_id" type="hidden" name="do_id" />
-          <div class="space-4"></div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label no-padding-right" > 备注 </label>
-            <div class="col-sm-7">
-                <textarea class="autosize-transition form-control" id="agree_remark" name="remark" placeholder="备注"></textarea>
-            </div>
-          </div>
-
-          <div class="space-4"></div>
-          <div class="form-group">
-            <div class="col-md-3 "> </div>
-            <div class="col-sm-6 ">
-              <div style='float: left;'>
-                <button id="agreeBtn" class="btn btn-info" type="button">
-                <i class="icon-ok bigger-110"></i>
-                  提交
-                </button>
-              </div>
-
-              <div style='float: left;'>
-                <button id="agree_cancelBtn" class="btn btn-danger" type="button">
-                  <i class="icon-reply bigger-110"></i>
-                    取消
-                  </button>
-              </div>
-            </div>
-          </div>
-        </form>
       </div>
     </div>
 
