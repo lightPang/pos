@@ -1,8 +1,9 @@
 <?php
   class OperationAction extends CommonAction{
     public function index(){
-      $this->doAuth();
-      $this->display();
+      if( $this->doAuth() ){
+        $this->display();
+      }
     }
     
     /*******
@@ -407,6 +408,69 @@
       }
       else if( isset( $_SESSION['u_id' ]) ){
         $ca = M('client_attr');
+        $data = $ca->select();
+        $this->ajaxReturn( $data, "ok", 0);
+      }
+    }
+
+    /*******
+    function about pos_Type
+    */
+    
+    public function posType(){
+      $this->doAuth();
+      $this->display('posType');
+    }
+    
+    public function createPosType(){
+      if( isset($_SESSION['u_id']) && isset( $_POST['code'] ) ){
+        $ca = M('pos_type');
+        $data['code'] = $_POST['code'] ;
+        $data['type'] = $_POST['type'];
+        $data['brand'] = $_POST['brand'];
+        $data['price'] = $_POST['price'];
+        $res = $ca->add( $data );
+        $map['pt_id'] = $res;
+        $this->addModifyRecord( $data,$map, 'pos_type', 'pt_id',1);
+        $this->ajaxReturn( $data, "insertion", $res);
+      }
+      $this->ajaxReturn(null, "insertion failed!", 0);
+    }
+    
+    public function updatePosType(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['pt_id'] ) ){
+        $map['pt_id'] = $_POST['pt_id'];
+        $data['code'] = $_POST['code'] ;
+        $data['type'] = $_POST['type'];
+        $data['brand'] = $_POST['brand'];
+        $data['price'] = $_POST['price'];
+        $ca = M('pos_type');
+        $this->addModifyRecord( $data,$map, 'pos_type', 'pt_id');
+        $res = $ca->where( $map)->save( $data);
+        $this->ajaxReturn( $map, "ok", 1);
+      }
+      $this->ajaxReturn( null, "update failed!", 0);
+    }
+    
+    public function delPosType(){
+      if( isset( $_SESSION['u_id'] ) && isset( $_POST['pt_id'] ) ){
+        $map['pt_id'] = $_POST['pt_id'];
+        $ca = M('pos_type');
+        $res = $ca->where($map)->delete();
+        $this->ajaxReturn( $res, "deletion", $res );
+      }
+      $this->ajaxReturn( null, "deletion failed!", 0 );
+    }
+    
+    public function getPosTypeData(){
+      if( isset($_SESSION['u_id'] ) && isset( $_POST['pt_id'] ) ){
+        $map['pt_id'] = $_POST['pt_id'] ;
+        $ca = M('pos_type');
+        $data = $ca->where($map)->select()[0];
+        $this->ajaxReturn( $data, "ok", 1);
+      }
+      else if( isset( $_SESSION['u_id' ]) ){
+        $ca = M('pos_type');
         $data = $ca->select();
         $this->ajaxReturn( $data, "ok", 0);
       }

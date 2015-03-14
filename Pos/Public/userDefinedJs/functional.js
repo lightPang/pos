@@ -170,6 +170,9 @@ function alter_key_name( arr, tableName ){
     case 'deployorder':
       data = {"name":"名称", "m_code_list":'编码' ,'state':'状态','remark':'备注'};
       break;
+    case 'pos_type':
+      data = {"name":"名称", "code":'机具ID' ,'brand':'机具品牌', 'type' :'机具型号' , 'price':'单价'};
+      break;
     default :
       data = {"name":"名称", "code":'编码','remark':'备注'};
       break;
