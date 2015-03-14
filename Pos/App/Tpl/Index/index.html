@@ -41,7 +41,7 @@
 
                       <div class="space-6"></div>
 
-                      <form id="login_form" action="__APP__/Index/login">
+                      <form method="post" id="login_form" action="__APP__/Index/login">
                         <fieldset>
                           <label class="block clearfix">
                             <span class="block input-icon input-icon-right">

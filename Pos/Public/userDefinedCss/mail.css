@@ -1,0 +1,22 @@
+.form-div{
+  margin-left:15px;
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-right: 10px;
+}
+
+.inline-div{
+  display: inline;
+}
+
+#search{
+  width: 220px;
+  height: 35px;
+}
+.titleText{
+  width: 530px;
+  height: 35px;
+}
+textarea{
+  width: 530px;
+}

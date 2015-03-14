@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "Operation/createClientPlatform";
 var updateUrl = rootUrl + "Operation/updateClientPlatform";
 var delUrl = rootUrl + "Operation/delClientPlatform";

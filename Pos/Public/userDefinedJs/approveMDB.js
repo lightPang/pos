@@ -1,4 +1,4 @@
-var rootUrl = '/pos/Pos/index.php/';
+
 /*
 check box functions
 

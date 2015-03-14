@@ -1,6 +1,5 @@
 $(document).ready(function(){
   $('input[name=account]').focus();
-  console.log( "./Index/home");
   $('#login_form').submit(function(event){
         event.preventDefault();
         var $form = $(this),
@@ -11,8 +10,10 @@ $(document).ready(function(){
         if(account != '' && pwd != ''){
           $('#sbtn').attr("disabled", true);
           $.post(url, {account:account, pwd:$.md5(pwd)}, function(data){
+            console.log( data );
             if(data=='true'){
-              location.href="/pos/Pos/index.php/Index/home";
+              alert( "登陆成功！");
+              location.href= "/pos/Pos/index.php/" + "Index/home";
             }
             else if(data=='fail'){
               alert('账号或密码错误！');

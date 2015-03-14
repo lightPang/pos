@@ -172,7 +172,63 @@
                     </div>
                   </div>
                 </form>
+                <div class="record_div">
+                  <table id="record_table_1"  class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th class="user_td">修改用户</th>
+                        <th class="time_td" >修改时间</th>
+                        <th class="content_td">修改内容</th>
+                      </tr>
+                    </thead>
+                    <tbody>    
+                    </tbody>
+                  </table>
+                </div><!-- record div end -->
               </div>
+
+              <div id="dispatch_content_1" style="display:none;">
+                <div class="row">
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right"> <button id="d1_rtnBtn">返回</button></div>
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d1_sourceC"> 调出仓库：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d1_targetC"> 调入仓库：<span></span></div> 
+                    <div class="col-sm-4 no-padding-right" id="d1_state"> 订单状态：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="d1_mType"> 调配机型：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="d1_quantity"> 调配数量：<span></span></div> 
+                    <div class="col-sm-3 no-padding-right" id="d1_remark"> 备注：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div>
+                    
+                  </div>
+                  <div class="record_div">
+                  
+                    <table id="record_table_1"  class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th class="user_td">修改用户</th>
+                          <th class="time_td" >修改时间</th>
+                          <th class="content_td">修改内容</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div><!-- record div end -->
+                  
+
+                </div><!-- content end -->
+
             </div>
 
             <div id="agreed" class="tab-pane">
@@ -222,6 +278,23 @@
                     <div class="bottom"></div>
                     
                   </div>
+                  <div class="record_div">
+                  
+                    <table id="record_table_2"  class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th class="user_td">修改用户</th>
+                          <th class="time_td" >修改时间</th>
+                          <th class="content_td">修改内容</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div><!-- record div end -->
+                  
 
                 </div><!-- content end -->
               </div>
@@ -268,12 +341,32 @@
                     <div class="bottom"></div> 
                   </div>
 
+                  <div class="record_div">
+                  
+                    <table id="record_table_3"  class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th class="user_td">修改用户</th>
+                          <th class="time_td" >修改时间</th>
+                          <th class="content_td">修改内容</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div><!-- record div end -->
+
                 </div><!-- content end -->
 
             </div><!-- tab content end -->
           </div>
         </div>
       </div>
+      <input type="hidden" id="table_name" value="deployorder" />
+      <input type="hidden" id="update_table_name" />
+      <input type="hidden" id="item_id" />
     </div>
 
     <div id="dialog-modal-disagree" title="拒绝设备调拨"  style="display: none">

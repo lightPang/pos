@@ -1,5 +1,6 @@
-var rootUrl = '/pos/Pos/index.php/';
 var dataUrl = rootUrl +'MachineStoring/searchOrder';
+var addUrl = rootUrl + "MachineStoring/addOrder";
+var delUrl = rootUrl + "MachineStoring/deleteOrder";
 $(document).ready(function(){
 	loadOrderData();
 });
@@ -55,7 +56,7 @@ $("#addBtn").click(function(){
 
 	    $.ajax({
 	      type:'POST',
-	      url:'/pos/Pos/index.php/MachineStoring/addOrder',
+	      url:addUrl,
 	      data: {'m_list' : m_list,
 	      		 'm_type' : m_type,
 	      		 'quantity' : quantity,
@@ -199,7 +200,7 @@ function deleteRow(o_id,ele){
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:'/pos/Pos/index.php/MachineStoring/deleteOrder',
+      url: delUrl,
       data: {'o_id' : o_id },
       success: function(data){
         console.log(data);
@@ -221,7 +222,7 @@ function loadOrderData(){
   $.ajax({
     type:'POST',
     dataType:"json", 
-    url:"/pos/Pos/index.php/MachineStoring/searchOrder",
+    url: dataUrl,
     success: function( data){
       var Arr = data['data'];
       var rows = [];

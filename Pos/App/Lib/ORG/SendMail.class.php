@@ -17,6 +17,7 @@
 * $mail->sendMail(); //发送
 */
 class SendMail {
+    public $testMsg ;
     /**
     * @var string 邮件传输代理用户名
     * @access protected
@@ -81,7 +82,7 @@ class SendMail {
     * @var array 附件
     * @access protected
     */
-    protected $_attachment = array();
+    public $_attachment = array();
   
     /**
     * @var reource socket资源
@@ -178,7 +179,7 @@ class SendMail {
             return false;
         }
         $this->_attachment[] = $file_array;
-                //print_r($this->_attachment);
+                //var_dump($this->_attachment);
  
         return true;
     }
@@ -354,20 +355,20 @@ class SendMail {
             $count = count($this->_attachment);
             for($i=0; $i<$count; $i++){
                 $header .= "\r\n--" . $separator . "\r\n";
-                $header .= "Content-Type: " . $this->getMIMEType($this->_attachment[$i][0]) . '; name="=?UTF-8?B?' . base64_encode( basename($this->_attachment[$i][1]) ) . '?="' . "\r\n";
+                $header .= "Content-Type: " . $this->getMIMEType($this->_attachment[$i][0]) . '; name="=?UTF-8?B?' . base64_encode( $this->get_basename($this->_attachment[$i][1]) ) . '?="' . "\r\n";
                 //echo $header;
                 $header .= "Content-Transfer-Encoding: base64\r\n";
-                $header .= 'Content-Disposition: attachment; filename="=?UTF-8?B?' . base64_encode( basename($this->_attachment[$i][1]) ) . '?="' . "\r\n";
+                $header .= 'Content-Disposition: attachment; filename="=?UTF-8?B?' . base64_encode( $this->get_basename($this->_attachment[$i][1]) ) . '?="' . "\r\n";
                 $header .= "\r\n";
                 $header .= $this->readFile($this->_attachment[$i][0]);
                 $header .= "\r\n--" . $separator . "\r\n";
             }
-            //echo $header;
+           
         }
  
         //结束邮件数据发送
         $header .= "\r\n.\r\n";
-  
+        // echo $header;
   
         $command[] = array("DATA\r\n", 354);
         $command[] = array($header, 250);
@@ -375,7 +376,18 @@ class SendMail {
           
         return $command;
     }
-  
+
+    /**
+    * 获取中文编码，原生php basename不支持中文
+    * @access protected
+    * @param string $filename 文件名
+    * @return str
+    */
+    
+    protected function get_basename($filename){  
+     return preg_replace('/^.+[\\\\\\/]/', '', $filename);  
+    }
+
     /**
     * 发送命令
     * @access protected
@@ -440,7 +452,7 @@ class SendMail {
                 //读取服务器返回
                 $data = trim(fread($this->_socket, 1024));
                 //echo 'response:' . $data . '<br /><br />';
-  
+                    
                 if($data) {
                     $pattern = "/^".$code."+?/";
                     if(preg_match($pattern, $data)) {
@@ -621,12 +633,13 @@ class SendMail {
             $this->_errorMessage = $errstr;
             return false;
         }
-  
+        
         //设置加密连接，默认是ssl，如果需要tls连接，可以查看php手册stream_socket_enable_crypto函数的解释
         stream_socket_enable_crypto($this->_socket, true, STREAM_CRYPTO_METHOD_SSLv23_CLIENT);
   
         stream_set_blocking($this->_socket, 1); //设置阻塞模式
         $str = fread($this->_socket, 1024);
+        
         if(!preg_match("/220+?/", $str)){
             $this->_errorMessage = $str;
             return false;

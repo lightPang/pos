@@ -1,6 +1,6 @@
-var rootUrl = '/pos/Pos/index.php/';
 var dataUrl = rootUrl +'MachineType/search';
-
+var delUrl = rootUrl + 'MachineType/delete';
+var upadteUrl = rootUrl + "MachineType/update";
 $(document).ready(function(){
 	loadMCTData();
 });
@@ -39,7 +39,7 @@ function deleteRow(mt_id,ele){
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:'/pos/Pos/index.php/MachineType/delete',
+      url: delUrl     ,
       data: {'mt_id' : mt_id },
       success: function(data){
         console.log(data);
@@ -67,8 +67,8 @@ $('#cancelBtn').click( function(){
 $('#updateBtn').click( function(){
   var url = $('#updateForm').attr('action'),
       mt_id=$('#update_mt_id').val(),
-      mt_name=$("#update_name").val(),
-      mt_number=$("#update_number").val(),
+      mt_name=$("#update_mt_name").val(),
+      mt_number=$("#update_mt_number").val(),
       type=$("#update_mt_type").val(),
       is_wired=$("input[name=update_is_wired]:checked").val(),
       is_keyboard=$("input[name=update_is_keyboard]:checked").val() ? 1 : 0,
@@ -87,7 +87,7 @@ $('#updateBtn').click( function(){
     console.log(url);
     $.ajax({
       type:'POST',
-      url: url,
+      url: updateUrl,
       data: { 'mt_id' : mt_id,
               'mt_name' : mt_name,
               'mt_number' : mt_number,
@@ -208,7 +208,7 @@ function loadMCTData(){
   $.ajax({
     type:'POST',
     dataType:"json", 
-    url:"/pos/Pos/index.php/MachineType/search",
+    url: dataUrl,
     success: function( data){
       var MCTArr = data['data'];
       var rows = [];

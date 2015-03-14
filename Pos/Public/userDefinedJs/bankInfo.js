@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "Bank/createBank";
 var updateUrl = rootUrl + "Bank/updateBank";
 var delUrl = rootUrl + "Bank/delBank";

@@ -67,10 +67,44 @@ function loadTable(id,data){
   $(id).find('tbody').html(html);
 }
 
+function loadMultiModifyRecord(){
+  var table_name = $("#table_name").val();
+  var item_id = $("#item_id").val();
+
+  $.ajax({
+    type:'post',
+    data:{
+      'table_name':table_name,
+      'item_id' : item_id
+    },
+    url : recordUrl,
+    success : function( data ){
+      var recordList = data['data'];
+
+      if( recordList != null )
+        recordList = alter_key_name( recordList, table_name );
+      else
+        return;
+      
+      var rows = Array();
+      for( var i = 0; i < recordList.length; ++ i ){
+        var row = Array();
+        row.push( recordList[i]['name'] );
+        row.push( recordList[i]['time'] );
+        row.push( recordList[i]['content'] );
+        rows.push( row );
+      }
+      var tableId = "#"+ $("#update_table_name").val();
+      loadTable( tableId, rows );
+    }
+  });
+
+}
+
 function loadModifyRecord(){
   var table_name = $("#table_name").val();
   var item_id = $("#item_id").val();
-  console.log( $("#item_id").val() );
+
   $.ajax({
     type:'post',
     data:{
@@ -127,11 +161,14 @@ function alter_key_name( arr, tableName ){
     case 'area_district' :
       data = { "name":"名称", "code":'代码', 'ap_id' :'所属省份','ac_id' :'所属城市', 'is_active':'是否启用','remark':'备注' };
       break;
-    case 'machineprovider':
+    case 'machinetype':
       data = {"mt_name":"机型名称","mt_number":"机型号", "is_wired":'有无线',"is_simmed":'是否需要sim', 'is_keyboard':'是否需要键盘' ,'remark':'备注' };
       break;
     case 'order' :
       data = {"m_list":"机器列表", "m_type":'机器型号', 'quantity': "机器数量", 'pay_state':'付款状态', 'price' :'单价', 'sum_price' : '总价' ,'pay_remark':'备注'};
+      break;
+    case 'deployorder':
+      data = {"name":"名称", "m_code_list":'编码' ,'state':'状态','remark':'备注'};
       break;
     default :
       data = {"name":"名称", "code":'编码','remark':'备注'};
@@ -141,9 +178,15 @@ function alter_key_name( arr, tableName ){
   for( var i = 0; i < arr.length; ++ i ){
     var changeArr = arr[i]['content'] ;
     var resArr = '';
-    for( var k in changeArr ){
-      resArr += "{ " + data[k] + ' ：' + changeArr[k] + " } ";
-      //resArr[ data[k] ] = changeArr[k];
+    if( arr[i]['content'] == '创建' ){
+      resArr = '创建';
+    }
+    else{
+      for( var k in changeArr ){
+        resArr += "{ " + data[k] + ' ：' + changeArr[k] + " } ";
+        //resArr[ data[k] ] = changeArr[k];
+      }
+      
     }
     //console.log( resArr.join("")  );
     arr[i]['content'] = resArr;

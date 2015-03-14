@@ -60,6 +60,20 @@
                     </div>
                     
                   </div>
+
+                  <div class="form-group">
+                  
+                    <label class="col-sm-1 control-label no-padding-right" > 员工手机 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="phone"  placeholder="员工手机"  />
+                    </div>
+                  
+                    <label class="col-sm-1 control-label no-padding-right" > 员工邮箱 </label>
+                    <div class="col-sm-2">
+                        <input type="text"  name="email"  placeholder="员工邮箱"  />
+                    </div>
+                    
+                  </div>
                   
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 权限选择 </label>
@@ -200,8 +214,8 @@
                         </label>
                         
                          <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="taskDispatch"/>
-                          <span class="lbl"> 任务分派</span>
+                          <input name="auth[]" type="checkbox" class="ace" value="sendMail"/>
+                          <span class="lbl"> 邮件发送</span>
                         </label>
                         
                         <label>
@@ -304,6 +318,20 @@
                     <label class="col-sm-1 control-label no-padding-right" > 员工密码 </label>
                     <div class="col-sm-2">
                         <input type="password"  name="updatePwd" id="updatePwd" placeholder="员工密码"  />
+                    </div>
+                    
+                  </div>
+
+                  <div class="form-group">
+                  
+                    <label class="col-sm-1 control-label no-padding-right" > 员工手机 </label>
+                    <div class="col-sm-2">
+                        <input type="text" name="update_phone" id="update_phone" placeholder="员工手机"  />
+                    </div>
+                  
+                    <label class="col-sm-1 control-label no-padding-right" > 员工邮箱 </label>
+                    <div class="col-sm-2">
+                        <input type="text"  name="update_email" id="update_email" placeholder="员工邮箱"  />
                     </div>
                     
                   </div>
@@ -418,22 +446,22 @@
                       
                       <div class="checkboxGroupRow">
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="setupApply-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="setupApply"/>
                           <span class="lbl"> 装机申请</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="setupRegister-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="setupRegister"/>
                           <span class="lbl"> 装机登记</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="checkRegister-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="checkRegister"/>
                           <span class="lbl"> 巡检登记</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="returnRegister-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="returnRegister"/>
                           <span class="lbl"> 退机登记</span>
                         </label>
                         
@@ -442,22 +470,22 @@
                       <div class="checkboxGroupRow">
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="applyApprove-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="applyApprove"/>
                           <span class="lbl"> 申请审批</span>
                         </label>
                         
                          <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="taskDispatch-update"/>
-                          <span class="lbl"> 任务分派</span>
+                          <input name="auth[]" type="checkbox" class="ace" value="sendMail"/>
+                          <span class="lbl"> 邮件发送</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="staffManage-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="staffManage"/>
                           <span class="lbl"> 员工管理</span>
                         </label>
                         
                         <label>
-                          <input name="auth[]" type="checkbox" class="ace" value="companyManage-update"/>
+                          <input name="auth[]" type="checkbox" class="ace" value="companyManage"/>
                           <span class="lbl">  公司管理</span>
                         </label>
                       </div>

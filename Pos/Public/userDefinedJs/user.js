@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "User/createUser";
 var updateUrl = rootUrl + "User/updateUser";
 var delUrl = rootUrl + "User/delUser";
@@ -103,6 +102,8 @@ function updateRow(u_id){
       $('#updateName').val( userItem['name'] );
       $('#updateUid').val( userItem['u_id'] );
       $("#updateAccount").val( userItem['account'] );
+      $("#update_phone").val( userItem['phone'] );
+      $("#update_email").val( userItem['email'] );
       var strs = userItem['auth'].split(',');
       for( var i = 0 ; i<strs.length; ++i ){
         if( strs[i] !== '' )
@@ -155,16 +156,19 @@ $('#updateBtn').click( function(){
       return;
     }
   }
+
   $.ajax({
     type:'POST',
     url: updateUrl,
     data:{
-        u_id : $("#updateUid").val(),
-        name : $("#updateName").val(),
-        c_id : $("#updateCompany").val(),
-        pwd : stripPwd( $("#updatePwd").val() ),
-        account : $("#updateAccount").val(),
-        auth : serializeAuth("#updateForm"),
+        'u_id' : $("#updateUid").val(),
+        'name' : $("#updateName").val(),
+        'c_id' : $("#updateCompany").val(),
+        'pwd' : stripPwd( $("#updatePwd").val() ),
+        'account' : $("#updateAccount").val(),
+        'phone' : $("#update_phone").val(),
+        'email' : $("#update_email").val(),
+        'auth' : serializeAuth("#updateForm"),
       },
     success: function(data){
       console.log(data);
@@ -250,6 +254,7 @@ function loadData(){
     dataType:"json", 
     url: dataUrl,
     success: function( data){
+      console.log( dataUrl );
       var MccBigArr = data['data'];
       var rows = [];
       var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\

@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var soDataUrl = rootUrl + 'Task/getSoData';
 var soItemUrl = rootUrl + 'Apply/getSoItem';
 var comfirmUrl = rootUrl + 'Task/confirm';

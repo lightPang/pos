@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var siDataUrl = rootUrl + "SetupItem/getSiData";
 var soDataUrl = rootUrl + 'Apply/getSoData';
 var soItemUrl = rootUrl + 'Apply/getSoItem';

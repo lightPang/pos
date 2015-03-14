@@ -1,12 +1,12 @@
 <?php
 class MachineStorageAction extends CommonAction{
 	public function getAllMachine(){
-		if($this->doAuth("manageMachineStorage")){
+		if($this->doAuth("viewStorage")){
 			$mModel = M();
 
 			$sql = "SELECT machine.c_id, company.name as warehouse_name, machine.m_type,
 							machinetype.mt_name, machinetype.mt_number, 
-							sum(case when state = 1 then 1 else 0 end) as state_1,
+							sum(case when state = 0 or state = 1 then 1 else 0 end) as state_1,
 							sum(case when state = 2 then 1 else 0 end) as state_2,
 							sum(case when state = 3 then 1 else 0 end) as state_3,
 							count(state) as total

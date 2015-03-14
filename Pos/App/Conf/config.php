@@ -9,6 +9,7 @@ return array(
     'DB_PORT'   =>  '3306',
     'DB_PREFIX' =>  '',
     'DEFAULT_TIMEZONE'=>'Asia/ShangHai' ,
+    'Web_Prefix' => '/pos/Pos/',
 	//'配置项'=>'配置值'
     #'SHOW_RUN_TIME'    => true, // 运行时间显示
     #'SHOW_ADV_TIME'    => true, // 显示详细的运行时间

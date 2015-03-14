@@ -163,7 +163,7 @@
         $date = date("d").'-'.date("H").'-'.date('i').'-'.date('s');
         $fileName = $fileDir.$date.".MDB";
         copy("MDB/blank.MDB", $fileName);
-        $filePreFix = "D:/PgmTools/xampp/htdocs/pos/Pos/";
+        $filePreFix = $this->_server('DOCUMENT_ROOT') . C('Web_Prefix') .
         //$fileName = "D:/PgmTools/xampp/htdocs/pos/Pos/MDB/download/2015/02/09-21-33-49.MDB";
         $fileName = $filePreFix.$fileName;
         $accessUtil = new Access($fileName);

@@ -1,6 +1,8 @@
 var quantityUrl = rootUrl + "MachineDispatch/getMachineQuantity";
 var createDOUrl = rootUrl + "MachineDispatch/addDeployOrders";
 var doDataUrl = rootUrl + "MachineDispatch/getDeployOrders";
+var agreeUrl = rootUrl + "MachineDispatch/agreeDeployOrder";
+var disagreeUrl = rootUrl + "MachineDispatch/disagreeDeployOrder";
 $(document).ready(function(){
 	dispatchedNum = new Array($("#m_type option").length);
 	for(var i = 0; i < dispatchedNum.length; i++){
@@ -28,6 +30,7 @@ function createDialog(){
 function agreeRow( do_id ){
   $("#confirmTable").css('display','none');
   $("#confirmContent").css('display','block');
+  $("#dispatch_content_1").css('display','none');
   $.ajax({
     type:'post',
     data :{ 'do_id' : do_id },
@@ -40,6 +43,9 @@ function agreeRow( do_id ){
         $(id).html( item[k] );
       }
       $("#update_do_id").val( item['do_id'] );
+      $("#update_table_name").val('record_table_1');
+      $("#item_id").val( item['do_id'] );
+      loadMultiModifyRecord();
     }
   });
 }
@@ -48,6 +54,7 @@ $("#rtnBtn").click(function(){
   $("#confirmTable").css('display','block');
   $("#m_list").val('');
   $("#confirmContent").css('display','none');
+  $("#record_table_1").find('tbody').html('');
 });
 
 $('#agreeBtn').click( function(){
@@ -60,7 +67,7 @@ $('#agreeBtn').click( function(){
     
     $.ajax({
       type:'POST',
-      url: "/pos/Pos/index.php/MachineDispatch/agreeDeployOrder",
+      url: agreeUrl,
       data: $("#agreeForm").serialize(),
       success: function(data){
         console.log(data);
@@ -91,11 +98,9 @@ function validate_machine_num( numTxt,totalNum ){
   return false;
 }
 
-function disagreeRow(ele){
+function disagreeRow(do_id,ele){
   var $tr = $(ele).parents('tr');
   var $tdlist = $tr.find( $('td') );
-  var inputs = $tdlist.get(0);
-  var do_id = $($(inputs).find("input").get(0)).val();
 
   $("#disagree_do_id").val(do_id);
   $("#dialog-modal-disagree").dialog( "open");
@@ -106,16 +111,15 @@ $('#disagreeBtn').click( function(){
 
     $.ajax({
       type:'POST',
-      url: "/pos/Pos/index.php/MachineDispatch/disagreeDeployOrder",
+      url: disagreeUrl ,
       data: $("#disagreeForm").serialize(),
       success: function(data){
-        console.log(data);alert(data.toSource());
+        console.log(data);
         if( data['status'] == 1){
           alert( data['info'] );
           $("#dialog-modal-disagree").dialog("close");
           $("#disagree_remark").val("");
           loadDeployOrderData();
-          loadDisagreedDeployOrderData();
         }
         else{
           alert( data['info'] );
@@ -124,11 +128,6 @@ $('#disagreeBtn').click( function(){
         $("#disagreeBtn").attr('disabled',false);
       }
     });
-});
-
-$('#agree_cancelBtn').click( function(){
-  $("#dialog-modal-agree").dialog('close');
-  $("#agree_remark").val("");
 });
 
 $('#disagree_cancelBtn').click( function(){
@@ -169,18 +168,6 @@ function change_dispachtable_num(){
   $("#valid_quantity").val(0);
 }
 
-
-function getSelectIndex(selectId, value){
-	var index = 0;
-	var options = $("#" + selectId + " option");
-	for(var i=0; i<options.length; i++){
-		if($(options[i]).val() == value){
-			return index;
-		}
-		index++;
-	}
-}
-
 $("#addBtn").click(function(){
 	$(this).attr("disabled", true);
 	$.ajax({
@@ -217,17 +204,20 @@ $("#d2_rtnBtn").click( function(){
   $("#dispatch_content_2").css('display','none');
   $("#dispatch-table-content-2").css( 'display', 'block');
   $("#dispatch_content_2").find('span').html('');
+  $("#record_table_2").find('tbody').html('');
 });
 
 $("#d3_rtnBtn").click(function(){
   $("#dispatch_content_3").css('display','none');
   $("#dispatch-table-content-3").css( 'display', 'block');
   $("#dispatch_content_3").find('span').html('');
+  $("#record_table_3").find('tbody').html('');
 });
 
 function showDelRow( do_id ){
   $("#dispatch_content_3").css('display','block');
   $("#dispatch-table-content-3").css( 'display', 'none');
+  console.log( do_id);
   $.ajax({
     type:'post',
     url : doDataUrl,
@@ -242,10 +232,44 @@ function showDelRow( do_id ){
         else
           $(id).find('span').html( item[k] );
       }
+      $("#update_table_name").val('record_table_3');
+      $("#item_id").val( item['do_id'] );
+      loadMultiModifyRecord();
     }
   });
 }
-
+$("#d1_rtnBtn").click(function(){
+  $("#confirmTable").css('display','block');
+  $("#confirmContent").css('display','none');
+  $("#dispatch_content_1").css('display','none');
+});
+function showUaRow( do_id ){
+  $("#confirmTable").css('display','none');
+  $("#confirmContent").css('display','none');
+  $("#dispatch_content_1").css('display','block');
+  $.ajax({
+    type:'post',
+    url : doDataUrl,
+    data : { 'do_id' : do_id },
+    success : function( data ){
+      var item = data['data'];
+      for( var k in item ){
+        var id = "#d1_" + k;
+        if( k == 'state' ){
+          $(id).find('span').html( '已提交' );
+        }
+        else if( k == 'm_code_list' ){
+          $(id).html( item[k].replace(/\\n/g, "<br>"));
+        }
+        else
+          $(id).find('span').html( item[k] );
+      }
+      $("#update_table_name").val('record_table_2');
+      $("#item_id").val( item['do_id'] );
+      loadMultiModifyRecord();
+    }
+  });
+}
 function showRow(do_id){
   $("#dispatch_content_2").css('display','block');
   $("#dispatch-table-content-2").css( 'display', 'none');
@@ -266,6 +290,9 @@ function showRow(do_id){
         else
           $(id).find('span').html( item[k] );
       }
+      $("#update_table_name").val('record_table_2');
+      $("#item_id").val( item['do_id'] );
+      loadMultiModifyRecord();
     }
   });
 
@@ -274,7 +301,7 @@ function loadDeployOrderData(){
 	$.ajax({
     type:'POST',
     dataType:"json",
-    url:"/pos/Pos/index.php/MachineDispatch/getDeployOrders",
+    url: doDataUrl,
     success: function( data){
       var Arr = data['data']; console.log(data);
       var c_id = data['status'];
@@ -285,6 +312,8 @@ function loadDeployOrderData(){
       var rejectHtmlEnd = ')\"><button class="btn btn-info btn-xs">拒绝</button></a></div>';
       var showHtml = '<a class="green" href="#" onclick="showRow(';
       var showHtmlEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var showUaHtml = '<a class="green" href="#" onclick="showUaRow(';
+      var showUaHtmlEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
       var showDelHtml = '<a class="red" href="#" onclick="showDelRow(';
       var showDelHtmlEnd = ')"><i class="icon-fire align-top bigger-110 icon-check"></i></a>';
       var idArr = ['dispatch-table-1','dispatch-table-2','dispatch-table-3'];
@@ -306,7 +335,7 @@ function loadDeployOrderData(){
             if( item['source_c'] == c_id )
               btnTxt = editHtml + item['do_id'] +","+item['m_type'] + editHtmlEnd + rejectHtml + item['do_id'] + rejectHtmlEnd;
             else 
-              btnTxt = showHtml + item['do_id'] + showHtmlEnd;
+              btnTxt = showUaHtml + item['do_id'] + showUaHtmlEnd;
             arrIndex = 0;
             break;
           case '1' :

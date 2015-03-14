@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "Operation/createMccItem";
 var updateUrl = rootUrl + "Operation/updateMccItem";
 var delUrl = rootUrl + "Operation/delMccItem";

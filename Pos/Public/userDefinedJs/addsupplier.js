@@ -1,5 +1,6 @@
-var rootUrl = '/pos/Pos/index.php/';
 var dataUrl = rootUrl + 'Supplier/search';
+var addUrl = rootUrl + "Supplier/add";
+var delUrl = rootUrl + "Supplier/delete";
 $(document).ready(function(){
 	loadSData();
 });
@@ -53,16 +54,15 @@ $('#updateBtn').click( function(){
   );
 });
 
-function deleteRow(ele){
+function deleteRow(mp_id,ele){
   var $tr = $(ele).parents('tr');
   $tr.addClass('remove');
   console.log( $tr.find('td').html() );
-  var mp_id = $tr.find('td').html();
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
       type:'POST',
-      url:'/pos/Pos/index.php/Supplier/delete',
+      url: delUrl,
       data: {'mp_id' : mp_id },
       success: function(data){
         console.log(data);
@@ -88,7 +88,7 @@ $('#addbtn').click(function(event){
 		$(this).attr('disabled', true);
     $.ajax({
       type:'POST',
-      url:'/pos/Pos/index.php/Supplier/add',
+      url:addUrl,
       data: {'supplier' : supplier,
             'remark' : remark},
       success: function(data){
@@ -120,7 +120,7 @@ function loadSData(){
   $.ajax({
     type:'POST',
     dataType:"json", 
-    url:"/pos/Pos/index.php/Supplier/search",
+    url:dataUrl,
     success: function( data){
       var SArr = data['data'];
       var rows = [];

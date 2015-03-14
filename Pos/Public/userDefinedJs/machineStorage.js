@@ -1,3 +1,5 @@
+var detailUrl = rootUrl + "MachineStorage/getMachineDetail";
+var dataUrl = rootUrl + "MachineStorage/getAllMachine";
 $(document).ready(function(){
 	loadStorageData();
 	createDialog();
@@ -30,7 +32,7 @@ function loadDetailData(c_id, m_type){
     type:'POST',
     dataType:"json", 
     data:{'c_id':c_id, 'm_type':m_type},
-    url:"/pos/Pos/index.php/MachineStorage/getMachineDetail",
+    url:dataUrl,
     success: function( data){
       var Arr = data['data'];
       var states = ['在仓','正常使用','坏机待修'];
@@ -84,8 +86,9 @@ function loadStorageData(){
   $.ajax({
     type:'POST',
     dataType:"json", 
-    url:"/pos/Pos/index.php/MachineStorage/getAllMachine",
+    url: dataUrl,
     success: function( data){
+      console.log( data );
       var Arr = data['data'];
       var rows = [];
       var editHtml = '<div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
@@ -96,8 +99,9 @@ function loadStorageData(){
       for( var i=0; i<Arr.length; ++i ){
         var item = Arr[i];
         var row = [];
+        /*
         row.push( '<input type="hidden" value="'+item["c_id"] + '" />' + 
-                  '<input type="hidden" value="'+item["m_type"] + '" />');
+                  '<input type="hidden" value="'+item["m_type"] + '" />');*/
         row.push( item["warehouse_name"] );
         row.push( item["mt_name"] );
         row.push( item["mt_number"]);
@@ -105,7 +109,7 @@ function loadStorageData(){
         row.push( item["state_2"] );
         row.push( item["state_3"] );
         row.push( item["total"] );
-        row.push( editHtml  );
+        //row.push( editHtml  );
         rows.push(row);
       }
       var oTable1;
@@ -119,7 +123,7 @@ function loadStorageData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-              			   {"bSortable": false }, null, null, null, null, null, null, null, { "bSortable": false }
+              			    null, null, null, null, null, null, null
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

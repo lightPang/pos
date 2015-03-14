@@ -1,4 +1,4 @@
-var infoDataUrl = "/pos/Pos/index.php/Common/getInfoData";
+var infoDataUrl = rootUrl + "Common/getInfoData";
 
 $(document).ready(function(){
   loadInfoData();

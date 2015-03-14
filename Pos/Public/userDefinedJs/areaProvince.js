@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var createUrl =  rootUrl + "Area/createProvince";
 var updateUrl = rootUrl + "Area/updateProvince";
 var delUrl = rootUrl + "Area/delProvince";

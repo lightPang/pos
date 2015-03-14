@@ -29,7 +29,7 @@
       return $flag;
     }
 
-    protected function addModifyRecord($data,$map,$table_name,$id_name){
+    protected function addModifyRecord($data,$map,$table_name,$id_name,$createFlag = false){
       $model = M($table_name);
       $origin_Item = $model->where( $map )->select()[0];
       $modifyItem = array();
@@ -38,8 +38,15 @@
           $modifyItem[$key] =  $origin_Item[$key]. ' => ' .$value;
         }
       }
-        
-      if( count( $modifyItem ) != 0 ){
+      if( $createFlag == true ){
+        $modify_record['table_name'] = $table_name;
+        $modify_record['item_id'] = $map[$id_name];
+        $modify_record['u_id'] = $_SESSION['u_id'];
+        $modify_record['time'] = Date( 'Y-m-d H:m:s');
+        $modify_record['content'] = json_encode( '创建' );
+        M('modify_record')->add( $modify_record );
+      }
+      else if( count( $modifyItem ) != 0 ){
         $modify_record['table_name'] = $table_name;
         $modify_record['item_id'] = $map[$id_name];
         $modify_record['u_id'] = $_SESSION['u_id'];

@@ -1,3 +1,4 @@
+var rootUrl = "/pos/Pos/index.php/";
 $(document).ready(function(){
   loadPrintData();
 });
@@ -11,7 +12,7 @@ function loadPrintData(){
   else{
     $.ajax({
       type:'post',
-      url:'/pos/Pos/index.php/Apply/getSoItem',
+      url: rootUrl + 'Apply/getSoItem',
       data:{
         'soId':so_id
       },

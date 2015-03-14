@@ -1,4 +1,3 @@
-var rootUrl = "/pos/Pos/index.php/";
 var setupItemUrl  = rootUrl + 'SetupItem/getSetupItemByDistrict';
 var checkListUrl = rootUrl + "Check/getRecords";
 var addRecordUrl = rootUrl + "Check/addRecord";
