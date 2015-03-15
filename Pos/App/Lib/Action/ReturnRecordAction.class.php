@@ -7,4 +7,8 @@ class ReturnRecordAction extends CommonAction {
       $this->display();
     }
 
+    public function getReturnRecodr(){}
+
+    public function finishReturnRecord(){}
+
 }

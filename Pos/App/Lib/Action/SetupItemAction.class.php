@@ -28,6 +28,13 @@
         $data = $sqlModel->where( $siMap )->select();
         $this->ajaxReturn( $data[0], 'ok','123');
       }
+      else if( $this->doAuth() ){
+        $sqlModel = M('setup_item');
+        $siMap['c_id'] = $_SESSION['c_id'];
+        $siMap['state'] = 3;
+        $data = $sqlModel->where( $siMap )->select();
+        $this->ajaxReturn( $data, 'ok', 1);
+      }
     }
     public function getSiData(){
       //echo 123;

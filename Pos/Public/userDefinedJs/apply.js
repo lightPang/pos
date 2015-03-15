@@ -404,7 +404,7 @@ function loadOrderData(type){
           "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
           "bPaginate" : true, //是否显示（应用）分页器  
           "aoColumns" : [
-                          null,null,  null, null, null, null, { "bSortable": false }
+                          null,null,  null, null, null, null, { "bSearchable" :false, "bSortable": false }
                         ],
           "oLanguage": { //国际化配置  
                   "sProcessing" : "正在获取数据，请稍后...",    
