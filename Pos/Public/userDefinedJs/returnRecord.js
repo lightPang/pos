@@ -1,50 +1,170 @@
 var siDataUrl = rootUrl + "SetupItem/getSetupItem";
 var rtDataUrl = rootUrl + "ReturnType/getReturnTypeData";
-var rrDataUrl = rootUrl + "ReturnRecord/getReturnRecodr";
+var rrDataUrl = rootUrl + "ReturnRecord/getReturnRecord";
 var finishUrl = rootUrl + "ReturnRecord/finishReturnRecord";
+var createUrl = rootUrl + "ReturnRecord/createReturnRecord";
 
-$(document).ready(function(){});
+$(document).ready(function(){
+  loadRtData();
+  loadSiData();
+  loadRRData();
+});
+
+function returnClick( show_name, unshow_name ){
+  var show = "#" + show_name;
+  var unshow = "#" + unshow_name;
+  $(show).css('display', 'block');
+  $(unshow).css('display', 'none');
+}
+
+$("#createRtnBtn").click( function(){
+  returnClick( 'list_table', 'createDiv' );
+  $("#createDiv").find('span').html('');
+  $("#info").val('');
+});
+
+$("#sb_returnBtn").click( function() {
+  returnClick( 'submit_table', 'submitedDiv' ) ;
+  $("#submitedDiv").find('span').html('');
+});
+
+$("#cp_RtnBtn").click(function(){
+  returnClick( 'confirmed_table', 'completeDiv' ) ;
+  $("#completeDiv").find('span').html('');
+});
+
+$("#fh_rtnBtn").click( function(){
+  returnClick( 'finished_table', 'finishedDiv' ) ;
+  $("#finishedDiv").find('span').html('');
+});
+
+$("#cp_Btn").click(function(){
+  if( $("#cp_info").val() == '' ){
+    alert("请填写完成信息！");
+    $("#cp_info").focus();
+    return;
+  }
+  $.ajax({
+    type:'post',
+    url : finishUrl,
+    data : $("#cpForm").serialize(),
+    success:function(data){
+      console.log(data);
+      if( data['status'] != '0' ){
+        alert( "修改成功！");
+        loadRRData();
+      }
+      else{
+        alert( data['info'] );
+      }
+    }
+  });
+});
+
+$("#createBtn").click( function(){
+  if( $("#info").val() == "" ) {
+    alert("请完整填写信息！");
+    $("#info").focus();
+    return;
+  }
+  $.ajax({
+    type:'post',
+    data : $("#createForm").serialize(),
+    url: createUrl,
+    success:function(data){
+      console.log( data );
+      if( data['status'] != '0' ){
+        alert( "提交成功!");
+        loadRRData();
+      }
+      else{
+        alert( data['info'] );
+      }
+    }
+  });
+});
 
 function loadOrder( rr_id ){
+  $("#submit_table").css('display','none');
+  $("#submitedDiv").css('display','block');
+
   $.ajax({
     type:'post',
     url : rrDataUrl,
     data : { 'rr_id' : rr_id },
     success:function(data){
-
+      var rrItem = data['data'];
+      for( var k in rrItem ){
+        var id = "#sb_" + k ;
+        $(id).find('span').html( rrItem[k] );
+      }
     }
   });
 }
 
 function loadFOrder( rr_id ){
+  $("#finished_table").css('display','none');
+  $("#finishedDiv").css('display','block');
   $.ajax({
     type:'post',
     url : rrDataUrl,
     data : { 'rr_id' : rr_id },
     success:function(data){
-      
+      console.log(data);
+      var rrItem = data['data'];
+      for( var k in rrItem ){
+        var id = "#fh_" + k ;
+        $(id).find('span').html( rrItem[k] );
+      }
+      var stateTxt = '';
+      switch( rrItem['state'] ){
+        case '2' :
+          stateTxt = '已完成';
+          break;
+        case '3' :
+          stateTxt = '已接机';
+          break;
+        case '4':
+          stateTxt = '已拒绝';
+          break;
+      }
+      $("#fh_state").find('span').html(stateTxt);
     }
   });
 }
 
 function confirmOrder( rr_id ){
+  $("#confirmed_table").css('display','none');
+  $("#completeDiv").css('display','block');
   $.ajax({
     type:'post',
     url : rrDataUrl,
     data : { 'rr_id' : rr_id },
     success:function(data){
-      
+      var rrItem = data['data'];
+      for( var k in rrItem ){
+        var id = "#cp_" + k ;
+        $(id).find('span').html( rrItem[k] );
+      }
+      $("#cp_rr_id").val( rrItem['rr_id'] );
     }
   });
 }
 
 function updateRow( si_id ){
+  $("#list_table").css('display','none');
+  $("#createDiv").css('display','block');
   $.ajax({
     type:'post',
     url : siDataUrl,
-    data : { 'si_id' : so_id },
+    data : { 'si_id' : si_id },
     success:function(data){
-      
+      var item = data['data'][0];
+      for( var k in item ){
+        var id = "#ct_" + k;
+        $(id).find('span').html( item[k] );
+      }
+      $("#ct_si_id").val( item['si_id'] );
     }
   });
 }
@@ -57,7 +177,7 @@ function loadRtData(){
       var dataArr = data['data'];
       var options = '';
       for( var i = 0 ; i < dataArr.length; ++ i ){
-        options += "<option value = '" + dataArr[i]['rt_id']  + '">' +dataArr[i].name + "</option>";
+        options += "<option value = '" + dataArr[i]['rt_id']  + "'>" +dataArr[i].name + "</option>";
       }
       $("#rt_id").append( options );
     }
@@ -83,7 +203,7 @@ function loadRRData(){
         rowsArr[i] = new Array();
       }
 
-      for( var i = 0; i < soArr.length; ++i ){
+      for( var i = 0; i < dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
         row.push( item['m_code']);
@@ -100,7 +220,7 @@ function loadRRData(){
           case '0':
             stateTxt = '已提交';
             btnTxt = showBtnTxt;
-            btnTxtEnd = showTxtEnd;
+            btnTxtEnd = showBtnTxtEnd;
             arrIndex = 0;
             break;
           case '1':
@@ -117,6 +237,13 @@ function loadRRData(){
             row.push( stateTxt );
             break;
           case '3':
+            stateTxt = '已还机';
+            btnTxt = showFTxt;
+            btnTxtEnd = showFTxtEnd;
+            arrIndex = 2;
+            row.push( stateTxt );
+            break;
+          case '4':
             stateTxt = '未通过';
             btnTxt = showFTxt;
             btnTxtEnd = showFTxtEnd;
@@ -127,20 +254,22 @@ function loadRRData(){
             stateTxt = '装机中';
             break;
         }
-        row.push( btnTxt+ item['so_id'] + btnTxtEnd);
+        row.push( btnTxt+ item['rr_id'] + btnTxtEnd);
         rowsArr[arrIndex].push( row );
       }
-      var aoColDef = [ null,null,  null, null, null, null, { "bSearchable" :false, "bSortable": false }];
+      var aoColDef = [ null,null,  null, null,  { "bSearchable" :false, "bSortable": false }];
       var aoColDefArr = Array();
       aoColDefArr.push( aoColDef );
       aoColDefArr.push( aoColDef );
-      aoColDef = [ null,null,  null, null, null, null, { "bSearchable" :false, "bSortable": false }];
-      aoColDefArr.push( aoColDef );
+      var newAoColDef = [ null,null,  null, null, null,  { "bSearchable" :false, "bSortable": false }];
+      aoColDefArr.push( newAoColDef );
+
       for( var i = 0 ; i < idArr.length; ++ i ){
         var oTable;
         var tableId = "#" + idArr[i];
         
         rows = rowsArr[i];
+
         if( $.fn.dataTable.isDataTable( tableId ) ){
           oTable = $(tableId).dataTable();
         }
@@ -149,7 +278,7 @@ function loadRRData(){
             "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
           "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
           "bPaginate" : true, //是否显示（应用）分页器  
-          "aoColumns" : aoColDef[i],
+          "aoColumns" : aoColDefArr[i],
           "oLanguage": { //国际化配置  
                   "sProcessing" : "正在获取数据，请稍后...",    
                   "sLengthMenu" : "显示 _MENU_ 条",    
@@ -189,7 +318,8 @@ function loadSiData(){
         row.push( item['addr'] );
         row.push( item['setup_time'] );
         row.push( editHtml + item['rt_id'] + editHtmlEnd  );
-        rows.push(row);
+        if( item['return_id'] =='' )
+          rows.push(row);
       }
       var oTable1;
       if ( $.fn.dataTable.isDataTable( '#si_list_table' ) ) {

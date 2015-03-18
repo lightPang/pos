@@ -38,6 +38,11 @@
         $this->display();
     }
 
+    public function machineReturn(){
+        $this->doAuth();
+        $this->display();
+    }
+
     public function machineDispatch(){
         $this->doAuth();
         

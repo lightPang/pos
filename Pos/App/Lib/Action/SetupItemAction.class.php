@@ -29,7 +29,7 @@
         $this->ajaxReturn( $data[0], 'ok','123');
       }
       else if( $this->doAuth() ){
-        $sqlModel = M('setup_item');
+        $sqlModel = M('si_view');
         $siMap['c_id'] = $_SESSION['c_id'];
         $siMap['state'] = 3;
         $data = $sqlModel->where( $siMap )->select();

@@ -37,6 +37,12 @@
         $data = $user->where( $map )->field('u_id,auth,account,name,c_id,email,phone,last_login_time,last_login_ip')->select();
         $this->ajaxReturn( $this->updateCompanyInfo( $data ), "get", 1 );
       }
+      else if( isset($_POST['c_id'] ) ){
+        $user = M('user');
+        $map['c_id'] = $_SESSION['c_id'];
+        $data = $user->where($map)->field('u_id,name,c_id')->select();
+        $this->ajaxReturn( $data, "get", 1 );
+      }
       else if( $this->doAuth('staffManage') ){
         $user = M('user');
         $data = $user->field('u_id,name,c_id,email,phone,last_login_time,last_login_ip')->select();

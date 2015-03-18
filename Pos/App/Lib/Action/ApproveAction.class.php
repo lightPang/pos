@@ -21,6 +21,11 @@
       $this->display();
     }
 
+    public function returnApprove(){
+      $this->doAuth();
+      $this->display();
+    }
+
     public function passApply(){
       $so_id = $_POST['so_id'];
       $c_id = $_POST['c_id'];

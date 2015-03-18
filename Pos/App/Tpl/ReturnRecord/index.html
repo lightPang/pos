@@ -60,19 +60,34 @@
               </div>
 
               <div id="createDiv" class="row" style="display:none;">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="createForm" role="form">
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 退机说明 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="info" placeholder="退机说明"  />
+                        <input type="text" id="info" name="info" placeholder="退机说明"  />
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 退机类型 </label>
-                    <select id="rt_id" name="rt_id" class="col-sm-2">
-                    </select>
+                    <div class="col-sm-3">
+                      <select id="rt_id" name="rt_id" class="col-sm-8">
+                      </select>
+                    </div>  
+                  </div>
+
+                  <input type="hidden" id="ct_si_id" name="si_id" />
+                  <div class="border-bottom"></div> 
+                  <div class="line"> 
+                    <div class="col-sm-3  no-padding-right" id="ct_m_code"> 机身编码：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="ct_m_tcode"> 终端编号：<span></span></div> 
+                    <div class="bottom"></div> 
+                  </div> 
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="ct_addr"> 安装地址：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="ct_setup_time"> 装机时间：<span></span></div>
+                    <div class="bottom"></div> 
                   </div>
 
                   <div class="space-4"></div>
@@ -82,6 +97,10 @@
                       <button class="btn btn-info" id="createBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
                           提交
+                      </button>
+                      <button class="btn btn-info" id="createRtnBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          返回
                       </button>
                     </div>
                   </div>
@@ -104,27 +123,23 @@
                   </thead>
                 </table>
               </div>
-              <div id="completeDiv" class="row" style="display:none;">
-                <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成情况 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="complete_info" placeholder="完成情况"  />
-                    </div>
-                  </div>
+              <div id="submitedDiv" class="row" style="display:none;">
+                <div class="line" >
+                  <div class="col-sm-3  no-padding-right"> <button id="sb_returnBtn">返回</button></div>
+                  <div class="bottom"></div> 
+                </div>
+                <div class="line">
+                  <div class="col-sm-3  no-padding-right" id="sb_m_code"> 机身编码：<span></span></div>
+                  <div class="col-sm-3 no-padding-right" id="sb_m_tcode"> 终端编号：<span></span></div>
+                  <div class="bottom"> </div>
+                </div>
 
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <div class="col-md-9 "> </div>
-                    <div class="col-sm-3 ">
-                      <button class="btn btn-info" id="createBtn" type="button">
-                        <i class="icon-ok bigger-110"></i>
-                          提交
-                      </button>
-                    </div>
-                  </div>
-                  
-                </form>
+                <div class="space-4"></div>  
+                <div class="line"> 
+                  <div class="col-sm-3 no-padding-right" id="sb_addr"> 安装地址：<span></span></div> 
+                  <div class="col-sm-3  no-padding-right" id="sb_setup_time"> 装机时间：<span></span></div>
+                  <div class="bottom"></div> 
+                </div>  
               </div>
             </div><!-- tab content end -->
 
@@ -143,21 +158,37 @@
                 </table>
               </div>
               <div id="completeDiv" class="row" style="display:none;">
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="cpForm" role="form">
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成情况 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="complete_info" placeholder="完成情况"  />
+                        <input type="text" id="cp_info" name="complete_info" placeholder="完成情况"  />
                     </div>
                   </div>
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right" id="cp_m_code"> 机身编码：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="cp_m_tcode"> 终端编号：<span></span></div>
+                    <div class="bottom"> </div>
+                  </div>
 
+                  <div class="space-4"></div>  
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="cp_addr"> 安装地址：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="cp_setup_time"> 装机时间：<span></span></div>
+                    <div class="bottom"></div> 
+                  </div>
+                  <input type="hidden" id="cp_rr_id" name="rr_id"/>
                   <div class="space-4"></div>
                   <div class="form-group">
                     <div class="col-md-9 "> </div>
                     <div class="col-sm-3 ">
-                      <button class="btn btn-info" id="createBtn" type="button">
+                      <button class="btn btn-info" id="cp_Btn" type="button">
                         <i class="icon-ok bigger-110"></i>
                           提交
+                      </button>
+                      <button class="btn btn-info" id="cp_RtnBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          返回
                       </button>
                     </div>
                   </div>
@@ -180,7 +211,26 @@
                   </thead>
                 </table>
               </div>
-              <div id="finishedDiv" >
+              <div id="finishedDiv" style="display:none;">
+                <div class="line" >
+                  <div class="col-sm-3  no-padding-right"> <button id="fh_rtnBtn">返回</button></div>
+                  <div class="bottom"></div> 
+                </div>
+                <div class="line"> 
+                  <div class="col-sm-3  no-padding-right" id="fh_state"> 退机状态：<span></span></div>
+                </div>
+                <div class="line">
+                  <div class="col-sm-3  no-padding-right" id="fh_m_code"> 机身编码：<span></span></div>
+                  <div class="col-sm-3 no-padding-right" id="fh_m_tcode"> 终端编号：<span></span></div>
+                  <div class="bottom"> </div>
+                </div>
+
+                <div class="space-4"></div>  
+                <div class="line"> 
+                  <div class="col-sm-3 no-padding-right" id="fh_addr"> 安装地址：<span></span></div> 
+                  <div class="col-sm-3  no-padding-right" id="fh_setup_time"> 装机时间：<span></span></div>
+                  <div class="bottom"></div> 
+                </div>
               </div>
             </div><!-- tab content end -->
 
