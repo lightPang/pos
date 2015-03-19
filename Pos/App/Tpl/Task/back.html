@@ -10,17 +10,11 @@
       <div class="col-lg-11">
         <div class="tabbable">
           <ul class="nav nav-tabs" id="myTab">
-            <li class="active">
-              <a data-toggle="tab" href="#fillin">
-                <i class="green icon-home bigger-110"></i>
-                  完工单填写
-                </a>
-            </li>
 
-            <li>
+            <li class="active">
               <a data-toggle="tab" href="#unprocessed">
                 <i class="green icon-home bigger-110"></i>
-                  未完成
+                  已确认
                 </a>
             </li>
 
@@ -33,110 +27,123 @@
           </ul>
 
           <div class="tab-content">
-            <div id="fillin" class="tab-pane in active">
-              <div class="row">
-                <form class="form-horizontal" role="form">
+
+            <div id="unprocessed" class="tab-pane active">
+              <div id="confirmed_table" >
+                <table id="table_confirmed" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>机器编码</th>
+                      <th>记录编号</th>
+                      <th>提交时间</th>
+                      <th>确认时间</th>
+                      <th>负责人</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div id="completeDiv" class="row" style="display:none;">
+                <form class="form-horizontal" id="cpForm" role="form">
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 记录编号 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成情况 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="自动生成？"  />
-                    </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 机器编号 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="number" placeholder="机器编号"  />
+                        <input type="text" id="cp_info" name="complete_info" placeholder="完成情况"  />
                     </div>
                   </div>
-
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 确认时间 </label>
-                    <div class="col-sm-2">
-                        <input type="text" id="form-field-1" name="applicant" placeholder="自动生成？"  />
-                    </div>
-                    <div class="col-sm-1"></div>
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 完成时间 </label>
-                    <div class="col-sm-2">
-                        <div class="input-group">
-                            <input id="id-date-picker-1" class="form-control date-picker" type="text" data-date-format="dd-mm-yyyy">
-                            <span class="input-group-addon">
-                            <i class="icon-calendar bigger-110"></i>
-                            </span>
-                        </div>
-                    </div>
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right" id="cp_m_code"> 机身编码：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="cp_m_tcode"> 终端编号：<span></span></div>
+                    <div class="bottom"> </div>
                   </div>
 
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证上传 </label>
-                    <div class="col-sm-3">
-                        <div class="ace-file-input ace-file-multiple">
-                            <input id="id-input-file-3" type="file" multiple="">
-                        </div>
-                    </div>
+                  <div class="space-4"></div>  
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="cp_addr"> 安装地址：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="cp_setup_time"> 装机时间：<span></span></div>
+                    <div class="bottom"></div> 
                   </div>
-
+                  <input type="hidden" id="cp_rr_id" name="rr_id"/>
                   <div class="space-4"></div>
                   <div class="form-group">
                     <div class="col-md-9 "> </div>
                     <div class="col-sm-3 ">
-                      <button class="btn btn-info" type="button">
+                      <button class="btn btn-info" id="cp_Btn" type="button">
                         <i class="icon-ok bigger-110"></i>
-                          Submit
+                          提交
+                      </button>
+                      <button class="btn btn-info" id="cp_RtnBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          返回
                       </button>
                     </div>
                   </div>
-                  
                 </form>
               </div>
             </div>
 
-            <div id="unprocessed" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      记录编号
-                    </th>
-                    <th>
-                      机器编号
-                    </th>
-                    <th>
-                      确认时间
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-
             <div id="processed" class="tab-pane">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      记录编号
-                    </th>
-                    <th>
-                      机器编号
-                    </th>
-                    <th>
-                      确认时间
-                    </th>
-                    <th>
-                      完成时间
-                    </th>
-                    <th>
-                      凭证
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
+              <div id="finished_table" >
+                <table id="table_finished" class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>机器编码</th>
+                      <th>记录编号</th>
+                      <th>提交时间</th>
+                      <th>确认时间</th>
+                      <th>负责人</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div id="finishedDiv" style="display:none;">
+                <div class="line" >
+                  <div class="col-sm-3  no-padding-right"> <button id="fh_rtnBtn">返回</button></div>
+                  <div class="bottom"></div> 
+                </div>
+                <div class="line"> 
+                  <div class="col-sm-3  no-padding-right" id="fh_state"> 退机状态：<span></span></div>
+                </div>
+                <div class="line">
+                  <div class="col-sm-3  no-padding-right" id="fh_m_code"> 机身编码：<span></span></div>
+                  <div class="col-sm-3 no-padding-right" id="fh_m_tcode"> 终端编号：<span></span></div>
+                  <div class="bottom"> </div>
+                </div>
+
+                <div class="space-4"></div>  
+                <div class="line"> 
+                  <div class="col-sm-3 no-padding-right" id="fh_addr"> 安装地址：<span></span></div> 
+                  <div class="col-sm-3  no-padding-right" id="fh_setup_time"> 装机时间：<span></span></div>
+                  <div class="bottom"></div> 
+                </div>
+                <div class="record_div">
+                  <input type="hidden" id="table_name" value="return_record" />
+                  <input type="hidden" id="item_id" />
+                  <table id="record_table"  class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th class="user_td">修改用户</th>
+                        <th class="time_td" >修改时间</th>
+                        <th class="content_td">修改内容</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      
+                    </tbody>
+                  </table>
+                </div><!-- record div end -->
+              </div>
+            </div><!-- tab content end -->
           </div>
 
         </div>
       </div>
     </div>
-
+    <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
+    <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/back.js"></script>
   </body>
 </html>

@@ -1,37 +1,46 @@
-var dataUrl = rootUrl + "ReturnRecord/getReturnRecord";
-var confirmUrl = rootUrl + "ReturnRecord/confirmReturn";
-var userDataUrl = rootUrl + "User/getUserData";
-var rejectUrl = rootUrl + "ReturnRecord/rejectReturn";
+var siDataUrl = rootUrl + "SetupItem/getSetupItem";
+var rtDataUrl = rootUrl + "ReturnType/getReturnTypeData";
+var rrDataUrl = rootUrl + "ReturnRecord/getReturnRecord";
+var finishUrl = rootUrl + "ReturnRecord/finishReturnRecord";
+var createUrl = rootUrl + "ReturnRecord/createReturnRecord";
 
 $(document).ready(function(){
   loadRRData();
-  loadUserData();
 });
 
-$("#if_returnBtn").click( function(){
-  $("#tableContent").css('display','block');
-  $("#infoDiv").css('display','none');
-  $("#infoDiv").find('span').html('');
+function returnClick( show_name, unshow_name ){
+  var show = "#" + show_name;
+  var unshow = "#" + unshow_name;
+  $(show).css('display', 'block');
+  $(unshow).css('display', 'none');
+}
+
+
+
+$("#cp_RtnBtn").click(function(){
+  returnClick( 'confirmed_table', 'completeDiv' ) ;
+  $("#completeDiv").find('span').html('');
 });
 
-$("#confirmRtnBtn").click( function(){
-  $("#list_table").css('display','block');
-  $("#createDiv").css('display','none');
-  $("#createDiv").find('span').html('');
+$("#fh_rtnBtn").click( function(){
+  returnClick( 'finished_table', 'finishedDiv' ) ;
+  $("#finishedDiv").find('span').html('');
 });
 
-$("#rejectBtn").click( function(){
+$("#cp_Btn").click(function(){
+  if( $("#cp_info").val() == '' ){
+    alert("请填写完成信息！");
+    $("#cp_info").focus();
+    return;
+  }
   $.ajax({
     type:'post',
-    url : rejectUrl,
-    data : { 
-      'rr_id' : $("#cf_rr_id").val(),
-      'reject_info' : $("#reject_info").val()
-    },
-    success : function( data ){
-      if( data['status'] == '1' ){
-        console.log( data );
-        alert("确认成功！");
+    url : finishUrl,
+    data : $("#cpForm").serialize(),
+    success:function(data){
+      console.log(data);
+      if( data['status'] != '0' ){
+        alert( "修改成功！");
         loadRRData();
       }
       else{
@@ -41,97 +50,71 @@ $("#rejectBtn").click( function(){
   });
 });
 
-$("#confirmBtn").click( function(){
-  $.ajax({
-    type:'post',
-    url : confirmUrl,
-    data : { 
-      'rr_id' : $("#cf_rr_id").val(),
-      'u_id' : $("#u_id").val() 
-    },
-    success:function(data){
-      if( data['status'] == '1' ){
-        console.log( data );
-        alert("确认成功！");
-        loadRRData();
-      }
-      else{
-        alert( data['info'] );
-      }
-    }
-  });
-});
-
-
-function loadUserData(){
-  $.ajax({
-    type:'post',
-    url: userDataUrl,
-    data:{'c_id':'ok'},
-    success:function(data){
-      var arr = data['data'];
-      options = '';
-      for( var i = 0 ; i < arr.length; ++i ){
-        options += "<option value='" + arr[i]['u_id'] + "'>" + arr[i]['name'] + "</option>";
-      }
-      $("#u_id").append(options);
-    }
-  });
-}
-
-function confirmReceive(rr_id){
-  $("#list_table").css('display','none');
-  $("#createDiv").css('display','block');
+function loadOrder( rr_id ){
+  $("#submit_table").css('display','none');
+  $("#submitedDiv").css('display','block');
 
   $.ajax({
     type:'post',
-    url : dataUrl,
+    url : rrDataUrl,
     data : { 'rr_id' : rr_id },
     success:function(data){
       var rrItem = data['data'];
       for( var k in rrItem ){
-        var id = "#cf_" + k ;
+        var id = "#sb_" + k ;
         $(id).find('span').html( rrItem[k] );
       }
-      $("#cf_rr_id").val( rrItem['rr_id'] );
-      loadModifyRecord();
     }
   });
 }
 
-function loadOrder(rr_id){
-  $("#tableContent").css('display','none');
-  $("#infoDiv").css('display','block');
-
+function loadFOrder( rr_id ){
+  $("#finished_table").css('display','none');
+  $("#finishedDiv").css('display','block');
   $.ajax({
     type:'post',
-    url : dataUrl,
+    url : rrDataUrl,
     data : { 'rr_id' : rr_id },
     success:function(data){
-      console.log( data );
+      console.log(data);
       var rrItem = data['data'];
       for( var k in rrItem ){
-        var id = "#if_" + k ;
+        var id = "#fh_" + k ;
         $(id).find('span').html( rrItem[k] );
       }
-      $("#item_id").val( rrItem['rr_id'] );
       var stateTxt = '';
       switch( rrItem['state'] ){
-        case '1':
-          stateTxt = '审核通过';
+        case '2' :
+          stateTxt = '已完成';
           break;
-        case '2':
-          stateTxt = '已确认退机';
-          break;
-        case '3':
-          stateTxt = '仓库已收机';
+        case '3' :
+          stateTxt = '已接机';
           break;
         case '4':
           stateTxt = '已拒绝';
           break;
       }
-      $("#if_state").find('span').html(stateTxt);
+      $("#fh_state").find('span').html(stateTxt);
+      $("#item_id").val( rrItem['rr_id'] );
       loadModifyRecord();
+    }
+  });
+}
+
+function confirmOrder( rr_id ){
+  $("#confirmed_table").css('display','none');
+  $("#completeDiv").css('display','block');
+  $.ajax({
+    type:'post',
+    url : rrDataUrl,
+    data : { 'rr_id' : rr_id },
+    success:function(data){
+      var rrItem = data['data'];
+      for( var k in rrItem ){
+        var id = "#cp_" + k ;
+        $(id).find('span').html( rrItem[k] );
+      }
+      $("#cp_rr_id").val( rrItem['rr_id'] );
     }
   });
 }
@@ -139,15 +122,18 @@ function loadOrder(rr_id){
 function loadRRData(){
   $.ajax({
     type:'post',
-    url : dataUrl,
+    url : rrDataUrl,
     success:function(data){
+      console.log( data );
       var dataArr = data['data'];
       var rows = [];
       var showBtnTxt = '<a class="green" href="#" onclick="loadOrder(';
       var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
-      var editBtnTxt = '<a class="green" href="#" onclick="confirmReceive(';
+      var editBtnTxt = '<a class="green" href="#" onclick="confirmOrder(';
       var editBtnTxtEnd = ')"><i class="icon-print  align-top bigger-110 icon-info-sign"></i></a>';
-      var idArr = ['si_list_table','receive_list_table'];
+      var showFTxt = '<a class="green" href="#" onclick="loadFOrder(';
+      var showFTxtEnd =')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var idArr = ['table_confirmed','table_finished'];
       var rowsArr = new Array();
       for( var i = 0; i < idArr.length; ++ i ){
         rowsArr[i] = new Array();
@@ -157,57 +143,51 @@ function loadRRData(){
         var item = dataArr[i];
         var row = [];
         row.push( item['m_code']);
-        row.push( item['m_tcode'] );
-        row.push( item['addr'] );
-        row.push( item['setup_time']);
-        row.push( item['returnType'] );
+        row.push( item['rr_id'] );
+        row.push( item['create_time'] );
+        row.push( item['confirm_time']);
+        row.push( item['User'] );
         var stateTxt = '';
         var btnTxt = '';
         var btnTxtEnd = '';
         var arrIndex = -1;
+        btnTxt = showBtnTxt;
+        btnTxtEnd = showBtnTxtEnd;
         switch(item['state']){
-          case '0':
+          case '1':
+            stateTxt = '已确认';
             btnTxt = editBtnTxt;
             btnTxtEnd = editBtnTxtEnd;
             arrIndex = 0;
             break;
-          case '1':
-            arrIndex = 1;
-            btnTxt = showBtnTxt;
-            btnTxtEnd = showBtnTxtEnd;
-            row.push('审核通过');
-            break;
           case '2':
-            btnTxt = showBtnTxt;
-            btnTxtEnd = showBtnTxtEnd;
+            stateTxt = '已完成';
+            btnTxt = showFTxt;
+            btnTxtEnd = showFTxtEnd;
             arrIndex = 1;
-            row.push( '确认退机');
+            row.push( stateTxt );
             break;
           case '3':
-            btnTxt = showBtnTxt;
-            btnTxtEnd = showBtnTxtEnd;
-            row.push( '已接机');
+            stateTxt = '已还机';
+            btnTxt = showFTxt;
+            btnTxtEnd = showFTxtEnd;
             arrIndex = 1;
-            break;
-          case '4':
-            btnTxt = showBtnTxt;
-            btnTxtEnd = showBtnTxtEnd;
-            row.push('已拒绝');
-            arrIndex = 1;
+            row.push( stateTxt );
             break;
           default:
-            stateTxt = '装机中';
+            arrIndex = -1;
             break;
         }
         row.push( btnTxt+ item['rr_id'] + btnTxtEnd);
-        if( arrIndex != -1 )
+        if( arrIndex != -1)
           rowsArr[arrIndex].push( row );
       }
       var aoColDef = [ null,null,  null, null,null,  { "bSearchable" :false, "bSortable": false }];
-      var newAoColDef = [ null,null,  null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
       var aoColDefArr = Array();
-      aoColDefArr.push( aoColDef);
+      aoColDefArr.push( aoColDef );
+      var newAoColDef = [ null,null,  null, null, null,null,  { "bSearchable" :false, "bSortable": false }];
       aoColDefArr.push( newAoColDef );
+
       for( var i = 0 ; i < idArr.length; ++ i ){
         var oTable;
         var tableId = "#" + idArr[i];

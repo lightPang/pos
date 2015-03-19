@@ -6,6 +6,12 @@
       }
     }
     
+    public function machineVersion(){
+      if( $this->doAuth() ){
+        $this->display();
+      }
+    }
+
     /*******
     function about mccBig
     */

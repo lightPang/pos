@@ -173,8 +173,11 @@ function alter_key_name( arr, tableName ){
     case 'pos_type':
       data = {"name":"名称", "code":'机具ID' ,'brand':'机具品牌', 'type' :'机具型号' , 'price':'单价'};
       break;
+    case 'return_record':
+      data = {"name":"名称", "rt_id":"退机类型" , "confirm_time":"通过时间" , "complete_info":"完成信息", "u_id":"退机人" , "reject_info" :"拒绝备注", "state" :"订单状态", "receive_time" : "收机时间", "code":'编码','remark':'备注'};
+      break;
     default :
-      data = {"name":"名称", "code":'编码','remark':'备注'};
+      data = {"name":"名称", "code":'编码','remark':'备注', 'is_active':'是否启用'};
       break;
   }
   

@@ -75,10 +75,10 @@
                   <div class="form-group">
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 拒绝缘由&nbsp; </label>
                     <div  >
-                      <input class="col-sm-3" type="text" name="reject_info" />
+                      <input class="col-sm-3" type="text" id="reject_info" name="reject_info" />
                     </div>
                     <div class="col-sm-2">
-                      <button class="btn btn-info" id="confirmBtn" type="button">
+                      <button class="btn btn-info" id="rejectBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
                           拒绝申请
                       </button>
@@ -136,7 +136,14 @@
                     <div class="col-sm-3 no-padding-right" id="if_addr"> 安装地址：<span></span></div> 
                     <div class="col-sm-3  no-padding-right" id="if_setup_time"> 装机时间：<span></span></div>
                     <div class="bottom"></div> 
-                  </div>  
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="if_state"> 机器状态：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="if_User"> 负责人：<span></span></div>
+                    <div class="bottom"></div> 
+                  </div>
+
                 </div>
                 <div class="record_div">
                   <input type="hidden" id="table_name" value="return_record" />

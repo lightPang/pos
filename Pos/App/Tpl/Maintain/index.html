@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>asdf</title>
@@ -20,7 +20,7 @@
             <li>
               <a data-toggle="tab" href="#submited">
                 <i class="green icon-home bigger-110"></i>
-                  已提交
+                  已分派
                 </a>
             </li>
 
@@ -36,7 +36,7 @@
                       <th>终端编号</th>
                       <th>安装地址</th>
                       <th>装机时间</th>
-                      <th>申请退机</th>
+                      <th>维修工单</th>
                     </tr>
                   </thead>
 
@@ -48,17 +48,17 @@
               <div id="createDiv" class="row" style="display:none;">
                 <form class="form-horizontal" id="createForm" role="form">
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 退机说明 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 维修说明 </label>
                     <div class="col-sm-2">
-                        <input type="text" id="info" name="info" placeholder="退机说明"  />
+                        <input type="text" id="remark" name="remark" placeholder="维修说明"  />
                     </div>
                   </div>
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 退机类型 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 分派用户 </label>
                     <div class="col-sm-3">
-                      <select id="rt_id" name="rt_id" class="col-sm-8">
+                      <select id="u_id" name="u_id" class="col-sm-8">
                       </select>
                     </div>  
                   </div>
@@ -101,21 +101,83 @@
                   <thead>
                     <tr>
                       <th>机器编码</th>
-                      <th>退机类型</th>
+                      <th>维修类型</th>
                       <th>提交时间</th>
                       <th>确认时间</th>
-                      <th>收机时间</th>
+                      <th>完成时间</th>
+                      <th>维修状态</th>
                       <th>负责人</th>
                       <th>操作</th>
                     </tr>
                   </thead>
                 </table>
               </div>
+              <div id="editDiv" class="row" style="display:none;">
+                <form class="form-horizontal" id="updateForm" role="form">
+
+                  <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 维修说明 </label>
+                      <div class="col-sm-2">
+                          <input type="text" id="update_remark" name="remark" placeholder="维修说明"  />
+                      </div>
+                    </div>
+
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                      <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 分派用户 </label>
+                      <div class="col-sm-3">
+                        <select id="update_u_id" name="u_id" class="col-sm-8">
+                        </select>
+                      </div>  
+                    </div>
+
+                  <div class="line">
+                    <div class="col-sm-3  no-padding-right" id="ed_m_code"> 机身编码：<span></span></div>
+                    <div class="col-sm-3 no-padding-right" id="ed_m_tcode"> 终端编号：<span></span></div>
+                    <div class="bottom"> </div>
+                  </div>
+
+                  <div class="space-4"></div>  
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="ed_addr"> 安装地址：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="ed_setup_time"> 装机时间：<span></span></div>
+                    <div class="bottom"></div> 
+                  </div>
+
+                  <div class="line"> 
+                    <div class="col-sm-3 no-padding-right" id="ed_user"> 负责人：<span></span></div> 
+                    <div class="col-sm-3  no-padding-right" id="ed_state"> 维修状态：<span></span></div>
+                    <div class="bottom"></div> 
+                  </div>
+                  <input type="hidden" name="mr_id" id="update_mr_id" />
+                  <div class="space-4"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 "> </div>
+                    <div class="col-sm-3 ">
+                      <button class="btn btn-info" id="updateBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          提交
+                      </button>
+                      <button class="btn btn-info" id="update_returnBtn" type="button">
+                        <i class="icon-ok bigger-110"></i>
+                          返回
+                      </button>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
               <div id="submitedDiv" class="row" style="display:none;">
                 <div class="line" >
                   <div class="col-sm-3  no-padding-right"> <button id="sb_returnBtn">返回</button></div>
                   <div class="bottom"></div> 
                 </div>
+
+                <div class="line">
+                  <div class="col-sm-3  no-padding-right" id="sb_remark"> 维修说明：<span></span></div>
+                  <div class="bottom"> </div>
+                </div>
+
                 <div class="line">
                   <div class="col-sm-3  no-padding-right" id="sb_m_code"> 机身编码：<span></span></div>
                   <div class="col-sm-3 no-padding-right" id="sb_m_tcode"> 终端编号：<span></span></div>
@@ -130,13 +192,13 @@
                 </div>
 
                 <div class="line"> 
-                  <div class="col-sm-3 no-padding-right" id="sb_User"> 负责人：<span></span></div> 
-                  <div class="col-sm-3  no-padding-right" id="sb_state"> 退机状态：<span></span></div>
+                  <div class="col-sm-3 no-padding-right" id="sb_user"> 负责人：<span></span></div> 
+                  <div class="col-sm-3  no-padding-right" id="sb_state"> 维修状态：<span></span></div>
                   <div class="bottom"></div> 
                 </div>  
 
                 <div class="record_div">
-                  <input type="hidden" id="table_name" value="return_record" />
+                  <input type="hidden" id="table_name" value="maintain_record" />
                   <input type="hidden" id="item_id" />
                   <table id="record_table"  class="table table-striped table-bordered table-hover">
                     <thead>
@@ -161,6 +223,6 @@
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
-    <script src="__PUBLIC__/userDefinedJs/returnRecord.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/maintain.js"></script>
   </body>
 </html>

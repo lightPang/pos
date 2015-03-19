@@ -89,7 +89,7 @@ function loadRRData(){
       for( var i = 0; i < idArr.length; ++ i ){
         rowsArr[i] = new Array();
       }
-
+      if( dataArr != null ){
       for( var i = 0; i < dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
@@ -120,6 +120,7 @@ function loadRRData(){
         if( arrIndex != -1 )
           rowsArr[arrIndex].push( row );
       }
+    }
       var aoColDef = [ null,null,  null, null,  { "bSearchable" :false, "bSortable": false }];
 
 
