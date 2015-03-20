@@ -12,6 +12,18 @@
       }
     }
 
+    public function machineSetup(){
+      if( $this->doAuth() ){
+        $this->display();
+      }
+    }
+
+    public function machineMainTain(){
+      if( $this->doAuth() ){
+        $this->display();
+      }
+    }
+
     /*******
     function about mccBig
     */

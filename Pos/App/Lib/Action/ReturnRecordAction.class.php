@@ -139,6 +139,7 @@ class ReturnRecordAction extends CommonAction {
 
           $mMap['code'] = $siItem['m_code'];
           $mData['state'] = 0;
+          $mData['si_id'] = 0;
           M('machine')->where( $mMap )->save( $mData );
           $this->ajaxReturn( $rrItem,'ok', 1);
         }

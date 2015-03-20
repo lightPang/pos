@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>asdf</title>
@@ -46,55 +46,6 @@
                 </table>
               </div>
 
-              <div id="cf_Div" class="row" style="display:none;">
-                <form class="form-horizontal" id="confirmForm" role="form">
-                  <div class="line">
-                    <div class="col-sm-3  no-padding-right" id="cf_remark"> 维修说明：<span></span></div>
-                    <div class="col-sm-3 no-padding-right" id="cf_create_time"> 创建时间：<span></span></div> 
-                    <div class="bottom"></div> 
-                  </div>
-
-                  <div class="line">
-                    <div class="col-sm-3  no-padding-right" id="cf_state"> 维修状态：<span></span></div>
-                    <div class="col-sm-3 no-padding-right" id="cf_user"> 负责人：<span></span></div> 
-                    <div class="bottom"></div> 
-                  </div>
-
-                  <input type="hidden" id="cf_mr_id" name="mr_id" />
-                  <div class="border-bottom"></div> 
-                  <div class="line"> 
-                    <div class="col-sm-3  no-padding-right" id="cf_m_code"> 机身编码：<span></span></div>
-                    <div class="col-sm-3 no-padding-right" id="cf_m_tcode"> 终端编号：<span></span></div> 
-                    <div class="bottom"></div> 
-                  </div> 
-                  <div class="line"> 
-                    <div class="col-sm-3 no-padding-right" id="cf_addr"> 安装地址：<span></span></div> 
-                    <div class="col-sm-3  no-padding-right" id="cf_setup_time"> 装机时间：<span></span></div>
-                    <div class="bottom"></div> 
-                  </div>
-
-                  <div class="space-4"></div>
-                  <div class="form-group">
-                    <div class="col-md-5 "> </div>
-                    <div class="col-sm-5 ">
-                      <button class="btn btn-info" id="rejectBtn" type="button">
-                        <i class="icon-reply bigger-110"></i>
-                          拒绝任务
-                      </button>
-                      <button class="btn btn-info" id="cf_btn" type="button">
-                        <i class="icon-ok bigger-110"></i>
-                          确认任务
-                      </button>
-                      <button class="btn btn-info" id="cf_rtnBtn" type="button">
-                        <i class="icon-ok bigger-110"></i>
-                          返回
-                      </button>
-                    </div>
-                  </div>
-                  
-                </form>
-              </div>
-
               <div id="ed_Div" class="row" style="display:none;">
                 <form class="form-horizontal" id="editForm" role="form">
                   <div class="line">
@@ -119,16 +70,9 @@
 
                   <div class="space-4"></div>
                   <div class="form-group">
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 维修结果： </label>
-                    <div class="col-sm-2">
-                      <select id="maintain_type" name="maintain_type" class="col-sm-12">
-                        <option value="0" >维修完成</option>
-                        <option value="1" >换机维修</option>
-                      </select>
-                    </div>  
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 维修备注 </label>
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 出机编号： </label>
                     <div class="col-sm-3">
-                      <input type="text" id="maintain_remark" name="maintain_remark" />
+                      <input type="text" id="change_code" name="change_code" />
                     </div> 
                   </div>
 
@@ -140,7 +84,7 @@
                     <div class="col-sm-3 ">
                       <button class="btn btn-info" id="ed_btn" type="button">
                         <i class="icon-ok bigger-110"></i>
-                          提交
+                          确认出机
                       </button>
                       <button class="btn btn-info" id="ed_RtnBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
@@ -165,6 +109,7 @@
                   <div class="line"> 
                     <div class="col-sm-3  no-padding-right" id="cg_m_code"> 机身编码：<span></span></div>
                     <div class="col-sm-3 no-padding-right" id="cg_m_tcode"> 终端编号：<span></span></div> 
+                    <div class="col-sm-3 no-padding-right" id="cg_change_code"> 换机号码：<span></span></div> 
                     <div class="bottom"></div> 
                   </div> 
                   <div class="line"> 
@@ -174,10 +119,13 @@
                   </div>
 
                   <div class="space-4"></div>
-                  <div class="form-group">  
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 结果备注 </label>
-                    <div class="col-sm-3">
-                      <input type="text" id="complete_remark" name="complete_remark" />
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 维修结果： </label>
+                    <div class="col-sm-2">
+                      <select id="is_change" name="is_change" class="col-sm-12">
+                        <option value="0" >维修完成</option>
+                        <option value="1" >换机维修</option>
+                      </select>
                     </div> 
                   </div>
 
@@ -187,7 +135,7 @@
                     <div class="col-sm-3 ">
                       <button class="btn btn-info" id="cg_btn" type="button">
                         <i class="icon-ok bigger-110"></i>
-                          确认完成
+                          提交
                       </button>
                       <button class="btn btn-info" id="cg_RtnBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
@@ -274,6 +222,6 @@
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
-    <script src="__PUBLIC__/userDefinedJs/maintain_task.js"></script>
+    <script src="__PUBLIC__/userDefinedJs/machineMaintain.js"></script>
   </body>
 </html>

@@ -24,6 +24,7 @@
           }
         }
         $this->assign('activeTab', $_GET['activeTab'] );
+        $this->assign('name', $_SESSION['user']);
       }
 
       return $flag;
@@ -101,7 +102,7 @@
         $Model = new Model();  
           
         $data = $Model->query($sql);
-        $data = M('mr_view')->where( $map) ->select();
+        $data = M('mr_view')->where( $map)->order('time desc') ->select();
         for ( $i = 0 ; $i < count($data); ++$i ) {
           $data[$i]['content'] = json_decode( $data[$i]['content'] , JSON_UNESCAPED_UNICODE );
         }

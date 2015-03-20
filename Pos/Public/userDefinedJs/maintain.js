@@ -222,7 +222,7 @@ function loadRRData(){
         row.push( item['create_time'] );
         row.push( item['confirm_time']);
         row.push( item['complete_time'] );
-        row.push( item['user'] );
+        
         var stateTxt = '';
         var btnTxt = '';
         var btnTxtEnd = '';
@@ -255,6 +255,7 @@ function loadRRData(){
             break;
         }
         row.push( stateTxt );
+        row.push( item['user'] );
         if( item['state'] != '0' )
           row.push( btnTxt+ item['mr_id'] + btnTxtEnd);
         else
@@ -317,7 +318,7 @@ function loadSiData(){
         row.push( item['addr'] );
         row.push( item['setup_time'] );
         row.push( editHtml + item['rt_id'] + editHtmlEnd  );
-        if(  item['maintain_id'] == 0  )
+        if(  item['maintain_id'] == 0 && item['return_id'] == 0  )
           rows.push(row);
       }
       var oTable1;

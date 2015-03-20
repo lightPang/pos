@@ -43,6 +43,12 @@
         $this->display();
     }
 
+    public function machineMaintain(){
+        if( $this->doAuth() ){
+            $this->display();
+        }
+    }
+
     public function machineDispatch(){
         $this->doAuth();
         
