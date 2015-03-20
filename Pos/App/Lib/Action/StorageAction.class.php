@@ -49,6 +49,12 @@
         }
     }
 
+    public function broken(){
+        if( $this->doAuth() ){
+            $this->display();
+        }
+    }
+
     public function machineDispatch(){
         $this->doAuth();
         

@@ -15,7 +15,6 @@ function activeTab(){
 		}
 		var $li = $("#menu_bar").find("li");
 		var target = $li.get( tab );
-    console.log(tab);
 		$(target).addClass('active');
     var ul_id = $(target).parent('ul').attr('id');
     if( ul_id != "undefined" ){
@@ -180,7 +179,7 @@ function alter_key_name( arr, tableName ){
       data = {"u_id":"负责人", "confirm_time":'确认时间','remark':'维修说明', 'maintain_remark':'维修内容', 'complete_time':'完成时间', 'out_time':'出机时间', 'back_time':'收机时间', 'maintain_type':'维修类型', 'complete_remark':'完成说明' , 'state':'状态'};
       break;
     default :
-      data = {"name":"名称", "code":'编码','remark':'备注', 'is_active':'是否启用'};
+      data = {"name":"名称", "code":'编码','remark':'备注', 'is_active':'是否启用','state':'状态'};
       break;
   }
   

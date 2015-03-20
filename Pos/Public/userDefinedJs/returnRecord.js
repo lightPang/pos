@@ -42,6 +42,7 @@ $("#createBtn").click( function(){
       if( data['status'] != '0' ){
         alert( "提交成功!");
         loadRRData();
+        loadSiData();
       }
       else{
         alert( data['info'] );
@@ -138,9 +139,9 @@ function loadRRData(){
         var item = dataArr[i];
         var row = [];
         row.push( item['m_code']);
-        row.push( item['create_time'] );
-        row.push( item['confirm_time']);
-        row.push( item['receive_time'] );
+        row.push( item['returnType'] );
+        row.push( item['create_time']);
+        row.push( item['confirm_time'] );
         row.push( item['User'] );
         var stateTxt = '';
         var btnTxt = '';

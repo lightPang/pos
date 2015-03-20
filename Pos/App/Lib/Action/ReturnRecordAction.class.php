@@ -32,8 +32,8 @@ class ReturnRecordAction extends CommonAction {
     public function createReturnRecord(){
       if( isset( $_SESSION['u_id']) && isset( $_POST['info']) ){
         $data = $this->_post();
-        $rrItem = M('return_record')->where( "si_id =".$_POST['si_id'] )->select() ;
-        if( $rrItem != null ){
+        $rrItem = M('setup_item')->where( "si_id =".$_POST['si_id'] )->select() ;
+        if( $rrItem['return_id'] != 0 ){
           $this->ajaxReturn( $data, '此机器已申请退机！',0);
         }
         else{
@@ -110,7 +110,7 @@ class ReturnRecordAction extends CommonAction {
           $rrItem['reject_info'] = $_POST['reject_info'];
           $this->addModifyRecord( $rrItem, $map, 'return_record', 'rr_id' );
           M('return_record')->where( $map )->save( $rrItem );
-          $siItem['return_id'] = '';
+          $siItem['return_id'] = 0;
           $this->addModifyRecord( $siItem, $siMap, 'setup_item', 'si_id' );
           M('setup_item')->where( $siMap )->save( $siItem );
 

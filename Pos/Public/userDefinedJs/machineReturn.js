@@ -96,7 +96,7 @@ function loadRRData(){
         row.push( item['m_code']);
         row.push( item['m_tcode'] );
         row.push( item['addr'] );
-        row.push( item['confirm_time']);
+        row.push( item['setup_time']);
         var stateTxt = '';
         var btnTxt = '';
         var btnTxtEnd = '';
