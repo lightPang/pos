@@ -5,6 +5,58 @@ var printUrl = rootUrl + 'Print/index';
 $(document).ready(function(){
   loadOrderData();
 });
+
+$("#complete_btn").click(function(){
+  if( $("#file_id").val() == '' ){
+    alert("请上传附件！");
+    return;
+  }
+  $.ajax({
+    type:'post',
+    data :{
+      "so_id" : $("#so_id").val(),
+      "file_id" : $("#file_id").val()
+    },
+    success:function( data ){
+      if( data['status'] == '1' ){
+        alert( '提交成功！');
+        loadOrderData();
+      }
+      else{
+        alert("请勿重复提交记录！");
+      }
+    }
+  });
+});
+
+$('#upload').Huploadify({
+    auto:true,
+    fileTypeExts:"*.txt;*.xls;*.docx;*.doc;*.xlsx;*.pdf;*.jpg;",
+    multi:true,
+    formData:null,
+    fileSizeLimit:5000,
+    showUploadedPercent:true,//是否实时显示上传的百分比，如20%
+    showUploadedSize:true,
+    removeTimeout:9999999,
+    uploader:"/pos/Pos/index.php/File/upload",
+    onUploadStart:function(){
+      //alert('开始上传');
+      },
+    onInit:function(){
+      //alert('初始化');
+      },
+    onUploadComplete:function(file,response){
+      if( response != '0' )
+        $("#file_id").val( response );
+      else
+        alert("文件上传失败！");
+    },
+    onDelete:function(file){
+    },
+    onCancel:function(file){
+    }
+    });
+
 function loadSetupOrder(soId,prefixId){
   var prefix = '';
   prefixId = prefixId.toString();

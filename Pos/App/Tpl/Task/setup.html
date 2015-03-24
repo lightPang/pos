@@ -31,7 +31,7 @@
                 <table id="ua_table" class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th >订单编号</th>
+                      <th>订单编号</th>
                       <th>商户名称</th>
                       <th>商户编号</th> 
                       <th>收单银行</th>
@@ -68,7 +68,7 @@
                       <div class="col-sm-2">
                         <input type="text" id="versionTxt" name="applicant" placeholder="版本号"  />
                       </div>
-                      <button id='printBtn' type="button">打印装机单
+                      <button id="printBtn" type="button">打印装机单
                       </button>
                     </div>
                     <div class="border-bottom"></div> 
@@ -77,18 +77,24 @@
                       <div class="space-4"></div>
                       <div class="form-group">
                         <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 凭证上传 </label>
+                        <!--
                         <div class="col-sm-3">
                             <div class="ace-file-input ace-file-multiple">
                                 <input id="id-input-file-3" type="file" class="required" multiple="">
                             </div>
                         </div>
+                      -->
+                        <div class="col-sm-3">
+                          <div id="upload"></div>
+                        </div>
                       </div>
                       <input type="hidden" id="so_id" /> 
+                      <input type="hidden" id="file_id"/>
                       <div class="space-4"></div>
                       <div class="form-group">
                         <div class="col-md-9 "> </div>
                         <div class="col-sm-3 ">
-                          <button class="btn btn-info" type="button">
+                          <button class="btn btn-info" id="complete_btn" type="button">
                             <i class="icon-ok bigger-110"></i>
                               提交
                           </button>
@@ -283,6 +289,9 @@
     </div>
     <script src="__PUBLIC__/js/jquery.dataTables.min.js"></script>
     <script src="__PUBLIC__/js/jquery.dataTables.bootstrap.js"></script>
+    
+    <script type="text/javascript" src="__PUBLIC__/huploadify/jquery.Huploadify.js"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/huploadify/Huploadify.css"/>
     <script src="__PUBLIC__/userDefinedJs/taskSetup.js"></script>
   </body>
 </html>

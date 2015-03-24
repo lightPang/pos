@@ -12,7 +12,7 @@ class ApplyAction extends CommonAction {
     public function idIndex(){
       if( $this->doAuth() ){
         $this->assign('type' , $_GET['type']);
-        $this->display('index2');
+        $this->display('index');
       }
 
     }
@@ -147,38 +147,6 @@ class ApplyAction extends CommonAction {
 
       return $siList;
     }
-    
-    public function getSubmitDataByPage(){
-      $this->doAuth();
-      $uaMap['state'] = 0;
-      $uaMap['c_id'] = $_SESSION['c_id'];
-      //$uaMap['u_id'] = $_SESSION['u_id'];
-      $sqlModel = M('setup_order');
-      $data = $sqlModel->where($uaMap)->select();
-      foreach ($data as $value => $key) {
-        $map['si_id'] = array('in', $key['si_list']);
-        $siModel = M('setup_item');
-        $siList = $siModel->where($map)->select();
-        $data[$value]['siList'] = $siList;
-      }
-      $this->ajaxReturn( $data, "123", 'ok' );
-    }
-
-    public function getPassedDataByPage(){
-      $this->doAuth();
-      $uaMap['state'] = array('gt',0);
-      //$uaMap['c_id'] = $_SESSION['c_id'];
-      $uaMap['u_id'] = $_SESSION['u_id'];
-      $sqlModel = M('setup_order');
-      $data = $sqlModel->where($uaMap)->select();
-      foreach ($data as $value => $key) {
-        $map['si_id'] = array('in', $key['si_list']);
-        $siModel = M('setup_item');
-        $siList = $siModel->where($map)->select();
-        $data[$value]['siList'] = $siList;
-      }
-      $this->ajaxReturn( $data, "123", 'ok' );
-    }
 
     public function createApplication(){
       if( $this->doAuth("setupApply") == true ){
@@ -186,10 +154,8 @@ class ApplyAction extends CommonAction {
         $resStr = $_POST['client_name'];
         $count = 0;
         //print_r($_POST);
-        $data = array();
-        foreach($_POST as $key => $value ){
-           $data[$key] = $value;
-        } 
+        $data = $this->_post();
+
         $fileSqlModel = M('file');
         $fileDir="Upload/".date("Y")."/".date("m")."/";
         if(!file_exists($fileDir))//照片目录
@@ -220,12 +186,18 @@ class ApplyAction extends CommonAction {
             $resStr = $key;
           }
         }
-        $data['so_number'] = $this->produceSoNum( $data['ac_time'], $data['si_list'],$data['bill_b_id']);
+        $flag = 0;
+        if( isset($data['so_id']) ){
+          $data['state'] = 1;
+          $flag = $data['so_id'];
+        }
+        $data['so_number'] = $this->produceSoNum( $data['ac_time'], $data['si_list'],$data['bill_b_id'],$flag);
         $data['ac_time'] = date('Y-m-d H:i:s',strtotime($data['ac_time']));
         //$data['register_date'] = date('Y-m-d H:i:s',strtotime($data['register_date']));
         //$data['active_date'] = date('Y-m-d H:i:s',strtotime($data['active_date']));
         $data['c_id'] = $_SESSION['c_id'];
         $data['u_id'] = $_SESSION['u_id'];
+         
         $siDao = M('setup_item');
         $siList = explode(',', $data['si_list'] );
         foreach ($siList as $value) {
@@ -249,7 +221,7 @@ class ApplyAction extends CommonAction {
       }
     }
 
-    protected function produceSoNum($ac_time, $si_list, $b_id){
+    protected function produceSoNum($ac_time, $si_list, $b_id, $flag = false){
       $serialNum = "";
       $c_id = $_SESSION['c_id'] ;
       $cMap['c_id'] = $c_id;
@@ -283,22 +255,32 @@ class ApplyAction extends CommonAction {
       $bankMap['b_id'] = $b_id;
       $bankData = $bankDao->where($bankMap)->select()[0];
       $serialNum .= substr($bankData['code'], 0,4);
-      $siListCount = strlen( $si_list ) / 2;
+      $siListCount = (int)(strlen( $si_list ) / 2 );
+      
       if( $siListCount < 10 )
         $serialNum .= '0'.$siListCount;
       else
         $serialNum .= $siListCount;
+      
       $date1 = date("Y-m-d H:i:s", $ac_time );
       $date2 = date("Y-m-d H:i:s", strtotime('+1439 min',strtotime($ac_time)));
       $soMap['ac_time'] = array( 'between', array($date1,$date2) );
       $soMap['c_id'] = $_SESSION['c_id'];
-      $soDao = M('setup_order');
-      $soCount = $soDao->where( $soMap )->count();
-      $soCount += 1;
-      if( $soCount < 10 )
-        $soCount = '00'.$soCount;
-      else if ( $soCount < 100 )
-        $soCount = '0'.$soCount;
+      $soCount = 0;
+      if( $flag == 0){
+        $soDao = M('setup_order');
+        $soCount = $soDao->where( $soMap )->count();
+        $soCount += 1;
+        if( $soCount < 10 )
+          $soCount = "00".$soCount;
+        else if ( $soCount < 100 )
+          $soCount = "0".$soCount;
+      }
+      else{
+        $soMap['so_id'] = $flag;
+        $soItem = M('setup_order')->where( $soMap )->select()[0];
+        $soCount = substr( $soItem['so_number'], 16 );
+      }
       $serialNum .= $soCount;
       return $serialNum;
     }

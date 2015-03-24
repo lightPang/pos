@@ -11,8 +11,9 @@
         $data = $this->_post();
 
         $siMap['si_id'] = $_POST['si_id'] ;
-        $mrItem = M('maintain_record')->select();
-        if( $mrItem != false ){
+        $siItem = M('setup_item')->select()[0];
+        //可以有重复的维修记录
+        if( $siItem['maintain_id'] != '0' ){
           $this->ajaxReturn( $data, '请勿重复提交记录！' , 0 );
         }
         else{

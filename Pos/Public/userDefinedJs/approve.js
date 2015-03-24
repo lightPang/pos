@@ -25,7 +25,7 @@ function loadOrderData(type){
       var dispatchBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
       var showBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
       var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
-      var idArr = ['ua_table','apr_table','mdb_table','back_table','loaded_table','ok_table'];
+      var idArr = ['ua_table','apr_table','back_table','loaded_table','ok_table'];
       var rowsArr = new Array();
       for( var i = 0; i < idArr.length; ++ i ){
         rowsArr[i] = new Array();
@@ -56,33 +56,41 @@ function loadOrderData(type){
           case '3':
             stateTxt = '已导出MDB';
             opTxt = showBtnTxt + item['so_id'] + ",3" + showBtnTxtEnd;
-            arrIndex = 2;
+            arrIndex = 1;
             break;
           case '4':
             stateTxt = '已导入MDB';
             opTxt = dispatchBtnTxt + item['so_id']  + dispatchBtnTxtEnd;
-            arrIndex = 3;
+            arrIndex = 2;
             break;
           case '5':
             stateTxt = '装机完成';
             opTxt = showBtnTxt + item['so_id'] + ",5" + showBtnTxtEnd;
             checkboxClass = 'loaded';
-            arrIndex = 4;
+            arrIndex = 3;
             break;
           default:
             stateTxt = '装机完成';
             opTxt = showBtnTxt + item['so_id'] + ",6" + showBtnTxtEnd;
-            arrIndex = 5;
+            arrIndex = 4;
             break;
         }
         if( checkboxClass != ''  ){
           row.push( checkBoxTxt + checkboxClass + checkBoxMid + item['so_id'] + checkboxEnd );
+        }
+        var typeTxt = '';
+        if( item['type'] == '0' ){
+          typeTxt = '直联';
+        } 
+        else{
+          typeTxt = '间联';
         }
         row.push( item['so_number']);
         row.push( item['client_name'] );
         row.push( item['client_number'] );
         row.push( item['billBank']);
         row.push( item['ac_time'] );
+        row.push( typeTxt );
         row.push( stateTxt);
         row.push( opTxt );
         if( arrIndex != -1 )
@@ -96,13 +104,13 @@ function loadOrderData(type){
           oTable = $(tableId).dataTable();
         }
         else{
-          if( i == 1 || i == 4 ){
+          if( i == 1  ){
             oTable = $(tableId).dataTable({
               "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
             "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
             "bPaginate" : true, //是否显示（应用）分页器  
             "aoColumns" : [
-                           { "bSortable": false }, null,null,  null, null, null, null, { "bSortable": false }
+                           { "bSortable": false }, null,null,  null, null, null,null, null, { "bSortable": false }
                           ],
             "oLanguage": { //国际化配置  
                     "sProcessing" : "正在获取数据，请稍后...",    
@@ -123,7 +131,7 @@ function loadOrderData(type){
             "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
             "bPaginate" : true, //是否显示（应用）分页器  
             "aoColumns" : [
-                            null,null,  null, null, null, null, { "bSortable": false }
+                            null,null,  null, null, null,null, null, { "bSortable": false }
                           ],
             "oLanguage": { //国际化配置  
                     "sProcessing" : "正在获取数据，请稍后...",    
@@ -207,8 +215,6 @@ function loadDispatchOrder(soId){
       var soList = soItem['siList'];
       var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
       var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
-      var siIdInput = "<input type='hidden' name='si_id[]' value='";
-      var mTypeInput = "<input type='hidden' name='m_type[]' value='";
       var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
       var inputEnd = "'/>";
       for( var i = 0 ; i < soList.length; ++ i ){
@@ -224,18 +230,18 @@ function loadDispatchOrder(soId){
         keyboardTypeTxt = item['keyboardType'];
         row.push(item['addr']);
         row.push(item['expandUser']);
-        row.push(item['maintainUser']);
-        row.push( mTypeTxt );
-        row.push( mCodeTxt );
-        row.push(keyboardTypeTxt );
-        row.push( keyboardCodeTxt );
+        row.push( item['machineType'] );
+        row.push( mCodeInput );
+        row.push( item['keyboardType'] );
+        row.push( keyboardInput );
         row.push(item['simType']);
-        row.push(item['m_tcode']);
+        row.push( simInput );
         row.push(item['annual_fee']);
         row.push( item['deposit_fee'] );
         row.push(item['remark']);
         rows.push(row);
       }
+      console.log( rows );
       var siTableId = "#" + prefix + "si-table";
       loadTable( siTableId, rows) ;
     }
@@ -253,7 +259,7 @@ function loadSetupOrder(soId,prefixId){
       prefix = 'apr_';
       break;
     case '3':
-      prefix = 'mdb_';
+      prefix = 'apr_';
       break;
     case '5':
       prefix = 'loaded_';
@@ -308,39 +314,55 @@ function loadSetupOrder(soId,prefixId){
       $("#ua_c_id").val( soItem['c_id'] );  
       var rows = [];
       var soList = soItem['siList'];
-      var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
-      var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
-      var siIdInput = "<input type='hidden' name='si_id[]' value='";
-      var mTypeInput = "<input type='hidden' name='m_type[]' value='";
-      var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
+      var mTypeTxt = "<input type='hidden' name='m_type[]' value='";
+      var simTypeTxt = "<input type='hidden' name='sim_type[]' value='";
+      var keyboardTypeTxt = "<input type='hidden' name='keyboard_type[]' value='";
+      var mCodeInput = "<input type='text' class='required' name='m_code[]' value='";
+      var simInput = "<input name='sim_code[]' class='required' value='";
+      var keyboardInput = "<input  class='required' name='keyboard_code[]' value='";
       var inputEnd = "'/>";
       for( var i = 0 ; i < soList.length; ++ i ){
         var item = soList[i];
         var row = [];
         var mCodeTxt = '';
+        var simCodeTxt = '';
         var keyboardCodeTxt = '';
-        var mTypeTxt = '';
-        var keyboardTypeTxt = '';
+        var keyboardType = '';
+        var simType = '';
+        var mType = '';
         if( prefixId != 1 ){
           mCodeTxt = item['m_code'];
           keyboardCodeTxt = item['keyboard_code'];
-          mTypeTxt = item['machineType'];
-          keyboardTypeTxt = item['keyboardType'];
+          simCodeTxt = item['sim_code'];
+          mType = item['machineType'];
+          keyboardType = item['keyboardType'];
+          simType = item['simType'];
         }
         else{
-          mCodeTxt = siIdInput + item['si_id'] + inputEnd + mCodeInput;
-          keyboardCodeTxt = keyboardCodeInput;
-          keyboardTypeTxt = keyboardInput + item['keyboard_type'] + inputEnd + item['keyboardType'];
-          mTypeTxt = mTypeInput + item['m_type'] + inputEnd + item['machineType'];
+          mCodeTxt = mCodeInput + item['m_code'] + inputEnd ;
+          keyboardCodeTxt = keyboardInput + item['keyboard_code'] + inputEnd  ;
+          keyboardType = keyboardTypeTxt + item['keyboard_type'] + inputEnd + item['keyboardType'];
+          mType = mTypeTxt + item['m_type'] + inputEnd + item['machineType'];
+          if( item['sim_type'] != '' ){
+            simType = '';
+            simInput = '';
+          }
+          else{
+            simType = simTypeTxt + item['sim_type'] + inputEnd + item['simType'];
+            simInput = simInput + item['sim_code'] + inputEnd ;
+          }
         }
         row.push(item['addr']);
         row.push(item['expandUser']);
+        if( prefixId != 1 )
         row.push(item['maintainUser']);
-        row.push( mTypeTxt );
+        row.push( mType );
         row.push( mCodeTxt );
-        row.push(keyboardTypeTxt );
+        row.push( keyboardType );
         row.push( keyboardCodeTxt );
-        row.push(item['simType']);
+        row.push( simType );
+        row.push( simCodeTxt );
+        if( prefixId != 1)
         row.push(item['m_tcode']);
         row.push(item['annual_fee']);
         row.push( item['deposit_fee'] );

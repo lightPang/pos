@@ -2,7 +2,10 @@ var createUrl =  rootUrl + "Apply/createApplication";
 var siDataUrl = rootUrl + "SetupItem/getSiData";
 var createSetupItemUrl = rootUrl + "SetupItem/create";
 var soDataUrl = rootUrl + 'Apply/getSoData';
-var soItemUrl = rootUrl + '/Apply/getSoItem';
+var soItemUrl = rootUrl + 'Apply/getSoItem';
+var delSetupItemUrl = rootUrl + "SetupItem/del";
+
+
 $(document).ready(function(){
   createSiDialog();
 });
@@ -17,38 +20,28 @@ function createSiDialog(){
 
             });
 }
-$('input[name="has_annual"]').change(function(){
-  var val = $('input[name="has_annual"]:checked').val();
-  if( val == 1 ){
-    $("#si_annual_fee").attr( 'disabled', false);
-    $("#si_annual_fee").addClass("required");
-  }
-  else{
-    $("#si_annual_fee").attr( 'disabled', true);
-    $("#si_annual_fee").removeClass("required");
-  }
-});
 
-$('input[name="has_deposit"]').change(function(){
-  var val = $('input[name="has_deposit"]:checked').val();
-  if( val == 1 ){
-    $("#si_deposit_fee").attr( 'disabled', false);
-    $("#si_deposit_fee").addClass("required");
+$("#si_pos_type").change( function(){
+  var val = $("#si_pos_type").val();
+  console.log( $("#si_pos_type").val() );
+  
+  if( val == '2' ){
+    $("#si_sim_type").attr('disabled',false);
+    console.log( val );
   }
   else{
-    $("#si_deposit_fee").attr( 'disabled', true);
-    $("#si_deposit_fee").removeClass("required");
+    $("#si_sim_type").attr('disabled', true );
   }
 });
 
 $("#addSiBtn").click(function(){
-  $("#si_type").html('0');
+  $("#si_type").val('0');
   $("#setup_item").dialog('open');
 });
 
 $("#update_addSiBtn").click(function(){
   $("#si_so_id").val( $("#update_so_id").val() );
-  $("#si_type").html('1');
+  $("#si_type").val('1');
   $("#setup_item").dialog('open');
 });
 
@@ -73,7 +66,7 @@ $("#updateSiBtn").click( function(){
        if( data['status'] >= 0 ){
           alert("操作成功!");
           var siListId = "#si_list";
-          if($("#si_type").html() != '0' ){
+          if($("#si_type").val() != '0' ){
             siListId = "#update_si_list";
           }
           if( data['status'] != '0' ){
@@ -81,10 +74,10 @@ $("#updateSiBtn").click( function(){
             si_list +=  data['status'].toString() + ",";
             $( siListId ).val( si_list);
           }
-          if($("#si_type").html() != '0' )
-            loadUpdateSiTableData();
+          if($("#si_type").val() != '0' )
+            loadSiTableData(1);
           else
-            loadSiTableData();
+            loadSiTableData(0);
            
           clearInput("#createSiForm");
           
@@ -100,8 +93,14 @@ $("#cancelSiBtn").click(function(){
   $("#setup_item").find('input').val('');
   $("#updateSiBtn").attr('disabled',false);
 });
-function loadSiTableData(){
-  var si_list = $("#si_list").val();
+function loadSiTableData(type){
+  var si_list = '';
+  if( type == '0' ){
+    si_list = $("#si_list").val();
+  }
+  else{
+    si_list = $("#update_si_list").val();
+  }
   $.ajax({
     type:'POST',
     dataType:"json",
@@ -134,30 +133,28 @@ function loadSiTableData(){
         row.push( item["annual_fee"] );
         row.push( item["deposit_fee"]);
         row.push( "<span class='" + item['si_id'] + "'>" + item["remark"] + "</span>");
-        row.push( editHtml + item['si_id'] + editHtmlEnd + item['si_id'] + delHtml );
+        row.push( editHtml + item['si_id'] + "," + type + editHtmlEnd + item['si_id'] + "," + type + delHtml );
         rows.push(row);
       }
       var oTable1;
-      if ( $.fn.dataTable.isDataTable( '#machineListTable' ) ) {
-        oTable1 = $('#machineListTable').dataTable();
+      var tableId = '';
+      if( type == '0' ){
+        tableId = "#machineListTable";
+      }
+      else{
+        tableId = "#update_machineListTable";
+      }
+      if ( $.fn.dataTable.isDataTable( tableId ) ) {
+        oTable1 = $( tableId ).dataTable();
       }
       else {
   
-      oTable1 = $('#machineListTable').dataTable({
+      oTable1 = $( tableId ).dataTable({
         "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,
-                        null,  
-                        null,
-                        null,
-                        null, 
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSortable": false }
+                        null,null, null,null,null,null,null, null,null,{ "bSearchable" :false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
@@ -208,48 +205,30 @@ function refreshLinkedData( source, target, type){
   $( $(targetEle).find( targetOption) ).css('display', 'inherit');
 }
 
-function createDialog(){
-  $("#dialog-modal").dialog({
-                height: 400,
-                width: 510,
-                dialogClass: "no-close",
-                modal: true,
-                autoOpen: false
-
-            });
-}
-
-function updateRow(si_id){
+function updateRow(si_id,type){
   $.ajax({
     type:'post',
-    url: setupItemUrl,
+    url: siDataUrl,
     data :{
       'si_id' : si_id
     },
     success: function(data){
+      console.log( data );
       var setupItem = data['data'];
-      $("#si_addr").val( setupItem['addr'] );
-      $("#si_phone").val( setupItem['phone'] );
-      $("#si_m_type").val( setupItem['m_type'] );
-      $("si_keyboard_type").val( setupItem['keyboard_type'] );
-      $("#si_sim_type").val( setupItem['sim_type'] );
-      $("#si_sim_id").val( setupItem['sim_id'] );
-      $("input[type='radio'][name='has_annual'][value='"+setupItem['has_annual']+"']").attr('checked','checked');
-      $("#si_annual_fee").val( setupItem['annual_fee'] );
-      $("input[type='radio'][name='has_deposit'][value='"+setupItem['has_deposit']+"']").attr('checked','checked');    
-      $("#si_deposit_fee").val( setupItem['deposit_fee']);
-      $("#si_expand_user").val( setupItem['expand_user'] );
-      $("#si_remark").val( setupItem['remark'] );
+      var idPrefix = "";
+      for( var key in setupItem ){
+        var id = "#si_" + key;
+        $(id).val( setupItem[key] );
+      }
+      $("#si_type").val(type);
       $("#si_id").val( setupItem['si_id'] );
-      $("#si_so_id").val( '' );
-      $("#si_type").html('0');
       $("#setup_item").dialog( "open");
     }
   });
   $("#setup_item").dialog( "open");
 }
 
-function deleteRow( si_id ){
+function deleteRow( si_id,type ){
   var confirmFlag = confirm("确认要删除吗？");
   if( confirmFlag === true ){
     $.ajax({
@@ -259,15 +238,26 @@ function deleteRow( si_id ){
       success: function(data){
         console.log(data);
         if( data['status'] != false ){
-          var si_list = $("#si_list").val();
+          var siListId = '';
+          var tableId = '';
+          if( type == '0' ){
+            siListId = "#si_list";
+            tableId = "#machineListTable";
+          }
+          else{
+            siListId = "#update_si_list";
+            tableId = "#update_machineListTable";
+          }
+          var si_list = $( siListId ).val();
           si_list = si_list.replace( si_id + ',' ,'' );
-          $("#si_list").val( si_list);
+          $(siListId).val( si_list);
           alert("删除成功！");
-          $span = $("#machineListTable").find('.'+si_id);
+          $span = $(tableId).find('.'+si_id);
           $tr = $("."+si_id).parents('td').parents('tr');
           console.log($tr);
+          console.log( tableId );
           $tr.addClass('remove');
-          var table = $('#machineListTable').DataTable();
+          var table = $( tableId ).DataTable();
           table.row('.remove').remove().draw();
         }
         else{
@@ -465,8 +455,11 @@ $("#update_submitBtn").click( function(){
       console.log(data);
        if( data['status'] !== 0 ){
           alert("修改成功!");
+          loadOrderData();
       }
-      //$("update_submitBtn").attr('disabled',false);
+      else{
+        alert( data['info'] );
+      }
     }
     });
 
@@ -510,7 +503,7 @@ function loadEditSetupOrder( soId ){
           }
         }
       }
-      loadUpdateSiTableData();
+      loadSiTableData( '1' );
     }
   })
 }
@@ -578,144 +571,4 @@ function loadSetupOrder(soId){
       loadTable( '#si-table', rows) ;
     }
   });
-}
-
-function loadUpdateSiTableData(){
-  var si_list = $("#update_si_list").val();
-  $.ajax({
-    type:'POST',
-    dataType:"json",
-    data: { "si_list" : si_list}, 
-    url: siDataUrl,
-    success: function( data){
-      if( data['data'] == null ) return;
-      //console.log(data);
-      var dataArr = data['data'];
-      var rows = [];
-      var editHtml = '<td><div class=\"visible-md visible-lg hidden-sm hidden-xs action-buttons\">\
-                                <a class=\"green\" href=\"#\" onclick=\"editUpdateRow(';
-      var editHtmlEnd =          ')\"><i class=\"icon-pencil bigger-130\"></i>\
-                                </a>';
-      var delHtml =            '<a class=\"red\" href=\"#\" onclick=\"deleteUpdateRow(';
-      var delHtmlEnd =          ')\">\
-                                  <i class=\"icon-trash bigger-130\"></i>\
-                                </a>\
-                              </div></td>';
-      for( var i=0; i<dataArr.length; ++i ){
-        var item = dataArr[i];
-        var row = [];
-        row.push( item["si_id"] );
-        row.push( item["addr"] );
-        row.push( item["expandUser"] );
-        row.push( item["mType"] );
-        row.push( item["keyboardType"]);
-        row.push( item["simType"] );
-        row.push( item["annual_fee"] );
-        row.push( item["deposit_fee"]);
-        row.push( "<span class='" + item['si_id'] + "'>" + item["remark"] + "</span>");
-        row.push( editHtml + item['si_id'] + editHtmlEnd +delHtml + item['si_id'] + delHtmlEnd );
-        rows.push(row);
-      }
-      var oTable1;
-      if ( $.fn.dataTable.isDataTable( '#update_machineListTable' ) ) {
-        oTable1 = $('#update_machineListTable').dataTable();
-      }
-      else {
-  
-      oTable1 = $('#update_machineListTable').dataTable({
-        "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
-        "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
-        "bPaginate" : true, //是否显示（应用）分页器  
-        "aoColumns" : [
-                        null,
-                        null,  
-                        null,
-                        null,
-                        null, 
-                        null,
-                        null, 
-                        null, 
-                        null,
-                        { "bSearchable":false, "bSortable": false }
-                      ],
-        "oLanguage": { //国际化配置  
-                "sProcessing" : "正在获取数据，请稍后...",    
-                "sLengthMenu" : "显示 _MENU_ 条",    
-                "sZeroRecords" : "没有您要搜索的内容",    
-                "sInfo" : "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",    
-                "sInfoEmpty" : "记录数为0",    
-                "sInfoFiltered" : "(全部记录数 _MAX_ 条)",    
-                "sInfoPostFix" : "",    
-                "sSearch" : "搜索",    
-                "sUrl" : "",    
-                }
-      });
-      }
-     oTable1.fnClearTable();
-     if( rows.length > 0 )
-      oTable1.fnAddData( rows );
-    }
-  }
-  );
-}
-
-function editUpdateRow( si_id ){
-  $.ajax({
-    type:'post',
-    url: setupItemUrl,
-    data :{
-      'si_id' : si_id
-    },
-    success: function(data){
-      var setupItem = data['data'];
-      //console.log( setupItem );
-      $("#si_addr").val( setupItem['addr'] );
-      $("#si_phone").val( setupItem['phone'] );
-      $("#si_m_type").val( setupItem['m_type'] );
-      $("si_keyboard_type").val( setupItem['keyboard_type'] );
-      $("#si_sim_type").val( setupItem['sim_type'] );
-      $("#si_sim_id").val( setupItem['sim_id'] );
-      $("input[type='radio'][name='has_annual'][value='"+setupItem['has_annual']+"']").attr('checked','checked');
-      $("#si_annual_fee").val( setupItem['annual_fee'] );
-      $("input[type='radio'][name='has_deposit'][value='"+setupItem['has_deposit']+"']").attr('checked','checked');    
-      $("#si_deposit_fee").val( setupItem['deposit_fee']);
-      $("#si_expand_user").val( setupItem['expand_user'] );
-      $("#si_remark").val( setupItem['remark'] );
-      $("#si_id").val( setupItem['si_id'] );
-      $("#si_so_id").val( setupItem['so_id'] );
-      $("#si_type").html('1');
-      $("#setup_item").dialog( "open");
-    }
-  });
-  
-}
-
-function deleteUpdateRow(si_id){
-  var confirmFlag = confirm("确认要删除吗？");
-  if( confirmFlag === true ){
-    $.ajax({
-      type:'POST',
-      url:delSetupItemUrl,
-      data: {'si_id' : si_id },
-      success: function(data){
-        console.log(data);
-        if( data['status'] != false ){
-          var si_list = $("#update_si_list").val();
-          si_list = si_list.replace( si_id + ',' ,'' );
-          $("#update_si_list").val( si_list);
-          alert("删除成功！");
-          $span = $("#update_machineListTable").find('.'+si_id);
-          $tr = $("."+si_id).parents('td').parents('tr');
-          console.log($tr);
-          $tr.addClass('remove');
-          var table = $('#update_machineListTable').DataTable();
-          table.row('.remove').remove().draw();
-        }
-        else{
-           alert("删除失败！");
-        }
-      }
-    });
-    
-  }
 }

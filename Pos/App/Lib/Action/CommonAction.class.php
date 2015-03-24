@@ -91,6 +91,8 @@
         $data['ri'] = $crModel->where($crMap)->select();
         $crMap['is_inner'] = 0;
         $data['ro'] = $crModel->where($crMap)->select();
+        $data['posType'] = M('pos_type')->select();
+        $data['machineVersion'] = M('machine_version')->select();
         $this->ajaxReturn($data, 'ok','123');
       }
     }

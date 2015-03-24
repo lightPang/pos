@@ -98,7 +98,8 @@ function updateRow( si_id ){
     url : siDataUrl,
     data : { 'si_id' : si_id },
     success:function(data){
-      var item = data['data'][0];
+      console.log(data);
+      var item = data['data'];
       for( var k in item ){
         var id = "#ct_" + k;
         $(id).find('span').html( item[k] );
@@ -226,8 +227,8 @@ function loadSiData(){
         row.push( item['m_tcode']);
         row.push( item['addr'] );
         row.push( item['setup_time'] );
-        row.push( editHtml + item['rt_id'] + editHtmlEnd  );
-        if( item['return_id'] == null || item['return_id'] == '0' )
+        row.push( editHtml + item['si_id'] + editHtmlEnd  );
+        if(  item['return_id'] == '0' && item['maintain_id'] == '0' )
           rows.push(row);
       }
       var oTable1;

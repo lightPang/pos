@@ -74,13 +74,7 @@
                         <input type="date" class="required" name="ac_time" name="number"   />
                     </div>
                     
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
-                    <div class="col-sm-1">
-                      <select name="is_urgent" class="form-control">
-                        <option value="1">是</option>
-                        <option value="0">否</option>
-                      </select>
-                    </div>
+                    
                   </div> 
                   
                   <div class="form-group">
@@ -101,11 +95,7 @@
                       </select>
                     </div>
                     
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
-                    <div class="col-xs-1">
-                      <select id="cr_inner_id" name="cr_inner_id" class="form-control">
-                      </select>
-                    </div>
+                    
                     
                   </div> 
                   
@@ -128,13 +118,31 @@
                       </select>
                     </div>
                     
+                    
+                    
+                  </div> 
+                  <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
+                    <div class="col-sm-2">
+                      <select id="cr_inner_id" name="cr_inner_id" class="form-control">
+                      </select>
+                    </div>
+
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                       <select id="cr_outer_id" name="cr_outer_id" class="form-control">
                       </select>
                     </div>
-                    
-                  </div> 
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
+                    <div class="col-sm-2">
+                      <select name="is_urgent" class="form-control">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                      </select>
+                    </div>
+
+                  </div>
                   
                   <div class="space-4"></div>
                   <div class="form-group">
@@ -400,7 +408,7 @@
                     <div class="col-sm-2 ">
                       <button class="btn btn-info" id="submitBtn" type="button">
                         <i class="icon-ok bigger-110"></i>
-                          Submit
+                          提交
                       </button>
                     </div>
                   </div>
@@ -469,13 +477,7 @@
                         <input type="date" class="required" id="update_ac_time" name="ac_time" name="number"   />
                     </div>
                     
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
-                    <div class="col-sm-1">
-                      <select id="update_is_urgent" name="is_urgent" class="form-control">
-                        <option value="1">是</option>
-                        <option value="0">否</option>
-                      </select>
-                    </div>
+                    
                   </div> 
                   
                   <div class="form-group">
@@ -496,11 +498,7 @@
                       </select>
                     </div>
                     
-                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
-                    <div class="col-xs-1">
-                      <select id="update_cr_inner_id" name="cr_inner_id" class="form-control">
-                      </select>
-                    </div>
+                    
                     
                   </div> 
                   
@@ -523,13 +521,31 @@
                       </select>
                     </div>
                     
+                    
+                    
+                  </div> 
+                  <div class="form-group" >
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【内】</label>
+                    <div class="col-sm-2">
+                      <select id="update_cr_inner_id" name="cr_inner_id" class="form-control">
+                      </select>
+                    </div>
+
                     <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 费率【外】</label>
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                       <select id="update_cr_outer_id" name="cr_outer_id" class="form-control">
                       </select>
                     </div>
-                    
-                  </div> 
+
+                    <label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 是否加急</label>
+                    <div class="col-sm-2">
+                      <select id="update_is_urgent" name="is_urgent" class="form-control">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                      </select>
+                    </div>
+
+                  </div>
                   
                   <div class="space-4"></div>
                   <div class="form-group">
@@ -1032,6 +1048,20 @@
                       </div>
                     </div>
                     <div class="space-4"></div>
+
+                    <div class="form-group">
+                      
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 机具型号 </label>
+                      <div class="col-sm-3">
+                          <select id="si_pos_type" name="pos_type"></select>
+                      </div>
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 版本型号 </label>
+                      <div class="col-sm-3">
+                          <select id="si_machine_version" name="machine_version" ></select>
+                      </div>
+                    </div>
+                    <div class="space-4"></div>
+
                     
                     <div class="form-group">
                       
@@ -1051,46 +1081,29 @@
                       <div class="col-sm-3">
                           <select id="si_sim_type" name="sim_type" disabled="true"></select>
                       </div>
-                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> SIM卡电话卡 </label>
+
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 拓展人 </label>
                       <div class="col-sm-3">
-                          <select id="si_sim_id" name="sim_id" disabled="true"></select>
+                          <select id="si_expand_user" name="expand_user"></select>
                       </div>
+
                     </div>
                     <div class="space-4"></div>
-                    <div class="form-group">
-                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 是否需要年费 </label>
-                      <div class="col-sm-3">
-                          <input type="radio" name="has_annual" value=1 class="ace"/><span class="lbl mg-rg-20"> 是</span>
-                          <input type="radio" name="has_annual" value=0 class="ace" checked="checked"/><span class="lbl"> 否</span>
-                      </div>
-                      
-                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 年费 </label>
-                      <div class="col-sm-2">
-                          <input type="text" id="si_annual_fee" name="annual_fee" placeholder="年费" disabled="true"/>
-                      </div>
-                    </div>
+
                     <div class="space-4"></div>
                     
                      <div class="form-group">
-                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 是否需要押金 </label>
+                      <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 年费 </label>
                       <div class="col-sm-3">
-                          <input type="radio" name="has_deposit" value=1 class="ace"/><span class="lbl mg-rg-20"> 是</span>
-                          <input type="radio" name="has_deposit" value=0 class="ace" checked="checked"/><span class="lbl"> 否</span>
+                          <input type="number" id="si_annual_fee" name="annual_fee" placeholder="年费" />
                       </div>
                       
                       <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 押金 </label>
                       <div class="col-sm-2">
-                          <input type="text" id="si_deposit_fee" name="deposit_fee" placeholder="押金" disabled="true"/>
+                          <input type="number" id="si_deposit_fee" name="deposit_fee" placeholder="押金" />
                       </div>
                     </div>
                     <div class="space-4"></div>
-                    
-                    <div class="form-group " >
-                    <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 拓展人 </label>
-                      <div class="col-sm-3">
-                          <select id="si_expand_user" name="expand_user"></select>
-                      </div>
-                    </div>
                     
                     <div class="form-group " >
                       <label class="col-sm-2" style="text-align:right;" for="form-field-1"> 备注</label>
@@ -1100,7 +1113,7 @@
                     </div>
                     
             <input id="si_id" type="hidden" name="si_id" />
-            
+            <input id="si_type" type="hidden" />
             <div class="space-4"></div>
             <div class="form-group">
               <div class="col-md-4 "> </div>

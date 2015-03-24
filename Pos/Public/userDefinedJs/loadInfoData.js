@@ -19,6 +19,8 @@ function loadInfoData(){
       loadExtraData( 'ca_id', data['clientAttr'],'ca_id','name' );
       loadExtraData( 'cp_id', data['clientPlatform'],'cp_id','name' );
       loadExtraData( 'si_expand_user',data['user'],'u_id','name');
+      loadExtraData( 'si_machine_version' ,data['machineVersion'], 'mv_id', 'name');
+      loadExtraData( 'si_pos_type' ,data['posType'], 'pt_id', 'type');
       loadExtraData('si_m_type', data['machineType'], 'mt_id','mt_name');
       loadExtraData('si_keyboard_type', data['keyboardType'], 'mt_id','mt_name');
       loadExtraData('si_sim_type', data['sim'], 'mt_id','mt_name');

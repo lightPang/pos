@@ -12,3 +12,4 @@
 #ignore mdb file
 /Pos/MDB
 /Pos/Mail
+/Pos/App/Conf

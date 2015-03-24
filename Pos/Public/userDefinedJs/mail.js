@@ -21,13 +21,7 @@ $(document).ready(function(){
       //alert('初始化');
       },
     onUploadComplete:function(file,response){
-      var obj = eval( response );
-      var url = obj;
-      var fileIdx = file['index'];
-      var file_list = $("#file_list").val();
-      if( file_list.indexOf( fileIdx + '_' + url ) < 0 ){
-        $("#file_list").val( file_list  + fileIdx  + '_' + url + ',');
-      }
+      console.log( response );
     },
     onDelete:function(file){
     },

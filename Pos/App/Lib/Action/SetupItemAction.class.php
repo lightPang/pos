@@ -70,6 +70,11 @@
         }
         $this->ajaxReturn( $data,"ok", count($data));
       }
+      else if( isset( $_SESSION['u_id'] ) && isset($_POST['si_id']) ){
+        $siMap['si_id'] = $_POST['si_id'];
+        $res = M('setup_item')->where( $siMap )->select()[0];
+        $this->ajaxReturn( $res, 'ok', 1);
+      }
     }
 
     public function del(){

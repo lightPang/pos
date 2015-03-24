@@ -36,10 +36,11 @@
           $f_data['name'] = $_FILES["file"]["name"];
           $f_data['type'] = $_FILES["file"]["type"];
           $f_data['url'] = $serverFileName;
-          //$f_data['content'] = file_get_contents( $serverFileName );
-          //$data = M('file')->add( $f_data );
+          $f_data['content'] = file_get_contents( $serverFileName );
+          $data = M('file')->add( $f_data );
           //$data = 1;
-          $this->ajaxReturn( $tmpName .'_'.$_FILES["file"]["name"] );
+          $this->ajaxReturn( $data );
+          //$this->ajaxReturn( $tmpName .'_'.$_FILES["file"]["name"] );
         }
         else{
           $this->ajaxReturn( null );

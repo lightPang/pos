@@ -56,4 +56,17 @@ class TaskAction extends CommonAction {
       }
     }
 
+    public function complete(){
+      if( $this->doAuth()&& isset( $_POST['so_id'] ) ){
+        $map['so_id'] = $_POST['so_id'];
+        $soItem = M('setup_order')->where($map)->select()[0];
+        if( $soItem['state'] == '2' ){
+
+        }
+        else{
+          $this->ajaxReturn(null,'订单状态错误', 0 );
+        }
+      }
+    }
+
 }

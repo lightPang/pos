@@ -34,6 +34,13 @@
       $keyboardCode = $_POST['keyboard_code'];
       $machineType = $_POST['m_type'];
       $machineCode = $_POST['m_code'];
+      $simType = $_POST['sim_type'];
+      $simCode = $_POST['sim_code'];
+      $soItem = M('setup_order')->where( "so_id=".$_POST['so_id'] )->select()[0];
+      if( $soItem['state'] != '1' ){
+        $this->ajaxReturn( null, '状态错误', 0 );
+        die;
+      }
       $machineData = array();
       $keyboardData = array();
       $machineCodeList = '';
@@ -45,9 +52,11 @@
         $siList .= $si_id[$i].',';
       }
       
-      $machineMap['m_code'] = array('in', $machineCodeList); 
+      $machineMap['m_code'] = array('in', $machineCodeList);
+      $machineMap['c_id'] = $_SESSION['c_id']; 
       $machineData = M('machine')->where( $machineMap )->select();
       $keyboardMap['m_code'] = array('in', $keyboardCodeList);
+      $keyboardMap['c_id'] = $_SESSION['c_id'];
       $keyboardData = M('machine')->where( $keyboardMap)->select();
       $siMap['si_id'] = array('in', $siList);
       $siData = M('setup_item')->where( $siMap )->select();
