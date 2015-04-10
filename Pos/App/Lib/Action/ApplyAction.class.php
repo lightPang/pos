@@ -20,6 +20,7 @@ class ApplyAction extends CommonAction {
     public function getSoData(){
       if( $this->doAuth() ){
         $map['c_id'] = $_SESSION['c_id'];
+        if( isset( $_POST['type'] ) )
         $map['type'] = $_POST['type'];
         $soModel = M('setup_order');
         $data = $soModel->where($map)->select();

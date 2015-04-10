@@ -17,6 +17,7 @@ $("#complete_btn").click(function(){
       "so_id" : $("#so_id").val(),
       "file_id" : $("#file_id").val()
     },
+    url : 
     success:function( data ){
       if( data['status'] == '1' ){
         alert( '提交成功！');

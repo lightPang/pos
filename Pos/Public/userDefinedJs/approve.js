@@ -9,11 +9,10 @@ $(document).ready(function(){
 
 });
 
-function loadOrderData(type){
+function loadOrderData(){
   $.ajax({
     type:'post',
     dataType:'json',
-    data:{'type':type},
     url:soDataUrl,
     success:function(data){
       //console.log( data['data'] );
@@ -55,6 +54,7 @@ function loadOrderData(type){
             break;
           case '3':
             stateTxt = '已导出MDB';
+            checkboxClass = 'apr';
             opTxt = showBtnTxt + item['so_id'] + ",3" + showBtnTxtEnd;
             arrIndex = 1;
             break;
@@ -64,8 +64,24 @@ function loadOrderData(type){
             arrIndex = 2;
             break;
           case '5':
-            stateTxt = '装机完成';
-            opTxt = showBtnTxt + item['so_id'] + ",5" + showBtnTxtEnd;
+            stateTxt = '已分派';
+            opTxt = dispatchBtnTxt + item['so_id']  + dispatchBtnTxtEnd;
+            arrIndex = 2;
+            break;
+          case '6':
+            stateTxt = '已确认';
+            opTxt = dispatchBtnTxt + item['so_id']  + dispatchBtnTxtEnd;
+            arrIndex = 2;
+            break;
+          case '7':
+            stateTxt = '已装机';
+            opTxt = showBtnTxt + item['so_id'] + ",7" + showBtnTxtEnd;
+            checkboxClass = 'loaded';
+            arrIndex = 3;
+            break;
+          case '8':
+            stateTxt = '已回填';
+            opTxt = showBtnTxt + item['so_id'] + ",7" + showBtnTxtEnd;
             checkboxClass = 'loaded';
             arrIndex = 3;
             break;
@@ -76,7 +92,7 @@ function loadOrderData(type){
             break;
         }
         if( checkboxClass != ''  ){
-          row.push( checkBoxTxt + checkboxClass + checkBoxMid + item['so_id'] + checkboxEnd );
+          row.push( checkBoxTxt + checkboxClass + checkBoxMid + item['so_id'] + '-' + item['bill_b_id'] + checkboxEnd );
         }
         var typeTxt = '';
         if( item['type'] == '0' ){
@@ -104,7 +120,7 @@ function loadOrderData(type){
           oTable = $(tableId).dataTable();
         }
         else{
-          if( i == 1  ){
+          if( i == 1 || i == 3 ){
             oTable = $(tableId).dataTable({
               "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
             "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
@@ -172,14 +188,14 @@ function loadDispatchOrder(soId){
     },
     url:soItemUrl,
     success:function(data){
-      //console.log(data);
+      console.log(data);
       var soItem  = data['data']['soItem'];
       var userList = data['data']['user'];
       var options = '';
       for( var i = 0 ; i < userList.length; ++ i ){
         options += "<option value = '" + userList[i]['u_id']  + "'>" + userList[i]['name']  + "</option>";
       } 
-      $("#u_id").append( options );
+      var userOptions = "<select name='u_id[]' >" + options + "</select>";
       $("#dispatch_so_id").val( soItem['so_id'] );
       for(var key in soItem){
         var id = "#" + prefix + key;
@@ -213,9 +229,7 @@ function loadDispatchOrder(soId){
       $("#ua_c_id").val( soItem['c_id'] );  
       var rows = [];
       var soList = soItem['siList'];
-      var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
-      var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
-      var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
+      var idInput = "<input type='hidden' name='si_id[]' value='";
       var inputEnd = "'/>";
       for( var i = 0 ; i < soList.length; ++ i ){
         var item = soList[i];
@@ -228,16 +242,14 @@ function loadDispatchOrder(soId){
         keyboardCodeTxt = item['keyboard_code'];
         mTypeTxt = item['machineType'];
         keyboardTypeTxt = item['keyboardType'];
-        row.push(item['addr']);
+        row.push( idInput + item['si_id'] + inputEnd + item['addr']);
         row.push(item['expandUser']);
+        row.push( userOptions );
         row.push( item['machineType'] );
-        row.push( mCodeInput );
+        row.push( item['m_code'] );
         row.push( item['keyboardType'] );
-        row.push( keyboardInput );
-        row.push(item['simType']);
-        row.push( simInput );
-        row.push(item['annual_fee']);
-        row.push( item['deposit_fee'] );
+        row.push( item['keyboard_code'] );
+        row.push( item['m_tcode'] );
         row.push(item['remark']);
         rows.push(row);
       }
@@ -261,10 +273,10 @@ function loadSetupOrder(soId,prefixId){
     case '3':
       prefix = 'apr_';
       break;
-    case '5':
+    case '7':
       prefix = 'loaded_';
       break;
-    case '6':
+    case '8':
       prefix = 'ok_';
       break;
   }
@@ -437,8 +449,7 @@ $("#cancelBtn").click(function(){
 });
 
 $("#dispatch_confirmBtn").click( function(){
-  console.log(123);
-  var flag = confirm("确定分派给此人？");
+  var flag = confirm("确定分派？");
   if( flag == true ){
     console.log( $('#dispatch_form').serialize() );
     $.ajax({

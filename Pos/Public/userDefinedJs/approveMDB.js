@@ -18,13 +18,22 @@ function checkMainBox( className,ele){
 function produceLoadedMDB( className ){
   var so_list = '';
   $boxList = $(className);
-  
+  var bill_b = '';
   for( var i = 0; i<$boxList.length; ++i){
-    
     var box = $boxList.get(i);
+    var boxVal = $(box).val();
+    var so_id = boxVal.split('-')[0];
+    var bill_b_id = boxVal.split('-')[1];
     if( box.checked == true && $(box).val() != '' ){
-      so_list += $(box).val() + ',';
-
+      if( bill_b == '' )
+        bill_b = bill_b_id;
+      else{
+        if( bill_b != bill_b_id ){
+          alert("请勾选同属一个收单银行的装机单进行操作！");
+          return;
+        }
+      }
+      so_list += so_id + ',';
     }
   }
   window.open( rootUrl + 'Approve/getLoadedMDBFile/so_list/'+so_list);
@@ -35,16 +44,25 @@ function produceLoadedMDB( className ){
 function produceMDB(className){
   var so_list = '';
   $boxList = $(className);
-  
+  var bill_b = '';
   for( var i = 0; i<$boxList.length; ++i){
-    
     var box = $boxList.get(i);
+    var boxVal = $(box).val();
+    var so_id = boxVal.split('-')[0];
+    var bill_b_id = boxVal.split('-')[1];
     if( box.checked == true && $(box).val() != '' ){
-      so_list += $(box).val() + ',';
-
+      if( bill_b == '' )
+        bill_b = bill_b_id;
+      else{
+        if( bill_b != bill_b_id ){
+          alert("请勾选同属一个收单银行的装机单进行操作！");
+          return;
+        }
+      }
+      so_list += so_id + ',';
     }
   }
-  console.log( so_list );
+  //console.log( so_list );
   window.open( rootUrl + 'Approve/getMDBFile/so_list/'+so_list);
 }
 

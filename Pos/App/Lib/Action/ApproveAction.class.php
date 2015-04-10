@@ -142,18 +142,17 @@
       if( $this->doAuth() && isset($_POST['so_id']) ){
         $so_id = $_POST['so_id'];
         $u_id = $_POST['u_id'];
+        $si_id = $_POST['si_id'] ;
         $soMap['so_id'] = $so_id;
         $soData = M('setup_order')->where( $soMap )->select()[0];
         if( $soData != null ){
-          $siMap['si_id'] = array( 'in', $soData['si_list'] );
-          $siData = M('setup_item')->where( $siMap )->select();
-          foreach ($siData as $siItem) {
-            $siMap['si_id'] = $siItem['si_id'];
-            $saveMap['setup_user'] = $u_id;
-            M('setup_item')->where( $siMap )->save( $saveMap );
+          for( $i = 0 ; $i < count($si_id) ;  ++$i ){
+            $siMap['si_id'] = $si_id[$i];
+            $siData['setup_user'] = $u_id[$i];
+            M('setup_item')->where( $siMap )->save( $siData );
           }
           $soData['state'] = 5;
-          $soData['setup_user'] = $u_id;
+          //$soData['setup_user'] = $u_id;
           $soData['dispatch_time'] = date('Y-m-d H:i:s');
           M('setup_order')->where( $soMap )->save( $soData );
           $this->ajaxReturn('ok', 'ok','1' );
@@ -177,7 +176,7 @@
         $date = date("d").'-'.date("H").'-'.date('i').'-'.date('s');
         $fileName = $fileDir.$date.".MDB";
         copy("MDB/blank.MDB", $fileName);
-        $filePreFix = $this->_server('DOCUMENT_ROOT') . C('Web_Prefix') .
+        $filePreFix = $this->_server('DOCUMENT_ROOT') . C('Web_Prefix') ;
         //$fileName = "D:/PgmTools/xampp/htdocs/pos/Pos/MDB/download/2015/02/09-21-33-49.MDB";
         $fileName = $filePreFix.$fileName;
         $accessUtil = new Access($fileName);
@@ -197,6 +196,10 @@
             $clientNameList .= "、".$soItem['client_name'];
             
           }
+
+          $soMap['so_id'] = $soItem['so_id'];
+          $soData['state'] = 3;
+          M('setup_order')->where( $soMap )->save( $soData );
           
           $bankName = $soItem['bill_b_short'];
           $item['商户序号'] = $i;
@@ -269,7 +272,7 @@
         $date = date("d").'-'.date("H").'-'.date('i').'-'.date('s');
         $fileName = $fileDir.$date.".MDB";
         copy("MDB/reload.MDB", $fileName);
-        $filePreFix = "D:/PgmTools/xampp/htdocs/pos/Pos/";
+        $filePreFix = $this->_server('DOCUMENT_ROOT') . C('Web_Prefix') ;
         //$fileName = "D:/PgmTools/xampp/htdocs/pos/Pos/MDB/download/2015/02/09-21-33-49.MDB";
         $fileName = $filePreFix.$fileName;
         $accessUtil = new Access($fileName);
