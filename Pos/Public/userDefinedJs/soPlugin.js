@@ -190,7 +190,9 @@
                     <input type="hidden" name="c_id" id="ua_c_id" />\
                   </form>\
               </div>';
+          if( $_this.find('#ua_so_number').length == 0  )
           $_this.append( innerHtml );
+        else console.log(123);
           var soItem = data['data'];
           for( var k in soItem ){
             var id = "#ua_"  + k ;
@@ -202,3 +204,9 @@
     
   }
 })(jQuery);
+
+function test(){
+  $("#file_upload").soPlugin({
+    "so_id" : "2"
+  });
+}

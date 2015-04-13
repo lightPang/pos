@@ -9,20 +9,20 @@ class ReturnRecordAction extends CommonAction {
 
     public function getReturnRecord(){
       if( isset( $_SESSION['u_id'] ) && isset($_POST['rr_id'] ) ){
-        $sqlModel = M('rr_user_view');
+        $sqlModel = M('rr_view');
         $sqlMap['rr_id'] = $_POST['rr_id'] ;
         $res = $sqlModel->where( $sqlMap )->select();
         $this->ajaxReturn( $res[0], 'ok', 1);
       }
       else if( isset( $_POST['state'] ) ){
-        $sqlModel = M('rt_view');
+        $sqlModel = M('rr_view');
         $sqlMap['c_id'] = $_SESSION['c_id'];
         $sqlMap['state'] = array( 'in', "2,3" );
         $res = $sqlModel->where( $sqlMap )->select();
         $this->ajaxReturn( $res, 'ok', 1);
       }
       else{
-        $sqlModel = M('rr_user_view');
+        $sqlModel = M('rr_view');
         $sqlMap['c_id'] = $_SESSION['c_id'];
         $res = $sqlModel->where( $sqlMap )->select();
         $this->ajaxReturn( $res, 'ok', 1 );
@@ -83,7 +83,7 @@ class ReturnRecordAction extends CommonAction {
           $rrItem['confirm_time'] = Date( 'Y-m-d H:m:s');
           $this->addModifyRecord( $rrItem, $map, 'return_record', 'rr_id' );
           M('return_record')->where( $map )->save( $rrItem );
-          $siItem['t_state'] = 5;
+          $siItem['state'] = 5;
           $this->addModifyRecord( $siItem, $siMap, 'setup_item', 'si_id' );
           M('setup_item')->where( $siMap )->save( $siItem );
 
@@ -133,7 +133,7 @@ class ReturnRecordAction extends CommonAction {
           $rrItem['receive_time'] = Date("Y-m-d H:m:s");
           $this->addModifyRecord( $rrItem, $map, 'return_record', 'rr_id' );
           M('return_record')->where( $map )->save( $rrItem );
-          $siItem['t_state'] = 6;
+          $siItem['state'] = 6;
           //$this->addModifyRecord( $siItem, $siMap, 'setup_item', 'si_id' );
           M('setup_item')->where( $siMap )->save( $siItem );
 

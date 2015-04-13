@@ -30,3 +30,7 @@
 .bottom{
   clear: both; 
 }
+
+.content{
+  padding-left: 10px;
+}

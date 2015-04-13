@@ -210,6 +210,7 @@ function loadRRData(){
       for( var i = 0; i < dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
+        row.push( item['client_name'] );
         row.push( item['m_code']);
         var typeTxt = '普通维修';
         if( item['is_change'] == 1 ){
@@ -263,7 +264,7 @@ function loadRRData(){
           rowsArr[arrIndex].push( row );
       }
       
-      var newAoColDef = [ null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
+      var newAoColDef = [ null,null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
 
       
       for( var i = 0 ; i < idArr.length ; ++i ){

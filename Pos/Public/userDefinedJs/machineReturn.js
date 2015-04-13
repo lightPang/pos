@@ -93,6 +93,7 @@ function loadRRData(){
       for( var i = 0; i < dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
+        row.push( item['client_name'] );
         row.push( item['m_code']);
         row.push( item['m_tcode'] );
         row.push( item['addr'] );
@@ -121,7 +122,7 @@ function loadRRData(){
           rowsArr[arrIndex].push( row );
       }
     }
-      var aoColDef = [ null,null,  null, null,  { "bSearchable" :false, "bSortable": false }];
+      var aoColDef = [null, null,null,  null, null,  { "bSearchable" :false, "bSortable": false }];
 
 
       for( var i = 0 ; i < idArr.length; ++ i ){

@@ -15,5 +15,13 @@
         $this->display('print');
       }
     }
+
+    public function printBySi(){
+      if( $this->doAuth() && isset($_GET['si_list']) ){
+        $this->assign('so_id', $_GET['so_id'] );
+        $this->assign('si_list', $_GET['si_list'] );
+        $this->display('print');
+      }
+    }
   }
 ?>

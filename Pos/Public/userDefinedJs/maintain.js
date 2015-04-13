@@ -213,6 +213,7 @@ function loadRRData(){
       for( var i = 0; i < dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
+        row.push( item['client_name'] );
         row.push( item['m_code']);
         var typeTxt = '普通维修';
         if( item['is_change'] == 1 ){
@@ -263,7 +264,7 @@ function loadRRData(){
         rows.push( row );
       }
 
-      var newAoColDef = [ null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
+      var newAoColDef = [null,null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
 
       var tableId = "#table_submited";
 
@@ -313,6 +314,7 @@ function loadSiData(){
       for( var i=0; i<dataArr.length; ++i ){
         var item = dataArr[i];
         var row = [];
+        row.push( item['client_name']);
         row.push( item["m_code"] );
         row.push( item['m_tcode']);
         row.push( item['addr'] );
@@ -332,7 +334,7 @@ function loadSiData(){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,null,null,null, { "bSearchable":false, "bSortable": false }
+                        null,null,null,null,null, { "bSearchable":false, "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    

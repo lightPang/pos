@@ -22,14 +22,15 @@ class TaskAction extends CommonAction {
       }
     }
     public function confirm(){
-      if( $this->doAuth() && isset($_POST['so_id']) ){
-        $so_id = $_POST['so_id'];
-        $soMap['so_id'] = $so_id;
-        $soData = M('setup_order')->where( $soMap )->select()[0];
-        if( $soData != null ){
-          $soData['confirm_time'] = date('Y-m-d H:i:s');
-          $soData['state'] = 6;
-          M('setup_order')->where( $soMap )->save( $soData );
+      if( $this->doAuth() && isset($_POST['si_id']) ){
+        $si_id = $_POST['si_id'];
+        $siMap['si_id'] = $si_id;
+        $siData = M('setup_item')->where( $siMap )->select()[0];
+        if( $siData != null && $siData['state'] == 2 ){
+          $siData['confirm_time'] = date('Y-m-d H:i:s');
+          $siData['state'] = 7;
+          $this->addModifyRecord( $siData, $siMap, 'setup_item','si_id');
+          M('setup_item')->where( $siMap )->save( $siData );
           $this->ajaxReturn(null,null,1);
         }
         else{
@@ -37,6 +38,45 @@ class TaskAction extends CommonAction {
         }
       }
     }
+
+    public function setupComplete(){
+      if( $this->doAuth() && isset($_POST['si_id'] ) ){
+        $si_id = $_POST['si_id'];
+        $siMap['si_id'] = $si_id;
+        $siData = M('setup_item')->where( $siMap )->select()[0];
+        if( $siData != null && $siData['state'] == 7 ){
+          $siData['setup_img'] = $_POST['file_id'];
+          $siData['setup_user'] = $_POST['setup_user'];
+          $siData['setup_time'] = date('Y-m-d H:i:s');
+          $siData['state'] = 3;
+          $this->addModifyRecord( $siData, $siMap, 'setup_item','si_id');
+          M('setup_item')->where( $siMap )->save( $siData );
+          $this->ajaxReturn(null,null,1);
+        }
+        else{
+          $this->ajaxReturn( null,null, 0 );
+        }
+      }
+    }
+
+    public function setupReject(){
+      if( $this->doAuth() && isset($_POST['si_id'] ) ){
+        $si_id = $_POST['si_id'];
+        $siMap['si_id'] = $si_id;
+        $siData = M('setup_item')->where( $siMap )->select()[0];
+        if( $siData != null && $siData['state'] == 2 ){
+          $siData['setup_user'] = '';
+          $siData['state'] = 1;
+          $this->addModifyRecord( $siData, $siMap, 'setup_item','si_id');
+          M('setup_item')->where( $siMap )->save( $siData );
+          $this->ajaxReturn(null,null,1);
+        }
+        else{
+          $this->ajaxReturn( null,null, 0 );
+        }
+      }
+    }
+
     public function getSoData(){
       if( $this->doAuth() ){
         $map['c_id'] = $_SESSION['c_id'];

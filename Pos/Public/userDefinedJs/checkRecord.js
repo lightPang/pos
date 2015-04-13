@@ -94,6 +94,7 @@ function loadMachineData(district_id){
       for( var i =0 ; i < mList.length; ++i ){
         var item = mList[i];
         var row = [];
+        row.push( item['client_name'] );
         row.push( item['m_code']);
         row.push( item['m_tcode']);
         row.push( item['addr']);
@@ -114,7 +115,7 @@ function loadMachineData(district_id){
         "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
         "bPaginate" : true, //是否显示（应用）分页器  
         "aoColumns" : [
-                        null,null,  null, null, null, null,null, { "bSortable": false }
+                        null,null,null,  null, null, null, null,null, { "bSortable": false }
                       ],
         "oLanguage": { //国际化配置  
                 "sProcessing" : "正在获取数据，请稍后...",    
@@ -141,6 +142,8 @@ function loadMachineData(district_id){
 function calDays(date){
   //var date = "2015-1-06 11:17:03";
   //var date2 = "2014-10-09 11:17:03";
+  if( date == null )
+    return 0;
   date = datetime_to_unix( date);
   var date2 = (new Date()).valueOf();
   var days=Math.floor((date2 - date)/(24*3600*1000));

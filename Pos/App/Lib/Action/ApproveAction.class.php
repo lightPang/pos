@@ -139,22 +139,17 @@
     }
 
     public function dispatch(){
-      if( $this->doAuth() && isset($_POST['so_id']) ){
+      if( $this->doAuth() && isset($_POST['si_id']) ){
         $so_id = $_POST['so_id'];
         $u_id = $_POST['u_id'];
-        $si_id = $_POST['si_id'] ;
-        $soMap['so_id'] = $so_id;
-        $soData = M('setup_order')->where( $soMap )->select()[0];
-        if( $soData != null ){
-          for( $i = 0 ; $i < count($si_id) ;  ++$i ){
-            $siMap['si_id'] = $si_id[$i];
-            $siData['setup_user'] = $u_id[$i];
-            M('setup_item')->where( $siMap )->save( $siData );
-          }
-          $soData['state'] = 5;
-          //$soData['setup_user'] = $u_id;
-          $soData['dispatch_time'] = date('Y-m-d H:i:s');
-          M('setup_order')->where( $soMap )->save( $soData );
+        $siMap['si_id'] = $_POST['si_id'] ; 
+        $siData = M('setup_item')->where( $siMap )->select()[0];
+        if( $siData != null && $siData['state'] == '1' ){
+          $siData['setup_user'] = $_POST['setup_user'];
+          $siData['dispatch_time'] = date('Y-m-d H:i:s');
+          $siData['state'] = 2;
+          $this->addModifyRecord( $siData, $siMap, 'setup_item','si_id');
+          M('setup_item')->where( $siMap )->save( $siData );
           $this->ajaxReturn('ok', 'ok','1' );
         }
         else{
@@ -264,7 +259,7 @@
     }
 
     public function getLoadedMDBFile(){
-      if( $this->doAuth() && $_GET['so_list'] ){
+      if( $this->doAuth() && $_GET['so_id'] ){
         $fileDir="MDB/loadedDownload/".date("Y")."/".date("m")."/";
         if(!file_exists($fileDir))//照片目录
           mkdir($fileDir,0777, true);
@@ -313,7 +308,7 @@
           //array_push($res, $item);
           $tableName = '商户';
           
-          $siData = $this->getFullSiData( $soItem['si_list'] );
+          $siData = $this->getFullSiData( $_POST['si_list'] );
           $item['申请终端'] = count($siData);
           $accessUtil->add( $tableName, $item);
           $posTableName = "POS机";

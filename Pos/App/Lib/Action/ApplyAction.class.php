@@ -79,7 +79,10 @@ class ApplyAction extends CommonAction {
         $bankOp = $bankOpModel->where($bankOpMap)->field('name,contact_num')->select()[0];
         $data['bankOp'] = $bankOp['name'];
         $data['bankOpPhone'] = $bankOp['contact_num'];
-        $map['si_id'] = array('in', $data['si_list']);
+        if( isset( $_POST['si_list'] ) )
+          $map['si_id'] = array('in', $_POST['si_list'] );
+        else
+          $map['si_id'] = array('in', $data['si_list']);
         $siModel = M('setup_item');
         $siList = $siModel->where($map)->select();
         $data['siList'] = $this->getFullSiList($siList);

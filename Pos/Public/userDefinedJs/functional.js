@@ -132,6 +132,41 @@ function loadModifyRecord(){
   });
 }
 
+function loadModifyRecordWithId( table_name, item_id, modify_table){
+  var table_name_id = "#" + table_name;
+  var item_name_id = "#" + item_id;
+  var recordTable_id = "#" + modify_table;
+  var table_name = $( table_name_id ).val();
+  var item_id = $( item_name_id ).val();
+
+  $.ajax({
+    type:'post',
+    data:{
+      'table_name':table_name,
+      'item_id' : item_id
+    },
+    url : recordUrl,
+    success : function( data ){
+      var recordList = data['data'];
+
+      if( recordList != null )
+        recordList = alter_key_name( recordList, table_name );
+      else
+        return;
+      
+      var rows = Array();
+      for( var i = 0; i < recordList.length; ++ i ){
+        var row = Array();
+        row.push( recordList[i]['name'] );
+        row.push( recordList[i]['time'] );
+        row.push( recordList[i]['content'] );
+        rows.push( row );
+      }
+      loadTable( recordTable_id, rows );
+    }
+  });
+}
+
 function alter_key_name( arr, tableName ){
   var key_arr = Array();
   var data = '';
@@ -177,6 +212,9 @@ function alter_key_name( arr, tableName ){
       break;
     case 'maintain_record':
       data = {"u_id":"负责人", "confirm_time":'确认时间','remark':'维修说明', 'maintain_remark':'维修内容', 'complete_time':'完成时间', 'out_time':'出机时间', 'back_time':'收机时间', 'maintain_type':'维修类型', 'complete_remark':'完成说明' , 'state':'状态'};
+      break;
+    case 'setup_item':
+      data = { "dispatch_time" : "分派时间", "setup_time":"装机时间", "confirm_time":'确认时间','setup_img':'装机图片', 'state':'状态', 'return_id' :'退机订单'  };
       break;
     default :
       data = {"name":"名称", "code":'编码','remark':'备注', 'is_active':'是否启用','state':'状态'};

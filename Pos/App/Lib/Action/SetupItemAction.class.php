@@ -29,9 +29,13 @@
         $this->ajaxReturn( $data[0], 'ok','123');
       }
       else if( $this->doAuth() ){
-        $sqlModel = M('si_view');
+        $sqlModel = M('si_check_view');
         $siMap['c_id'] = $_SESSION['c_id'];
-        $siMap['state'] = 3;
+        if( isset( $_POST['state'] ) ){
+          $siMap['state'] = array( 'gt', $_POST['state'] );
+        }
+        else
+          $siMap['state'] = 3;
         $data = $sqlModel->where( $siMap )->select();
         $this->ajaxReturn( $data, 'ok', 1);
       }
@@ -96,23 +100,13 @@
 
     public function getSetupItemByDistrict(){
       if( $this->doAuth() ){
-        $siModel = M('setup_item');
-        $userModel = M('user');
-        $userData = $userModel->field('u_id,name')->select();
+        $siModel = M('si_check_view');
         $district_id = $_POST['district_id'];
         if( $district_id != 0 )
           $siMap['ad_id'] = $district_id;
-        $siMap['setup_state'] = 1;
+        $siMap['state'] = 3;
         $data = $siModel->where($siMap)->select();
         
-        foreach ($data as $key => $value) {
-          foreach ($userData as $userItem) {
-            if( $userItem['u_id'] == $value['check_user']){
-              $data[$key]['checkUser'] = $userItem['name'];
-              break;
-            }
-          }
-        }
         $this->ajaxReturn($data,'ok' ,'123');
       }
     }

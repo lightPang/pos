@@ -1,11 +1,16 @@
 var soDataUrl = rootUrl + 'Task/getSoData';
 var soItemUrl = rootUrl + 'Apply/getSoItem';
+var completeUrl = rootUrl + "Task/setupComplete";
+var siItemUrl = rootUrl + 'SetupItem/getSetupItem';
 var comfirmUrl = rootUrl + 'Task/confirm';
-var printUrl = rootUrl + 'Print/index';
+var rejectUrl = rootUrl ;
+var userDataUrl = rootUrl + 'User/getUserData';
 $(document).ready(function(){
   loadOrderData();
 });
+$("reject_btn").click( function(){
 
+} );
 $("#complete_btn").click(function(){
   if( $("#file_id").val() == '' ){
     alert("请上传附件！");
@@ -14,10 +19,11 @@ $("#complete_btn").click(function(){
   $.ajax({
     type:'post',
     data :{
-      "so_id" : $("#so_id").val(),
-      "file_id" : $("#file_id").val()
+      "si_id" : $("#si_id").val(),
+      "file_id" : $("#file_id").val(),
+      "setup_user" : $("#setup_user").val()
     },
-    url : 
+    url : completeUrl,
     success:function( data ){
       if( data['status'] == '1' ){
         alert( '提交成功！');
@@ -58,7 +64,7 @@ $('#upload').Huploadify({
     }
     });
 
-function loadSetupOrder(soId,prefixId){
+function loadSetupOrder(si_id,prefixId,state){
   var prefix = '';
   prefixId = prefixId.toString();
   switch (prefixId){
@@ -70,104 +76,37 @@ function loadSetupOrder(soId,prefixId){
       break;
   }
   var tableId = "#" + prefix + "table-div";
+  var itemDiv = "#" + prefix + 'itemDiv';
   var orderId = "#" + prefix + "showOrder";
+  $("#si_id").val( si_id );
+  $("#file_id").val('');
   $(tableId).css('display','none');
   $(orderId).css('display','block');
-  $.ajax({
-    type:'post',
-    dataType:'json',
-    data:{
-      'soId' : soId
-    },
-    url:soItemUrl,
-    success:function(data){
-      //console.log(data);
-      var soItem  = data['data'];
-      for(var key in soItem){
-        var id = "#" + prefix + key;
-        if( $(id).find('span') != null ){
-          $(id).find('span').html( soItem[key] );
+  if( state == '2' ){
+    $("#resForm").css('display','none' );
+    $("#confirmDiv").css('display','block');
+  }
+  else if( state == '7' ){
+    $("#resForm").css('display','block' );
+    $("#confirmDiv").css('display','none');
+    $.ajax({
+      type: 'post',
+      data : { 'c_id' : 'c'},
+      url : userDataUrl,
+      success : function( data ){
+        var userData = data['data'];
+        var options = '';
+        for( var i = 0 ; i < userData.length; ++ i ){
+          options += "<option value='" + userData[i]['u_id'] + "'>" + userData[i]['name'] + "</option>";
         }
+        $("#setup_user").html('');
+        $("#setup_user").append( options );
       }
-      $stateSpan = $("#state").find('span');
-      switch ($stateSpan.html()){
-        case '1':
-          $stateSpan.html('已提交');
-      }
-      $urgentSpan = $("#is_urgent").find('span');
-      switch ($urgentSpan.html()){
-        case '0':
-          $urgentSpan.html("否");
-        case '1' :
-          $urgentSpan.html("是");
-      }
-      if( soItem['state'] == 5 ){
-        $("#confirmDiv").css('display','block');
-        $("#resForm").css('display','none');
-      }
-      else{
-        $("#confirmDiv").css('display','none');
-        $("#resForm").css('display','block');
-      }
-      var idList = ["contractDownload","taxDownload","licenseDownload","cardDownload","passportDownload","authDownload","clientImgDownload1","clientImgDownload2","clientImgDownload3"];
-      var keyList = ['contract_file_id','tax_file_id','license_file_id','card_file_id','passport_file_id','auth_file_id','client_img_1_id','client_img_2_id','client_img_3_id'];
-      for( var j = 0; j<idList.length; ++j ){
-        var id = "#" + prefix + idList[j];
-        if( soItem[ keyList[j] ] == null )
-          $(id).css('display','none');
-        else
-          $(id).attr( 'onclick', "downloadFile("+soItem[ keyList[j] ]+")");
-
-      }
-      $("#so_id").val( soItem['so_id'] );
-      $("#ua_c_id").val( soItem['c_id'] );  
-      var rows = [];
-      var soList = soItem['siList'];
-      var keyboardCodeInput = "<input type='text' class='required' name='keyboard_code[]' />";
-      var mCodeInput = "<input type='text' class='required' name='m_code[]' />";
-      var siIdInput = "<input type='hidden' name='si_id[]' value='";
-      var mTypeInput = "<input type='hidden' name='m_type[]' value='";
-      var keyboardInput = "<input type='hidden' name='keyboard_type[]' value='";
-      var inputEnd = "'/>";
-      var version = '';
-      for( var i = 0 ; i < soList.length; ++ i ){
-        version = soList[i]['version'];
-        var item = soList[i];
-        var row = [];
-        var mCodeTxt = '';
-        var keyboardCodeTxt = '';
-        var mTypeTxt = '';
-        var keyboardTypeTxt = '';
-        if( prefixId != 1 ){
-          mCodeTxt = item['m_code'];
-          keyboardCodeTxt = item['keyboard_code'];
-          mTypeTxt = item['machineType'];
-          keyboardTypeTxt = item['keyboardType'];
-        }
-        else{
-          mCodeTxt = siIdInput + item['si_id'] + inputEnd + mCodeInput;
-          keyboardCodeTxt = keyboardCodeInput;
-          keyboardTypeTxt = keyboardInput + item['keyboard_type'] + inputEnd + item['keyboardType'];
-          mTypeTxt = mTypeInput + item['m_type'] + inputEnd + item['machineType'];
-        }
-        row.push(item['addr']);
-        row.push(item['expandUser']);
-        row.push(item['maintainUser']);
-        row.push( mTypeTxt );
-        row.push( mCodeTxt );
-        row.push(keyboardTypeTxt );
-        row.push( keyboardCodeTxt );
-        row.push(item['simType']);
-        row.push(item['m_tcode']);
-        row.push(item['annual_fee']);
-        row.push( item['deposit_fee'] );
-        row.push(item['remark']);
-        rows.push(row);
-      }
-      var siTableId = "#" + prefix + "si-table";
-      $("#versionTxt").val( version );
-      loadTable( siTableId, rows) ;
-    }
+    });
+  }
+  $(itemDiv).siPlugin({
+    "si_id" : si_id,
+    "div_prefix" : prefix + "_content_"
   });
 }
 
@@ -175,14 +114,20 @@ function loadOrderData(){
   $.ajax({
     type:'post',
     dataType:'json',
-    url:soDataUrl,
+    data :{
+      'state' : "1"
+    },
+    url:siItemUrl,
     success:function(data){
       //console.log( data['data'] );
       var soArr = data['data'];
       var rows = [];
       var showBtnTxt = '<a class="green" href="#" onclick="loadSetupOrder(';
       var showBtnTxtEnd = ')"><i class="icon-print align-top bigger-110 icon-check"></i></a>';
+      var editTxtEnd = ')"><i class="icon-exclamation-sign align-top bigger-110 icon-check"></i></a>';
       var idArr = ['ua_table','apr_table'];
+      var checkBoxTxt = "<input type='checkbox' class='print-checkbox apr' value='";
+      var checkboxEnd = "'/>";
       var rowsArr = new Array();
       for( var i = 0; i < idArr.length; ++ i ){
         rowsArr[i] = new Array();
@@ -191,18 +136,37 @@ function loadOrderData(){
       for( var i = 0; i < soArr.length; ++i ){
         var item = soArr[i];
         var row = [];
+        var arrIndex = 1;
+        var btnTxt = '123';
+        var btnTxtEnd = '';
+        var stateTxt = '';
+        switch(item['state']){
+          case '2':
+            stateTxt = '待确认';
+            arrIndex = 0;
+            row.push( checkBoxTxt + item['so_id'] + '-' + item['si_id'] + checkboxEnd );
+            btnTxtEnd = editTxtEnd;
+            break;
+          case '7':
+            stateTxt = '已确认';
+            arrIndex = 0;
+            row.push( checkBoxTxt + item['so_id'] + '-' + item['si_id'] + checkboxEnd );
+            btnTxtEnd = editTxtEnd;
+            break;
+          default:
+            stateTxt = '装机完成';
+            arrIndex = 1;
+            
+            btnTxtEnd = showBtnTxtEnd;
+            break;
+        }
         row.push( item['so_number']);
         row.push( item['client_name'] );
-        row.push( item['client_number'] );
-        row.push( item['billBank']);
-        row.push( item['ac_time'] );
-        var stateTxt = '';
-        var btnTxt = '';
-        var btnTxtEnd = '';
+        row.push( item['addr'] );
+        row.push( item['m_code'] );
+        row.push( item['version'] );
+        
         var type = '';
-        var arrIndex = 1;
-        btnTxt = showBtnTxt;
-        btnTxtEnd = showBtnTxtEnd;
         if( item['type'] == 0 ){
           type = '直联';
         }
@@ -210,30 +174,21 @@ function loadOrderData(){
           type = '间联';
         }
         row.push( type );
-        switch(item['state']){
-          case '5':
-            stateTxt = '待确认';
-            arrIndex = 0;
-            break;
-          case '6':
-            stateTxt = '已确认';
-            arrIndex = 0;
-            break;
-          case '7' :
-            stateTxt = '装机完成';
-            arrIndex = 1;
-            break;
-          default:
-            break;
-        }
         row.push( stateTxt);
-        row.push( btnTxt+ item['so_id'] + ',' + arrIndex.toString() + btnTxtEnd);
+        btnTxt = showBtnTxt + item['si_id'] + ',' + arrIndex.toString() + ',' + item['state'];
+        row.push( btnTxt + btnTxtEnd );
 
         rowsArr[arrIndex].push( row );
       }
+      var secondAoConfig = [null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
+      var firstAoConfig = [ { "bSearchable" :false, "bSortable": false },null,null,  null, null, null, null, null,{ "bSearchable" :false, "bSortable": false }];
+      var aoConfig = Array();
+      aoConfig.push( firstAoConfig );
+      aoConfig.push( secondAoConfig );
       for( var i = 0 ; i < idArr.length; ++ i ){
         var oTable;
         var tableId = "#" + idArr[i];
+
         rows = rowsArr[i];
         if( $.fn.dataTable.isDataTable( tableId ) ){
           oTable = $(tableId).dataTable();
@@ -243,9 +198,7 @@ function loadOrderData(){
             "bProcessing" : false, //DataTables载入数据时，是否显示‘进度’提示  
           "aLengthMenu" : [10, 20, 50], //更改显示记录数选项  
           "bPaginate" : true, //是否显示（应用）分页器  
-          "aoColumns" : [
-                          null,null,  null, null, null, null, null,{ "bSortable": false }
-                        ],
+          "aoColumns" : aoConfig[i],
           "oLanguage": { //国际化配置  
                   "sProcessing" : "正在获取数据，请稍后...",    
                   "sLengthMenu" : "显示 _MENU_ 条",    
@@ -263,17 +216,15 @@ function loadOrderData(){
         if( rows.length>0 )
           oTable.fnAddData( rows );
       }
-
-      
     }
   });
 }
 
-$("#comfirm_btn").click( function(){
+$("#confirm_btn").click( function(){
   $.ajax({
     type:'post',
     data:{
-      'so_id':$("#so_id").val()
+      'si_id':$("#si_id").val()
     },
     url: comfirmUrl,
     success : function( data ){
@@ -319,25 +270,48 @@ function checkInput(){
   return true;
 }
 
-$("#printBtn").click( function(){
-  var version = $("#versionTxt").val();
-  if( version == '' ){
-    alert("请填写机器版本号！");
-    $("#versionTxt").focus();
-  }
-  else{
-    var soId = $("#so_id").val();
-    var printWindowUrl = printUrl + '/so_id/' + soId + '/version/' + version; 
-    window.open( printWindowUrl );
-  }
-});
 
 $("#ua_returnBtn").click(function(){
   $("#ua_table-div").css('display','block');
   $("#ua_showOrder").css('display','none');
-  $("#ua_showOrder").find('span').html('');
-  $("#ua_si-table").find('tbody').html('');
-  $("#confirmDiv").css('display','none');
-  $("#resForm").css('display','none');
   $("#ua_passBtn").attr('disabled', false);
 });
+
+$("#apr_returnBtn").click(function(){
+  $("#apr_table-div").css('display','block');
+  $("#apr_showOrder").css('display','none');
+});
+
+$("#apr_check").on('change', function(){ checkMainBox('.apr',this);});
+
+function printOrder( className ){
+  var si_list = '';
+  $boxList = $(className);
+  var so_id = '';
+  for( var i = 0; i<$boxList.length; ++i){
+    var box = $boxList.get(i);
+    var boxVal = $(box).val();
+    var so_temp = boxVal.split('-')[0];
+    var si_id = boxVal.split('-')[1];
+    if( box.checked == true && $(box).val() != '' ){
+      if( so_id == '' )
+        so_id = so_temp;
+      else{
+        if( so_id != so_temp ){
+          alert("请勾选同属一个订单的装机单进行操作！");
+          return;
+        }
+      }
+      si_list += si_id + ',';
+    }
+  }
+  window.open( rootUrl + 'Print/printBySi/so_id/' + so_id + '/si_list/' +si_list);
+}
+
+function checkMainBox( className,ele){
+  $boxList = $(className);
+  for( var i = 0; i<$boxList.length; ++i){
+    var $box = $boxList.get(i);
+    $box.checked = ele.checked;
+  }
+}

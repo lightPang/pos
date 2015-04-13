@@ -16,27 +16,27 @@ function checkMainBox( className,ele){
 }
 
 function produceLoadedMDB( className ){
-  var so_list = '';
+  var si_list = '';
   $boxList = $(className);
-  var bill_b = '';
+  var so_id = '';
   for( var i = 0; i<$boxList.length; ++i){
     var box = $boxList.get(i);
     var boxVal = $(box).val();
-    var so_id = boxVal.split('-')[0];
-    var bill_b_id = boxVal.split('-')[1];
+    var so_temp = boxVal.split('-')[0];
+    var si_id = boxVal.split('-')[1];
     if( box.checked == true && $(box).val() != '' ){
-      if( bill_b == '' )
-        bill_b = bill_b_id;
+      if( so_id == '' )
+        so_id = so_temp;
       else{
-        if( bill_b != bill_b_id ){
-          alert("请勾选同属一个收单银行的装机单进行操作！");
+        if( so_id != so_temp ){
+          alert("请勾选同属一个装机单的装机项目进行操作！");
           return;
         }
       }
-      so_list += so_id + ',';
+      si_list += si_id + ',';
     }
   }
-  window.open( rootUrl + 'Approve/getLoadedMDBFile/so_list/'+so_list);
+  window.open( rootUrl + 'Approve/getLoadedMDBFile/so_id/'+ so_id + '/si_list/'+si_list);
 }
 
 

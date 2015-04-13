@@ -14,7 +14,8 @@ function loadPrintData(){
       type:'post',
       url: rootUrl + 'Apply/getSoItem',
       data:{
-        'soId':so_id
+        'soId':so_id,
+        'si_list' : $("#si_list").val()
       },
       success:function(data){
         var soItem = data['data'];

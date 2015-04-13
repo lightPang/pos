@@ -5,10 +5,30 @@ var rejectUrl = rootUrl + "Maintain/reject";
 var confirmUrl = rootUrl + "Maintain/confirm";
 var checkUrl = rootUrl + "Maintain/check";
 var changeUrl = rootUrl + "Maintain/change";
-
+var userDataUrl = rootUrl + "User/getUserData";
 $(document).ready(function(){
   loadRRData();
+  loadUserSelect();
 });
+
+function loadUserSelect(){
+  $.ajax({
+    type:'post',
+    url : userDataUrl,
+    data : { 'c_id' : "c" },
+    success : function(data ){
+      var userData = data['data'];
+      console.log( userData );
+      var options = '';
+      for( var i =0; i < userData.length; ++i ){
+        options += "<option value='" + userData[i]['u_id'] +"'>" + userData[i]['name'] + "</option>";
+      }
+      $("#complete_user").html('');
+      $("#complete_user").append( options );
+      $("#ed_complete_user").append(options);
+    }
+  });
+}
 
 function returnClick( prefix ){
   var tableDivId = "#tableDiv";
@@ -16,6 +36,7 @@ function returnClick( prefix ){
   $(tableDivId).css('display', 'block');
   $(divId).css( 'display', 'none');
   $(divId).find('span').html('');
+
 }
 
 $("#cf_rtnBtn").click( function(){
@@ -44,7 +65,8 @@ $("#cg_btn").click( function(){
     type : 'post',
     data : { 
       "mr_id": $("#cg_mr_id").val(),
-      "complete_remark" : $("#complete_remark").val()
+      "complete_remark" : $("#complete_remark").val(),
+      "u_id" : $("#complete_user").val()
     },
     url : changeUrl,
     success:function(data){
@@ -66,7 +88,8 @@ $("#ed_btn").click( function(){
     data : { 
       "mr_id": $("#ed_mr_id").val(),
       "maintain_remark" : $("#maintain_remark").val(),
-      "maintain_type" : $("#maintain_type").val()
+      "maintain_type" : $("#maintain_type").val(),
+      "u_id" : $("#ed_complete_user").val()
     },
     url : checkUrl,
     success:function(data){
@@ -89,7 +112,6 @@ $("#cf_btn").click( function(){
     data : { "mr_id":$("#cf_mr_id").val() },
     url: confirmUrl,
     success:function(data){
-      console.log( data );
       if( data['status'] != '0' ){
         alert( "提交成功!");
         loadRRData();
@@ -109,7 +131,6 @@ $("#rejectBtn").click( function(){
     data : { "mr_id":$("#cf_mr_id").val() },
     url: rejectUrl,
     success:function(data){
-      console.log( data );
       if( data['status'] != '0' ){
         alert( "提交成功!");
         loadRRData();
@@ -137,7 +158,6 @@ function loadUOrder( id,type ){
       var item = data['data'];
       for( var k in item ){
         var id = "#" + type + "_" + k ;
-        console.log( id );
         $(id).find('span').html( item[k] );
       }
       var stateTxt = '';

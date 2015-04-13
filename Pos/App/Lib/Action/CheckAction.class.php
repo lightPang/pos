@@ -30,6 +30,8 @@ class CheckAction extends CommonAction {
       if( $this->doAuth() ){
         $siList = $_POST['si_list'];
         $si_id = $_POST['si_id'];
+        $siMap['si_id'] = $si_id;
+        $siData = M('si_check_view')->where( $siMap )->select()[0];
         $item['confirm_code'] = $_POST['confirm_code'];
         $item['remark'] = $_POST['remark'];
         $item['si_id'] = $_POST['si_id'];
@@ -41,12 +43,12 @@ class CheckAction extends CommonAction {
             $item['is_add'] = 0;
         
         $fileSqlModel = M('file');
-        $fileDir="Upload/".date("Y")."/".date("m")."/";
+        $fileDir="Upload/Check/".date("Y")."/".date("m")."/";
         if(!file_exists($fileDir))//照片目录
           mkdir($fileDir,0777, true);
         $fileObj = $_FILES['img'];
         $fileInfo=pathinfo($_FILES['img']["name"]);
-        $serverFileName = $fileDir.time().".".$fileInfo['extension'];
+        $serverFileName = $fileDir.$siData['client_number'].'-'. Date( "Y-m-d H-m-s").".".$fileInfo['extension'];
         move_uploaded_file ($_FILES['img']["tmp_name"],$serverFileName);
         $fp = fopen($serverFileName,'r');
         $file_data = fread($fp,$_FILES['img']["size"]);

@@ -121,10 +121,13 @@
           if( $_POST['maintain_type'] == '0'){
             $data['state'] = 3;
             $data['complete_time'] = Date( "Y-m-d H:m:s");
+            $data['u_id'] = $_POST['u_id'];
             $this->addModifyRecord( $data, $map, 'maintain_record', 'mr_id' );
             M('maintain_record')->where( $map)->save( $data );
             $siMap['si_id'] = $mrItem['si_id'];
             $siData['maintain_id'] = 0;
+            $siData['check_time'] = Date( "Y-m-d H:m:s");
+            $siData['check_user'] = $_POST['u_id'];
             M('setup_item')->where( $siMap )->save( $siData );
             $this->ajaxReturn(null,null,1);
           }
@@ -151,10 +154,13 @@
           $data['state'] = 3;
           $data['complete_time'] = Date( "Y-m-d H:m:s");
           $data['complete_remark'] = $_POST['complete_remark'];
+          $data['u_id'] = $_POST['u_id'];
           $this->addModifyRecord( $data, $map, 'maintain_record', 'mr_id' );
           M('maintain_record')->where( $map)->save( $data );
           $siMap['si_id'] = $mrItem['si_id'];
           $siData['maintain_id'] = 0;
+          $siData['check_time'] = Date( "Y-m-d H:m:s");
+          $siData['check_user'] = $_POST['u_id'];
           M('setup_item')->where( $siMap )->save( $siData );
 
           $mMap['m_code'] = $mrItem['m_code'];
