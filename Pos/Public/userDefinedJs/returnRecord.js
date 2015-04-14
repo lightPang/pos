@@ -54,39 +54,9 @@ $("#createBtn").click( function(){
 function loadOrder( rr_id ){
   $("#submit_table").css('display','none');
   $("#submitedDiv").css('display','block');
-
-  $.ajax({
-    type:'post',
-    url : rrDataUrl,
-    data : { 'rr_id' : rr_id },
-    success:function(data){
-      var rrItem = data['data'];
-      for( var k in rrItem ){
-        var id = "#sb_" + k ;
-        $(id).find('span').html( rrItem[k] );
-      }
-      var stateTxt = '';
-      switch( rrItem['state'] ){
-        case '0':
-          stateTxt = '已提交';
-          break;
-        case '1':
-          stateTxt = '已确认';
-          break;
-        case '2':
-          stateTxt = '已完成';
-          break;
-        case '3':
-          stateTxt = '已还机';
-          break;
-        case '4':
-          stateTxt = '未通过';
-          break;
-      }
-      $("#sb_state").find('span').html( stateTxt );
-      $("#item_id").val( rrItem['rr_id']);
-      loadModifyRecord();
-    }
+  $("#rr_record").rrPlugin({
+    'rr_id': rr_id,
+    'div_prefix': 'rr_record'
   });
 }
 

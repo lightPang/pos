@@ -116,6 +116,18 @@ function updateRow(u_id){
           
         }
       }
+      var cAuthArr = userItem['c_auth'].split(',');
+      for( var i = 0 ; i<cAuthArr.length; ++i ){
+        if( cAuthArr[i] !== '' )
+        {
+          var condition = "input[value='" + cAuthArr[i] +"']";
+          //console.log(condition);
+          //用prop成功修改属性，用attr失败。
+          $('#updateForm').find(condition).prop("checked",true);
+          //console.log(box);
+          
+        }
+      }
     }
   });
 }
@@ -168,7 +180,8 @@ $('#updateBtn').click( function(){
         'account' : $("#updateAccount").val(),
         'phone' : $("#update_phone").val(),
         'email' : $("#update_email").val(),
-        'auth' : serializeAuth("#updateForm"),
+        'auth' : serializeAuth("#updateForm", "auth[]"),
+        'c_auth' : serializeAuth("#updateForm", "c_auth[]")
       },
     success: function(data){
       console.log(data);
@@ -210,7 +223,8 @@ $('#submitBtn').click( function(){
         c_id : $("#selectCompany").val(),
         account : $("input[name='newAccount']").val() ,
         pwd : $.md5( $("input[name='newPwd']").val() ),
-        auth : serializeAuth("#contentForm"),
+        auth : serializeAuth("#contentForm","auth[]"),
+        c_auth : serializeAuth("#contentForm", "c_auth[]")
       },
       success: function(data,textStatus, jqXHR){
         if( data['status'] !== 0 ){
@@ -224,9 +238,10 @@ $('#submitBtn').click( function(){
   } 
 });
 
-function serializeAuth( authName ){
+function serializeAuth( formName, authName ){
   var res = "";
-  var $authArr = $(authName).find("input[type='checkbox']");
+  var typeStr = "input[name='" + authName +"']";
+  var $authArr = $(formName).find(typeStr);
   for ( var i = 0 ; i < $authArr.length; ++i){
     var tempObj = $authArr.get(i);
     if( tempObj.checked === true )

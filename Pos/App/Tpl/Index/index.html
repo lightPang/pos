@@ -25,7 +25,7 @@
                   <span class="red">POS机</span>
                   <span class="white">管理系统</span>
                 </h1>
-                <h4 class="blue">&copy; Company Name</h4>
+                <h4 class="blue">&copy; 城域科技有限公司</h4>
               </div>
 
               <div class="space-6"></div>

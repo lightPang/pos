@@ -23,8 +23,14 @@
               $flag = true;
           }
         }
+        $cMap['c_id'] = $_SESSION['c_id'];
+        $cName = M('company')->where($cMap)->select()[0]['name'];
+        $cMap['c_id'] = array('in', $_SESSION['c_auth'] );
+        $clist = M('company')->where( $cMap )->select();
+        $this->assign( 'c_auth_list' ,$clist );
         $this->assign('activeTab', $_GET['activeTab'] );
         $this->assign('name', $_SESSION['user']);
+        $this->assign('company_name', $cName );
       }
 
       return $flag;

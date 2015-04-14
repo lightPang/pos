@@ -53,69 +53,28 @@ $("#cp_Btn").click(function(){
 function loadOrder( rr_id ){
   $("#submit_table").css('display','none');
   $("#submitedDiv").css('display','block');
-
-  $.ajax({
-    type:'post',
-    url : rrDataUrl,
-    data : { 'rr_id' : rr_id },
-    success:function(data){
-      var rrItem = data['data'];
-      for( var k in rrItem ){
-        var id = "#sb_" + k ;
-        $(id).find('span').html( rrItem[k] );
-      }
-    }
+  $("#cp_record").rrPlugin({
+    rr_id : rr_id,
+    div_prefix : "cp_"
   });
+  
 }
 
 function loadFOrder( rr_id ){
   $("#finished_table").css('display','none');
   $("#finishedDiv").css('display','block');
-  $.ajax({
-    type:'post',
-    url : rrDataUrl,
-    data : { 'rr_id' : rr_id },
-    success:function(data){
-      console.log(data);
-      var rrItem = data['data'];
-      for( var k in rrItem ){
-        var id = "#fh_" + k ;
-        $(id).find('span').html( rrItem[k] );
-      }
-      var stateTxt = '';
-      switch( rrItem['state'] ){
-        case '2' :
-          stateTxt = '已完成';
-          break;
-        case '3' :
-          stateTxt = '已接机';
-          break;
-        case '4':
-          stateTxt = '已拒绝';
-          break;
-      }
-      $("#fh_state").find('span').html(stateTxt);
-      $("#item_id").val( rrItem['rr_id'] );
-      loadModifyRecord();
-    }
+  $("#rr_record").rrPlugin({
+    rr_id : rr_id,
+    div_prefix : "rr_record"
   });
 }
 
 function confirmOrder( rr_id ){
   $("#confirmed_table").css('display','none');
   $("#completeDiv").css('display','block');
-  $.ajax({
-    type:'post',
-    url : rrDataUrl,
-    data : { 'rr_id' : rr_id },
-    success:function(data){
-      var rrItem = data['data'];
-      for( var k in rrItem ){
-        var id = "#cp_" + k ;
-        $(id).find('span').html( rrItem[k] );
-      }
-      $("#cp_rr_id").val( rrItem['rr_id'] );
-    }
+  $("#cp_record").rrPlugin({
+    rr_id : rr_id,
+    div_prefix : "cp_"
   });
 }
 
@@ -146,7 +105,7 @@ function loadRRData(){
         row.push( item['rr_id'] );
         row.push( item['create_time'] );
         row.push( item['confirm_time']);
-        row.push( item['User'] );
+        row.push( item['user'] );
         var stateTxt = '';
         var btnTxt = '';
         var btnTxtEnd = '';

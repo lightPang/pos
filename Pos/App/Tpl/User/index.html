@@ -228,6 +228,15 @@
                           <span class="lbl">  公司管理</span>
                         </label>
                       </div>
+
+                      <div class="checkboxGroupRow">
+                        <volist name="company_list" id="company">
+                          <label>
+                            <input name="c_auth[]" type="checkbox" class="ace" value="{$company.c_id}"/>
+                            <span class="lbl"> {$company.name}</span>
+                          </label>
+                        </volist>
+                      </div>
                       
                     </div>
                   </div>
@@ -489,8 +498,20 @@
                           <span class="lbl">  公司管理</span>
                         </label>
                       </div>
+
+                      <div class="checkboxGroupRow">
+                        <volist name="company_list" id="update_company">
+                          <label>
+                            <input name="c_auth[]" type="checkbox" class="ace" value="{$update_company.c_id}"/>
+                            <span class="lbl"> {$update_company.name}</span>
+                          </label>
+                        </volist>
+                      </div>
                       
                     </div>
+
+                    
+
                   </div>
                   
                   <input type="hidden" id="updateUid" />

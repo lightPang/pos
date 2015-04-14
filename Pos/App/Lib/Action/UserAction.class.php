@@ -2,6 +2,7 @@
   class UserAction extends CommonAction{
     public function index(){
       $this->doAuth();
+      $this->assign( 'company_list', M('company')->select() );
       $this->display();
     }
     
@@ -12,6 +13,7 @@
         $data['account'] = $_POST['account'];
         $data['c_id'] = $_POST['c_id'] ;
         $data['auth'] = $_POST['auth'];
+        $data['c_auth'] = $_POST['c_auth'];
         $data['create_user'] = $_SESSION['u_id'];
         $data['edit_user'] = $_SESSION['u_id'];
         $data['create_time'] = date('Y-m-d H:i:s',time());
@@ -34,7 +36,7 @@
       if( $this->doAuth('staffManage')  && isset( $_POST['u_id'] ) ){
         $map['u_id'] = $_POST['u_id'] ;
         $user = M('user');
-        $data = $user->where( $map )->field('u_id,auth,account,name,c_id,email,phone,last_login_time,last_login_ip')->select();
+        $data = $user->where( $map )->field('u_id,auth,c_auth,account,name,c_id,email,phone,last_login_time,last_login_ip')->select();
         $this->ajaxReturn( $this->updateCompanyInfo( $data ), "get", 1 );
       }
       else if( isset($_POST['c_id'] ) ){
@@ -82,6 +84,7 @@
         $data['name'] = $_POST['name'] ;
         $data['c_id'] = $_POST['c_id'];
         $data['auth'] = $_POST['auth'];
+        $data['c_auth'] = $_POST['c_auth'];
         $user = M('user');
         $user->where($map)->save($data);
         $this->ajaxReturn(null,"update",1);

@@ -58,17 +58,9 @@ function loadOrder(rr_id){
   $("#tableContent").css('display','none');
   $("#infoDiv").css('display','block');
 
-  $.ajax({
-    type:'post',
-    url : dataUrl,
-    data : { 'rr_id' : rr_id },
-    success:function(data){
-      var rrItem = data['data'];
-      for( var k in rrItem ){
-        var id = "#if_" + k ;
-        $(id).find('span').html( rrItem[k] );
-      }
-    }
+  $("#rr_record").rrPlugin({
+    rr_id : rr_id,
+    div_prefix : "rr_record"
   });
 }
 

@@ -9,6 +9,23 @@ class IndexAction extends CommonAction {
     	$this->doAuth();
     	$this->display();
     }
+
+    public function change(){
+      if( $this->doAuth() ){
+        $c_id = $_GET['c_id'];
+        if( strpos($_SESSION['c_auth'] , $c_id ) >= 0 ){
+          $_SESSION['c_id'] = $c_id;
+          $this->doAuth();
+          $this->display('home');
+        }
+        else{
+          $this->display('index');
+        }
+      }
+      else{
+        $this->display('index');
+      }
+    }
     
     public function login(){
     	$account = $this->_post('account');
@@ -16,7 +33,7 @@ class IndexAction extends CommonAction {
   		if($account && $pwd) {
   			$userDao = M('User');
   			$where = 'account = '."'$account'".' AND pwd = '."'$pwd'";
-  			$user = $userDao->where($where)->field('u_id, name,c_id')->select()[0];
+  			$user = $userDao->where($where)->field('u_id, name,c_id,c_auth')->select()[0];
   			
   			if($user) {
   				session_start();
@@ -30,6 +47,7 @@ class IndexAction extends CommonAction {
   				$_SESSION['user'] = $user['name'];
   				$_SESSION['u_id'] = $user['u_id'];
           $_SESSION['c_id'] = $user['c_id'];
+          $_SESSION['c_auth'] = $user['c_auth'];
   				echo 'true';
   				exit;
   			}
@@ -39,13 +57,8 @@ class IndexAction extends CommonAction {
   			}
   		}
     }
-
-	public function test(){
-      
-      $this->display();
-    }
-
-    public function test2(){
-      echo "test2";
+    public function log_out(){
+      session_destroy(); 
+      $this->display('index');
     }
 }

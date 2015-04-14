@@ -1,10 +1,10 @@
 ;(function($){
   $.fn.siPlugin = function(opts){
     var defaults = {
-      "si_id" : null,
+      "rr_id" : null,
       "tableIndexArr" : null,
       "div_prefix" : null,
-      "dataUrl" : "/pos/Pos/index.php/SetupItem/getSetupItem"
+      "dataUrl" : "/pos/Pos/index.php/ReturnRecord/getReturnRecord"
     };
 
     var option = $.extend( defaults, opts );
