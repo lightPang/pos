@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link  rel="stylesheet" href="__PUBLIC__/userDefinedCss/print.css" />
+<title>装机单打印</title>
+</head>
+
+<body style="width:980px;margin: 0 auto;">
+  <div style="height:1310px;">
+  <div>
+    <div class="logo">
+      <img src="__PUBLIC__/userJPG/logo.png" />
+    </div>
+    <div class="barcode">
+      <img id="barcodeImg" />
+      <div>装机单编号：<span id="so_number"></span></div>
+      <div>装机单类型：<span id="typeName"></span></div>
+    </div>
+  </div>
+  <div class="clear" ></div>
+  <div class="title" >POS机装机单</div>
+
+  <table cellpadding="0" cellspacing="0">
+    <tbody>
+    <tr>
+      <td class="td-title" >商户名称：</td>
+      <td colspan="3" id="client_name"></td>
+      <td class="td-title">商户属性：</td>
+      <td class="td-content-sm" id="clientAttr"></td>
+    </tr>
+    <tr>
+      <td class="td-title">商户地址：</td>
+      <td id="client_addr" colspan="3"></td>
+      <td class="td-title">是否加急：</td>
+      <td class="td-content-sm" id="isUrgent"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title">商户编号：</td>
+      <td class="td-content-sm" id="client_number"></td>
+      <td class="td-title">联系人：</td>
+      <td class="td-content-sm" id="legal_name"></td>
+      <td class="td-title">联系电话：</td>
+      <td class="td-content-sm" id="legal_phone"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title">收单行号：</td>
+      <td class="td-content-sm" id="billBankCode"></td>
+      <td class="td-title">开户银行：</td>
+      <td colspan="3" id="acBank"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title" >银行账号：</td>
+      <td class="td-content-sm" id="account_num"></td>
+      <td class="td-title" >手续费率：</td>
+      <td class="td-content-sm" id="rate" colspan="3"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title">银行经办：</td>
+      <td class="td-content-sm" id="bankOp"></td>
+      <td class="td-title">拓展经理：</td>
+      <td class="td-content-sm" id="expandUser"></td>
+      <td class="td-title" >终端数量：</td>
+      <td class="td-content-sm" id="siListCount"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title" >经办电话：</td>
+      <td class="td-content-sm" id="bankOpPhone"></td>
+      <td class="td-title">拓展经理电话：</td>
+      <td class="td-content-sm" id="expandUserPhone"></td>
+      <td class="td-title">出单日期：</td>
+      <td class="td-content-sm" id="active_date"></td>
+    </tr>
+
+  </table>
+  <table class="border-table" border="1" cellpadding="0" >
+    <tr id="head_tr" style="height:40px;">
+      <td class="td-list-title" >终端号</td>
+      <td class="td-content-sm">绑定电话</td>
+      <td class="td-content-sm">密钥</td>
+      <td class="td-list-title">机型</td>
+      <td class="td-content-sm">机身号</td>
+      <td class="td-content-sm">键盘号/底座号</td>
+    </tr>
+    <tr style="height:100px;">
+      <td >装机注意</td>
+      <td colspan="3"><div style="height:55px; vertical-align:bottom; text-align:left;">支持非接收电子现金 口；支持接触IC卡 口； 支持磁条 口；</div><div style="text-align:left;">已开通银行 口；已审核MCC 口；</div></td>
+      <td ><div style="height:55px; vertical-align:bottom;">版本号</div><div>设机员</div></td>
+      <td><div style="height:55px; vertical-align:bottom;">{$version}</div><div><span>王大可</span><span>&nbsp;<?=date("Y.m.d")?></span></div></td>
+    </tr>
+
+    <tr>
+      <td class="td-title" >收款</td>
+      <td colspan="5"></td>
+    </tr>
+
+    <tr>
+      <td colspan='6' class="remark_td">
+        <div>
+          <div>备注：重要声明</div>
+          <div>1、贵商户使用的刷卡机产权归公司所有，若有损坏遗失，请按照每台2000元的价格赔偿。</div>
+          <div>2、为了提供更好的专业服务，若贵商户名称、地址、联系人、联系电话等资料变更，请及时告知我司。</div>
+          <div>3、为了保障贵商户的机具安全和交易资金到位，除我司指定人员外，任何人不得挪动、更换机具或作撤机处理。</div>
+          <div>4、持卡人签名的交易必须保存一年以上。</div>
+          <div>5、交易成功与否以签名小票为准。</div>
+          <div style="text-align:right;">城域科技（广州）</div>
+        </div>
+      </td>
+    </tr>
+
+    <tr style="height:120px;">
+      <td colspan='2' style="text-align:left;vertical-align:top;">银联经办签章：</td>
+      <td colspan='2' style="text-align:left;vertical-align:top;">维护公司经办签章：</td>
+      <td colspan='2' style="text-align:left;vertical-align:top;">商户负责人签章：</td>
+    </tr>
+
+    <tr style="height:30px;">
+      <td colspan='2' style="text-align:right;">年&nbsp;&nbsp;月&nbsp;&nbsp;日</td>
+      <td colspan='2' style="text-align:right;">年&nbsp;&nbsp;月&nbsp;&nbsp;日</td>
+      <td colspan='2' style="text-align:right;">年&nbsp;&nbsp;月&nbsp;&nbsp;日</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+  <table >
+    <tr>
+      <td class="td-title">商户名称：</td>
+      <td style="width:280px;" id="clientName"></td>
+    </tr>
+
+    <tr>
+      <td class="td-title" >商户编号：</td>
+      <td class-"td-content-sm" id="client_num"></td>
+      <td style="width:220px;">1/1</td>
+      <td class="td-title" >打印日期：</td>
+      <td id="date"></td>
+    </tr>
+  </table>
+  <input id="so_id" type="hidden" value="{$so_id}" />
+  <input id="si_list" type="hidden" value="{$si_list}" />
+  <script src="__PUBLIC__/js/jquery-2.0.3.min.js"></script>
+  <script src="__PUBLIC__/userDefinedJs/print.js"></script>
+</body>
+</html>
